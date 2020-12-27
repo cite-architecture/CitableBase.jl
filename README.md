@@ -1,4 +1,4 @@
-# CiteBase.jl
+# CitableBase.jl
 
 Core ideas of the CITE architecture:
 

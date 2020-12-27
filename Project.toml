@@ -1,4 +1,4 @@
-name = "CiteBase"
+name = "CitableBase"
 uuid = "d6f014bd-995c-41bd-9893-703339864534"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
 version = "1.0.0"

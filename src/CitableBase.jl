@@ -1,4 +1,4 @@
-module CiteBase
+module CitableBase
 
 using Documenter, DocStringExtensions
 

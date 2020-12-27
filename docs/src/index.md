@@ -1,6 +1,6 @@
-# CiteBase.jl Documentation
+# CitableBase.jl Documentation
 ```@meta
-CurrentModule = CiteBase
+CurrentModule = CitableBase
 ```
 ```@contents
 ```
