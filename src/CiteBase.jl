@@ -1,20 +1,19 @@
 module CiteBase
 
-export Urn, CtsUrn, Cite2Urn, Citable
+export Urn, Citable, string, components, parts
 
 abstract type Urn end
 
-
-struct CtsUrn <: Urn
-    string::String
-end
-
-struct Cite2Urn <: Urn
-    string::String
-end
-
 function string(u::Urn)
     u.string()
+end
+
+function components(uString::String)
+    split(uString, ":")
+end
+
+function parts(componentString::String)
+    split(componentString,".")
 end
 
 struct Citable
