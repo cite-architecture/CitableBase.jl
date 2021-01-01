@@ -5,6 +5,10 @@ using Documenter, DocStringExtensions
 export Urn, Citable, string, components, parts
 
 abstract type Urn end
+# A URN must implement:
+#
+# validurn(s)::Bool True if string s is valid for this type of URN
+# urn() String value of this URN
 
 
 function string(u::Urn)
