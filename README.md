@@ -1,14 +1,9 @@
 # CitableBase.jl
 
-Core ideas of the CITE architecture:
+A Julia package defining the two core abstractions of the CITE architecture:
 
-- abstract URN type
-- functions to extract top-level components and parts of components
-- definition of citable objects
+1. identifiers expressible using the syntax of the IETF URN specification
+2. citable units, identified by URN, and including a human-readable label
 
+Although the package includes a few trivial convenience functions, its main purpose is to provide types that can be extended for specific types of URNs and specific types of citable entities.
 
-To build Docstrings:  within `docs` directory, run
-
-```
-julia  --color=yes make.jl
-```
