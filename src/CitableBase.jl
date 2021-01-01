@@ -11,9 +11,10 @@ abstract type Urn end
 # urn() String value of this URN
 
 
-function string(u::Urn)
-    u.string()
-end
+function validurn(s)::Bool end
+
+function urn() end
+
 
 """
 $(SIGNATURES)
