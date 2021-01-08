@@ -4,10 +4,16 @@ CurrentModule = CitableBase
 ```
 ```@contents
 ```
+## Types
+```@docs
+Urn
+Citable
+```
 ## Functions
 ```@docs
-components(uString::String)
-parts(componentString::String)
+validurn(s::AbstractString)
+components(uString::AbstractString)
+parts(componentString::AbstractString)
 ```
 ## Index
 ```@index
