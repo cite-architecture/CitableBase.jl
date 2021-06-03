@@ -11,7 +11,8 @@ using Documenter, DocStringExtensions, CitableBase
 makedocs(
     sitename = "CitableBase.jl",
     pages = [
-        "Home" => "index.md"
+        "Home" => "index.md",
+        "API documentation" => "apis.md"
     ]
     )
 

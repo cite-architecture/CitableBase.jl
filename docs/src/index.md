@@ -1,23 +1,8 @@
-# CitableBase.jl Documentation
-```@meta
-CurrentModule = CitableBase
-```
+# CitableBase.jl 
 
-## Types
-```@docs
-Urn
-Citable
-```
+CitableBase.jl defines two core abstractions of the CITE architecture:
 
-## Functions
-```@docs
-validurn
-components
-parts
-```
+1. identifiers expressible using the syntax of the IETF URN specification
+2. citable units, identified by URN, and including a human-readable label
 
-## Functions to implement for specific URN types
-```@docs
-addversion
-dropversion
-```
+
