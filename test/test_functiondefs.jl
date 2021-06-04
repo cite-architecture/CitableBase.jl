@@ -20,3 +20,20 @@ end
     @test isnothing(dropversion(u))
     @test isnothing(addversion(u, "versionid"))
 end
+
+
+
+@testset "Test ovveride validurn" begin
+    struct FakeUrn <: Urn
+        urn::AbstractString
+    end
+    function dropversion(u::FakeUrn)
+        "Success"
+    end
+    function addversion(u::FakeUrn, s)
+        "Success adding $s"
+    end
+    u = FakeUrn("urn:fake:id.subid")
+    @test dropversion(u) == "Success"
+    @test addversion(u, "versionid") == "Success adding versionid"
+end
