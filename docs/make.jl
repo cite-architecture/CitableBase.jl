@@ -1,6 +1,11 @@
 # Use this from root directory of repository, e.g.,
-# julia --project=docs/ docs/make.jl
-
+#
+#   julia --project=docs/ docs/make.jl
+#
+# Serve docs from repository root:
+#
+#   julia -e 'using LiveServer; serve(dir="docs/build")'julia -e 'using LiveServer; serve(dir="docs/build")' 
+#
 using Pkg
 Pkg.activate(".")
 Pkg.instantiate()
