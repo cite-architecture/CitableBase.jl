@@ -17,6 +17,8 @@ makedocs(
     sitename = "CitableBase.jl",
     pages = [
         "Home" => "index.md",
+        "URNs" => "urns.md",
+        "Citable resources" => "citable.md",
         "API documentation" => "apis.md"
     ]
     )

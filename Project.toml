@@ -1,7 +1,7 @@
 name = "CitableBase"
 uuid = "d6f014bd-995c-41bd-9893-703339864534"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
-version = "1.2.3"
+version = "2.0.0"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
@@ -10,5 +10,5 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 DocStringExtensions = "0.8"
-Documenter = "0.26, 0.27"
+Documenter = "0.27"
 julia = "1"
