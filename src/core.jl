@@ -10,7 +10,8 @@ function show(u::Urn)
 end
 
 "A citable unit of any kind is identified by a URN and has a human-readable label."
-struct Citable
-    urn::Urn
-    label::AbstractString
+abstract type Citable end
+
+function cex(c::Citable)
+    "THIS IS CEX FOR A CITABLE!"
 end
