@@ -12,6 +12,13 @@ end
 "A citable unit of any kind is identified by a URN and has a human-readable label."
 abstract type Citable end
 
-function cex(c::Citable)
-    "THIS IS CEX FOR A CITABLE!"
+"""Citable content should always be serializable.
+"""
+function cex(data::T, delim="|") where {T <: Citable}
+    @warn("No cex function defined for ", typeof(data))
+end
+
+function objectid(data::T) where {T <: Citable}
+    @warn("No cex function defined for ", typeof(data))
+    nothing
 end
