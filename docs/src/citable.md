@@ -1,4 +1,4 @@
-# Citable resources
+# Citable resources: an example implementation
 
 Citable resources extend the `Citable` abstract type and  implement three functions: `urn`, `label` and `cex`.   
 
@@ -9,15 +9,28 @@ using CitableBase
 struct FakeUrn <: Urn
     urn::AbstractString
 end
+ref = FakeUrn("urn:fake:objectclass.objectid")
+
 struct FakeCite <: Citable
     urn::FakeUrn
     label
 end
+citable = FakeCite(ref, "Some citable resource")
+typeof(citable) |> supertype
+
+# output
+
+Citable
+```
+
+All citable resources are identified by a `Urn`, which can be found with the `urn` function.
+
+
+```jldoctest citable
 function urn(c::FakeCite)
     c.urn
 end
-ref = FakeUrn("urn:fake:objectclass.objectid")
-citable = FakeCite(ref, "Some citable resource")
+
 urn(citable)
 
 # output
@@ -25,6 +38,7 @@ urn(citable)
 FakeUrn("urn:fake:objectclass.objectid")
 ```
 
+All citable resources must have a human-readable label.
 
 ```jldoctest citable
 function label(c::FakeCite)
@@ -36,6 +50,9 @@ label(citable)
 
 "Some citable resource"
 ```
+
+
+It must be possible to serialize a citable resource following to CiteEXchange format with the `cex` function.
 
 ```jldoctest citable
 function cex(c::FakeCite, delimiter = "#")
