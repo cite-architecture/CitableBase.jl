@@ -1,14 +1,14 @@
 "A citable unit of any kind is identified by a URN and has a human-readable label."
 abstract type Citable end
 
-"""Citable content should always be serializable.
+"""Citable content should implement `cex(c::Citable)`.
 """
 function cex end
 
-"""Citable content has a label.
+"""Citable content should implement `label(c::Citable)`.
 """
 function label end
 
-"""Citable content is identified by a URN.
+"""Citable content should implement `urn(c::Citable)::Urn`
 """
 function urn end

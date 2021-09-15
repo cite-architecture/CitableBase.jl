@@ -5,6 +5,7 @@ using Documenter, DocStringExtensions
 # Urn and its required functions:
 export Urn
 export dropversion, addversion
+export urnmatches, urncontains
 # Concrete implementations:
 export components, parts
 
