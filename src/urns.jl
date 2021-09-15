@@ -20,9 +20,8 @@ $(SIGNATURES)
 Splits a URN's string representation into top-level components.
 """
 function components(u::Urn)
-    split(u.urn, ":")
+    split(string(u), ":")
 end
-
 
 """
 $(SIGNATURES)

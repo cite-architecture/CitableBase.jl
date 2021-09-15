@@ -3,9 +3,10 @@ module CitableBase
 using Documenter, DocStringExtensions
 
 # Urn and its required functions:
-export Urn 
-export components, parts, validurn
+export Urn
 export dropversion, addversion
+# Concrete implementations:
+export components, parts
 
 # Citable and its required functions
 export Citable 
