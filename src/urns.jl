@@ -50,13 +50,13 @@ $(SIGNATURES)
 """
 function addversion end
 
-"""Two URNs match if they are equal, or if either contains the other.
+"""Urn subtypes should implement `urnmatches(urn1::U, urn2::U)::Bool`.
 
 $(SIGNATURES)
 """
-function urnmatches(u1::T, u2::T) where {T <: Urn}
-    contains(u1, u2) || contains(u2, u1) || u1 == u2
-end
+function urnmatches end
+    
+
 
 
 """Urn subtypes should implement `urncontains(urn1::U, urn2::U)::Bool`

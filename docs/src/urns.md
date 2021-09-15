@@ -68,12 +68,12 @@ Implementations of the `URN` interface should  dispatch the following two method
 
 ## URN comparison
 
-Implementations of the `URN` interface should  dispatch the `contains(urn1::Urn, urn2::Urn)` to a type-specific method.
+Implementations of the `URN` interface should  dispatch the `urncontains(urn1::Urn, urn2::Urn)` function and the `urnmatches(urn1::Urn, urn2::Urn)` function to type-specific methods.
 
-We illustrate with a simple-minded function that defines containment as any time the first part if the third component is shared.
+We illustrate the first with a simple-minded function that defines containment as any time the first part if the third component is shared.
 
 ```jldoctest urns
-function contains(u1::FakeUrn, u2::FakeUrn)
+function urncontains(u1::FakeUrn, u2::FakeUrn)
     components1 = components(u1)
     components2 = components(u2)
 
@@ -83,11 +83,23 @@ function contains(u1::FakeUrn, u2::FakeUrn)
 end
 urn1 = FakeUrn("urn:fake:group")
 urn2 = FakeUrn("urn:fake:group.id2")
-contains(urn1, urn2)
+urncontains(urn1, urn2)
 
 # output
 
 true
 ```
 
-The generic `urnmatch`
+Then we define `urnmatches` as true if two URNs are equal, or if either contains the other.
+
+
+```jldoctest urns
+function urnmatches(u1::FakeUrn, u2::FakeUrn)
+    urncontains(u1, u2) || urncontains(u2, u1) || u1 == u2
+end
+urnmatches(urn1, urn2)
+
+# output
+
+true
+```
