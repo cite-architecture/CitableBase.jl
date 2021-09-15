@@ -15,7 +15,7 @@ typeof(fake) |> supertype
 Urn
 ```
 
-Subtypes of `Urn` should override the Base definition of `print`.
+Subtypes of `Urn` should override the Base definition of `print`. This makes it possible to use the generic `components` and `parts` functions in `CitableBase`.
 
 ```jldoctest urns
 import Base: print
@@ -28,8 +28,6 @@ print(fake)
 
 urn:fake:objectclass.objectid
 ```
-
-This makes it possible to use the generic `components` and `parts` functions in `CitableBase`.
 
 Top-level syntactic units are separated by colons: `CitableBase` refers to these units as *components*.
 
@@ -61,8 +59,8 @@ components(fake)[3] |> parts
 
 Implementations of the `URN` interface should  dispatch the following two methods to type-specific functions:
 
-- `dropversion`
-- `addversion`
+- `dropversion(u::Urn)`
+- `addversion(u::Urn, versionId)`
 
 
 
