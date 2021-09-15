@@ -14,7 +14,6 @@ Urn
 ```@docs
 components
 parts
-urnmatches
 ```
 
 
@@ -24,6 +23,7 @@ urnmatches
 addversion
 dropversion
 urncontains
+urnsimilar
 ```
 
 
