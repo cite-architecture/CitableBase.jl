@@ -19,6 +19,7 @@ makedocs(
         "Home" => "index.md",
         "URNs" => "urns.md",
         "Citable resources" => "citable.md",
+        "Implementations" => "implementations.md",
         "API documentation" => "apis.md"
     ]
     )
