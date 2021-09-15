@@ -2,8 +2,8 @@
 
 ## `Urn`
 
-- [CitableText.jl](https://github.com/cite-architecture/CitableText.jl)
-- [CitableObject.jl](https://github.com/cite-architecture/CitableObject.jl)
+- the `CtsUrn`, in [CitableText.jl](https://github.com/cite-architecture/CitableText.jl)
+- the `Cite2Urn`, in [CitableObject.jl](https://github.com/cite-architecture/CitableObject.jl)
 
 
 
