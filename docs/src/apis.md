@@ -2,22 +2,43 @@
 ```@meta
 CurrentModule = CitableBase
 ```
+# API documentation 
 
-## Types
+## URNs
 ```@docs
 Urn
-Citable
 ```
 
-## Functions
+### Concrete functions for Urns
+
 ```@docs
-validurn
 components
 parts
+urnmatches
 ```
 
-## Functions to implement for specific URN types
+
+### URN abstractions to implement for specific types
+
 ```@docs
 addversion
 dropversion
+urncontains
+```
+
+
+## Citable resources
+
+```@docs
+Citable
+```
+
+
+### Citable abstractions to implement for specific types
+
+
+```@docs
+urn
+label
+cex
 ```
