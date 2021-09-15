@@ -1,33 +1,6 @@
 
-# They SHOULD
-# 1. override the validurn function to provide more specific validation
-
-"""
-$(SIGNATURES)
-True if s is valid for this type of URN.
-
-This checks only the minimal generic syntax for a URN, and should
-be overriden to check more specific requirements of types extending URN.        
-
-# Examples
-```julia-repl
-julia> validurn("urn:isbn:1788998367")
-```
-"""
-function validurn(s)
-    toplevel = components(s)
-    if size(toplevel,1) < 3
-        false
-    elseif toplevel[1] != "urn"
-        false
-    elseif toplevel[2] == ""
-        false
-    elseif toplevel[3] == ""
-        false
-    else 
-        true
-    end
-end
+"Unique identifiers expressible in the syntax of the IETF's URN specification."
+abstract type Urn end 
 
 """
 $(SIGNATURES)
@@ -63,3 +36,15 @@ julia> parts("tlg0012.tlg001.msA")
 function parts(componentString::AbstractString)
     split(componentString,".")
 end
+
+
+"""Catch-all function for `dropversion` method.
+$(SIGNATURES)
+"""
+function dropversion  end
+
+
+"""Catch-all function for `addversion` method.
+$(SIGNATURES)
+"""
+function addversion end

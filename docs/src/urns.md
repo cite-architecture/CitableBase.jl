@@ -32,19 +32,10 @@ components(fake)[3] |> parts
  "objectid"
 ```
 
+All implementations of the `URN` interface should override `Base.show`, and dispatch the following two methods to type-specific functions:
 
-
-All implementations of the `URN` interface should override `Base.show`, and dispatch the following three methods to type-specific functions:
-
-- `validurn`
 - `dropversion`
 - `addversion`
 
 
-## Real implementations
-
-In practice, there are two URN classes that implement the `URN` abstract type:  
-
-1. the CTS URN (implemented in the [CitableText](https://cite-architecture.github.io/CitableText.jl/stable/) module)
-2. the CITE2 URN (implemented in the [CitableObject](https://cite-architecture.github.io/CitableObject.jl/stable/) module).
 

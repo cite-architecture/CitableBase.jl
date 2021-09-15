@@ -1,20 +1,17 @@
 module CitableBase
-#import Base.show
 
 using Documenter, DocStringExtensions
 
+# Urn and its required functions:
 export Urn 
-# Urn required functions:
 export components, parts, validurn
 export dropversion, addversion
 
+# Citable and its required functions
 export Citable 
-# Citable required functions
 export urn, label, cex
 
-
-include("core.jl")
 include("urns.jl")
-include("versions.jl")
+include("citable.jl")
 
 end # module
