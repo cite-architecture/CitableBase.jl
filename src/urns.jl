@@ -19,7 +19,7 @@ end
 $(SIGNATURES)
 Splits a URN's string representation into top-level components.
 """
-function components(u::Urn)
+function components(u::U) where {U <: Urn}
     split(string(u), ":")
 end
 
