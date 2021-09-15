@@ -28,3 +28,8 @@ end
    @test_throws MethodError dropversion(incompleteUrn)
    @test_throws MethodError addversion(incompleteUrn, "v1")
 end
+
+@testset "Test application of dispatched functions" begin
+    fakeUrn = FakeUrn("urn:fake:id.subid")
+    components(fakeUrn)
+end
