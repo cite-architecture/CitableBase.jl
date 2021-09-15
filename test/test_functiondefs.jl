@@ -23,14 +23,12 @@ end
     @test isnothing(addversion(u, "versionid"))
 end
 
-@testset "Test ovveride validurn" begin
-    function dropversion(u::FakeUrn)
-        "Success"
+
+@testset "Test incomplete implementation of URN" begin
+    struct IncompleteUrn <: Urn
+        urn::AbstractString
     end
-    function addversion(u::FakeUrn, s)
-        "Success adding $s"
-    end
-    u = FakeUrn("urn:fake:id.subid")
-    @test dropversion(u) == "Success"
-    @test addversion(u, "versionid") == "Success adding versionid"
+   incompleteUrn =  IncompleteUrn("urn")
+   @test_throws MethodError dropversion(incompleteUrn)
+   @test_throws MethodError addversion(incompleteUrn, "v1")
 end
