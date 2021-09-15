@@ -6,11 +6,8 @@
     function urn(u::FakeUrn)
         u.urn
     end
-   
-    @test urn(fakeUrn) == "urn:fake:id.subid"
-    @test components(fakeUrn) == ["urn", "fake", "id.subid"]
-    @test components(fakeUrn)[3] |> parts == ["id", "subid"]
-end
+     @test urn(fakeUrn) == "urn:fake:id.subid"
+  end
 
 @testset "Test dispatch of shared methods" begin
     struct UrnType2 <: Urn
