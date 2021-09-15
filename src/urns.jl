@@ -50,11 +50,11 @@ $(SIGNATURES)
 """
 function addversion end
 
-"""Urn subtypes should implement `urnmatches(urn1::U, urn2::U)::Bool`.
+"""Urn subtypes should implement `urnsimilar(urn1::U, urn2::U)::Bool`.
 
 $(SIGNATURES)
 """
-function urnmatches end
+function urnsimilar end
     
 
 
