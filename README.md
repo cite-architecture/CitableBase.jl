@@ -23,11 +23,10 @@ Links will be added to the list below as implementations are tested against the 
 
 ### Citable texts
 
-In the `CitableCorpus` module:
-    - `CitablePassage`
-    - `CitableDocment`
+In the [`CitableCorpus` module](https://cite-architecture.github.io/CitableCorpus.jl/stable/):
 
-- citable physical text
+- `CitablePassage`
+- `CitableDocment`
 
 Analyses of texts:
 
