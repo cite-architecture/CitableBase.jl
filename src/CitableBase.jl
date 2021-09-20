@@ -1,5 +1,7 @@
 module CitableBase
 
+import Base:  ==
+
 using Documenter, DocStringExtensions
 
 # Urn and its required functions:
@@ -12,6 +14,7 @@ export components, parts
 # Citable and its required functions
 export Citable 
 export urn, label, cex
+export ==
 
 include("urns.jl")
 include("citable.jl")

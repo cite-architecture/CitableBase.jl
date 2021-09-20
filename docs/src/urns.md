@@ -15,6 +15,20 @@ typeof(fake) |> supertype
 Urn
 ```
 
+!!! note
+
+    The `==` function is overridden in `CitableBase` for all `Urn` types.  In order to compare two URNs for equality, you'll need to import or use `CitableBase` (as in the block above).
+
+```jldoctest urns
+FakeUrn("urn:fake:demo1") == FakeUrn("urn:fake:demo1")
+
+# output
+
+true
+```
+
+
+
 Subtypes of `Urn` should override the Base definition of `print`. This makes it possible to use the generic `components` and `parts` functions in `CitableBase`.
 
 ```jldoctest urns
@@ -66,7 +80,10 @@ Implementations of the `URN` interface should  dispatch the following two method
 
 ## URN comparison
 
+
+
 Implementations of the `URN` interface should  dispatch the `urncontains(urn1::Urn, urn2::Urn)` function and the `urnsimilar(urn1::Urn, urn2::Urn)` function to type-specific methods.
+
 
 We illustrate the first with a simple-minded function that defines containment as any time the first part of the third component is shared.
 
