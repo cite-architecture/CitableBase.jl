@@ -7,7 +7,8 @@
         u.urn
     end
      @test urn(fakeUrn) == "urn:fake:id.subid"
-  end
+     @test fakeUrn == FakeUrn("urn:fake:id.subid")
+end
 
 @testset "Test dispatch of shared methods" begin
     struct UrnType2 <: Urn
@@ -31,5 +32,6 @@ end
 
 @testset "Test application of dispatched functions" begin
     fakeUrn = FakeUrn("urn:fake:id.subid")
-    components(fakeUrn)
+    comps = components(fakeUrn)
+    @test length(comps) == 3
 end

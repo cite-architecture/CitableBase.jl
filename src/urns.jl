@@ -2,6 +2,14 @@
 "Unique identifiers expressible in the syntax of the IETF's URN specification."
 abstract type Urn end 
 
+"""Override Base.== for all `Urn` types.
+
+$(SIGNATURES)
+"""
+function ==(u1::T, u2::T) where {T <: Urn}
+    string(u1) == string(u2)
+end
+
 """
 $(SIGNATURES)
 Splits a string on colons (separator for top-level components of URNs).
@@ -56,9 +64,6 @@ $(SIGNATURES)
 """
 function urnsimilar end
     
-
-
-
 """Urn subtypes should implement `urncontains(urn1::U, urn2::U)::Bool`
 """
 function urncontains end
