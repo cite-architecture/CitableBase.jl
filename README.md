@@ -23,14 +23,16 @@ Links will be added to the list below as implementations are tested against the 
 
 ### Citable texts
 
-- citable passage
-- citable corpus
+In the `CitableCorpus` module:
+    - `CitablePassage`
+    - `CitableDocment`
+
 - citable physical text
 
 Analyses of texts:
 
-- citable analysis
-- citable analyzed corpus
+- citable analyzed token
+
 
 
 ### Collections of objects
