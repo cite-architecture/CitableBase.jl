@@ -12,11 +12,13 @@ export urnsimilar, urncontains
 export components, parts
 
 # Citable and its required functions
-export Citable 
+export Citable, CitableTrait
+export CitableByCtsUrn, CitableByCite2Urn, NotCitable
 export urn, label, cex
 export ==
 
 include("urns.jl")
 include("citable.jl")
+
 
 end # module
