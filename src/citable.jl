@@ -13,7 +13,7 @@ struct CitableByCite2Urn <: CitableTrait end
 """Value for the CitableTrait for everything not citable."""
 struct NotCitable <: CitableTrait end 
 
-"""Default status is NotCitable."""
+"""Define default value of CitableTrait as NotCitable."""
 CitableTrait(::Type) = NotCitable() 
 
 
