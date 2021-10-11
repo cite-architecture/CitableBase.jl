@@ -74,12 +74,12 @@ It must be possible to serialize a citable resource following to CiteEXchange fo
 
 ```jldoctest citable
 import CitableBase: cex
-function cex(c::MyOwnCite)
-    join([c.urn.urn, c.label])
+function cex(c::MyOwnCite, delimiter = "|")
+    join([c.urn.urn, c.label], delimiter)
 end
 cex(citablething)
 
 # output
 
-"urn:fake:id.subidSome citable resource"
+"urn:fake:id.subid|Some citable resource"
 ```

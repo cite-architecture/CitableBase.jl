@@ -48,8 +48,8 @@ type's citable trait value.
 
 $(SIGNATURES)
 """
-function cex(x::T) where {T} 
-    cex(CitableTrait(T), x)
+function cex(x::T, delim = "|") where {T} 
+    cex(CitableTrait(T), x, delim)
 end
 
 
@@ -75,7 +75,7 @@ end
 
 $(SIGNATURES)
 """
-function cex(::NotCitable, x)
+function cex(::NotCitable, x, delim)
     throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
 end
 
@@ -102,7 +102,7 @@ end
 
 $(SIGNATURES)
 """
-function cex(::CitableByCtsUrn, txt)
+function cex(::CitableByCtsUrn, txt, delim)
     throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
 end
 
@@ -130,44 +130,6 @@ end
 
 $(SIGNATURES)
 """
-function cex(::CitableByCite2Urn, obj)  
+function cex(::CitableByCite2Urn, obj, delim)  
     throw(DomainError(txt, string("Please implement the cex function for type ", typeof(obj))))
 end
-
-
-
-
-
-"""Delegate to specific functions based on 
-type's citable trait value.
-
-$(SIGNATURES)
-"""
-function cex(x::T) where {T} 
-    cex(CitableTrait(T), x)
-end
-
-"""Citable text content should implement label.
-"""
-function label(::CitableByCtsUrn, txt) 
-    throw(DomainError(txt, string("Please implement the label function for type ", typeof(txt))))
-end
-
-label(::CitableByCite2Urn, txt) = throw(DomainError(txt, string("Please implement label cex function for type ", typeof(obj))))
-
-
-urn(::CitableByCtsUrn, txt) = throw(DomainError(txt, string("Please implement the urn function for type ", typeof(txt))))
-
-urn(::CitableByCite2Urn, txt) = throw(DomainError(txt, string("Please implement label urn function for type ", typeof(obj))))
-
-
-
-#function cex end
-
-"""Citable content should implement `label(c::Citable)`.
-"""
-#function label end
-
-"""Citable content should implement `urn(c::Citable)::Urn`
-"""
-#function urn end
