@@ -14,8 +14,8 @@ struct MyOwnUrn <: Urn
         urn::AbstractString
 end
 struct MyOwnCite <: Citable
-    urn
-    label
+    urn::MyOwnUrn
+    label::AbstractString
 end
 u = MyOwnUrn("urn:fake:id.subid")
 citablething = MyOwnCite(u, "Some citable resource")
@@ -25,7 +25,7 @@ citablething = MyOwnCite(u, "Some citable resource")
 MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
 ```
 
-Then we'll implement the Holy trait trick to make our new type work with the citable trait.  We create our new value for the citable trait as a concrete type of the `CitableTrait` abstract type, and identify our new citable type as having this trait value.
+Then we'll use the Holy trait trick to make our new type work with the citable trait.  We create our new value for the citable trait as a concrete type of the `CitableTrait` abstract type, and identify our new citable type as having this trait value.
 
 ```jldoctest citable
 import CitableBase: CitableTrait
@@ -39,7 +39,7 @@ CitableTrait
 
 
 
-Now we can imlement the three functions of the `CitableTrait` interface.
+Now we can implement the three functions of the `CitableTrait` interface.
 
 All citable resources are identified by a `Urn`, which can be found with the `urn` function.
 

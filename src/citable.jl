@@ -1,7 +1,7 @@
 "A citable unit of any kind is identified by a URN and has a human-readable label."
 abstract type Citable end
 
-"""The citable trait."""
+"""Abstraction of values for a citable trait."""
 abstract type CitableTrait end 
 
 """Value for the CitableTrait for citable text content."""
@@ -48,8 +48,8 @@ type's citable trait value.
 
 $(SIGNATURES)
 """
-function cex(x::T, delim = "|") where {T} 
-    cex(CitableTrait(T), x, delim)
+function cex(x::T; delimiter = "|") where {T} 
+    cex(CitableTrait(T), x; delimiter)
 end
 
 
@@ -63,7 +63,7 @@ function urn(::NotCitable, x)
     throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
 end
 
-"""It is an error to invoke the `cex` function on material that is not citable.
+"""It is an error to invoke the `label` function on material that is not citable.
 
 $(SIGNATURES)
 """
@@ -75,14 +75,14 @@ end
 
 $(SIGNATURES)
 """
-function cex(::NotCitable, x, delim)
+function cex(::NotCitable, x; delimiter)
     throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
 end
 
 
 
 # Impose required function on all citable texts:
-"""Citable text content should implement cex.
+"""Citable text content should implement `urn`.
 
 $(SIGNATURES)
 """
@@ -90,7 +90,7 @@ function urn(::CitableByCtsUrn, txt)
     throw(DomainError(txt, string("Please implement the urn function for type ", typeof(txt))))
 end
 
-"""Citable text content should implement cex.
+"""Citable text content should implement `label`.
 
 $(SIGNATURES)
 """
@@ -98,11 +98,11 @@ function label(::CitableByCtsUrn, txt)
     throw(DomainError(txt, string("Please implement the label function for type ", typeof(txt))))
 end
 
-"""Citable text content should implement cex.
+"""Citable text content should implement `cex`.
 
 $(SIGNATURES)
 """
-function cex(::CitableByCtsUrn, txt, delim)
+function cex(::CitableByCtsUrn, txt; delimiter)
     throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
 end
 
@@ -115,21 +115,21 @@ end
 $(SIGNATURES)
 """
 function urn(::CitableByCite2Urn, obj)  
-    throw(DomainError(txt, string("Please implement the urn function for type ", typeof(obj))))
+    throw(DomainError(obj, string("Please implement the urn function for type ", typeof(obj))))
 end
 
-"""Citable content should implement cex.
+"""Citable content should implement `label`.
 
 $(SIGNATURES)
 """
 function label(::CitableByCite2Urn, obj)  
-    throw(DomainError(txt, string("Please implement the label function for type ", typeof(obj))))
+    throw(DomainError(obj, string("Please implement the label function for type ", typeof(obj))))
 end
 
-"""Citable content should implement cex.
+"""Citable content should implement `cex`.
 
 $(SIGNATURES)
 """
-function cex(::CitableByCite2Urn, obj, delim)  
-    throw(DomainError(txt, string("Please implement the cex function for type ", typeof(obj))))
+function cex(::CitableByCite2Urn, obj; delimiter)  
+    throw(DomainError(obj, string("Please implement the cex function for type ", typeof(obj))))
 end
