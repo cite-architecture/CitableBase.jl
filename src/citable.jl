@@ -16,7 +16,9 @@ struct NotCitable <: CitableTrait end
 """Define default value of CitableTrait as NotCitable."""
 CitableTrait(::Type) = NotCitable() 
 
-
+function citableobject(x)
+    CitableTrait(typeof(x)) != NotCitable()
+end
 #=
 Define delegation for the 4 functions of the CitableTrait:
 
@@ -50,7 +52,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function cex(x::T; delimiter = "|") where {T} 
-    cex(CitableTrait(T), x; delimiter)
+    cex(CitableTrait(T), x; delimiter = delimiter)
 end
 
 """Delegate `fromcex` to specific functions based on 
@@ -59,7 +61,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function fromcex(s::AbstractString, T; delimiter = "|")
-    "Type $(T) does not implement the fromcex function."
+    fromcex(CitableTrait(T), s; delimiter = delimiter)
 end
 
 # Catch attempts to use these functions on NotCitable:
