@@ -18,14 +18,15 @@ CitableTrait(::Type) = NotCitable()
 
 
 #=
-Define delegation for the 3 functions of the CitableTrait:
+Define delegation for the 4 functions of the CitableTrait:
 
 1. urn
 2. label
 3. cex
+4. fromcex
 =#
 
-"""Delegate to specific functions based on 
+"""Delegate `urn` to specific functions based on 
 type's citable trait value.
 
 $(SIGNATURES)
@@ -34,7 +35,7 @@ function urn(x::T) where {T}
     urn(CitableTrait(T), x)
 end
 
-"""Delegate to specific functions based on 
+"""Delegate `label` to specific functions based on 
 type's citable trait value.
 
 $(SIGNATURES)
@@ -43,7 +44,7 @@ function label(x::T) where {T}
     label(CitableTrait(T), x)
 end
 
-"""Delegate to specific functions based on 
+"""Delegate `cex` to specific functions based on 
 type's citable trait value.
 
 $(SIGNATURES)
@@ -52,7 +53,14 @@ function cex(x::T; delimiter = "|") where {T}
     cex(CitableTrait(T), x; delimiter)
 end
 
+"""Delegate `fromcex` to specific functions based on 
+type's citable trait value.
 
+$(SIGNATURES)
+"""
+function fromcex(s::AbstractString, T; delimiter = "|")
+    "Type $(T) does not implement the fromcex function."
+end
 
 # Catch attempts to use these functions on NotCitable:
 """It is an error to invoke the `urn` function on material that is not citable.
@@ -60,7 +68,7 @@ end
 $(SIGNATURES)
 """
 function urn(::NotCitable, x)
-    throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
+    throw(DomainError(x, string( typeof(x), " does not implement the urn function.")))
 end
 
 """It is an error to invoke the `label` function on material that is not citable.
@@ -68,7 +76,7 @@ end
 $(SIGNATURES)
 """
 function label(::NotCitable, x)
-    throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
+    throw(DomainError(x, string(typeof(x), " does not implement the label function.")))
 end
 
 """It is an error to invoke the `cex` function on material that is not citable.
@@ -76,8 +84,9 @@ end
 $(SIGNATURES)
 """
 function cex(::NotCitable, x; delimiter)
-    throw(DomainError(x, string("Objects of type ", typeof(x), " are not citable.")))
+    throw(DomainError(x, string(typeof(x), " does not implement the cex function.")))
 end
+
 
 
 
@@ -105,8 +114,6 @@ $(SIGNATURES)
 function cex(::CitableByCtsUrn, txt; delimiter)
     throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
 end
-
-
 
 
 # Impose required function on all citable objects:
