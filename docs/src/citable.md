@@ -39,7 +39,7 @@ CitableTrait
 
 
 
-Now we can implement the three functions of the `CitableTrait` interface.
+Now we can implement the four functions of the `CitableTrait` interface.
 
 All citable resources are identified by a `Urn`, which can be found with the `urn` function.
 
@@ -82,4 +82,21 @@ cex(citablething)
 # output
 
 "urn:fake:id.subid|Some citable resource"
+```
+
+In the other direction, we can read CEX to instantiate a citable object.
+```jldoctest citable
+import CitableBase: fromcex
+function fromcex(s::AbstractString, MyOwnCite, delimiter = "|")
+    parts = split(s, delimiter)
+    urn = MyOwnUrn(parts[1])
+    label = parts[2]
+    MyOwnCite(urn, label)
+end
+
+fromcex("urn:fake:id.subid|Some citable resource", MyOwnCite)
+
+# output
+
+MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
 ```
