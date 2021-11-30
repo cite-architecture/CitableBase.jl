@@ -14,7 +14,7 @@ export components, parts
 # Citable and its required functions
 export Citable, CitableTrait
 export CitableByCtsUrn, CitableByCite2Urn, NotCitable
-export urn, label, cex
+export urn, label, cex, fromcex, citableobject
 export ==
 
 include("urns.jl")
