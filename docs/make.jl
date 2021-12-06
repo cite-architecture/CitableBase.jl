@@ -18,6 +18,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "URNs" => "urns.md",
+        "URN comparison" => "urncomparison.md",
         "Citable resources" => "citable.md",
         "Implementations" => "implementations.md",
         "API documentation" => "apis.md"

@@ -2,6 +2,7 @@
 "Unique identifiers expressible in the syntax of the IETF's URN specification."
 abstract type Urn end 
 
+
 """Override Base.== for all `Urn` types.
 
 $(SIGNATURES)
@@ -58,12 +59,4 @@ $(SIGNATURES)
 """
 function addversion end
 
-"""Urn subtypes should implement `urnsimilar(urn1::U, urn2::U)::Bool`.
 
-$(SIGNATURES)
-"""
-function urnsimilar end
-    
-"""Urn subtypes should implement `urncontains(urn1::U, urn2::U)::Bool`
-"""
-function urncontains end
