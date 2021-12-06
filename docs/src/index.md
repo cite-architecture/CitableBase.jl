@@ -8,7 +8,7 @@ The CitableBase module defines three core abstractions of the CITE architecture:
 
 The following pages:
 
-1. illustrate how to implement a `Urn`, a `Citable`, and the `UrnComparisonTrait` 
+1. illustrate how to implement type `Urn` type, type `Citable` type, and the `UrnComparisonTrait` 
 2. list examples of implementations
 3. document public functions and types of the `CitableBase` module
 
