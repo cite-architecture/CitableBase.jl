@@ -18,7 +18,9 @@ export urn, label, cex, fromcex, citableobject
 export ==
 
 include("urns.jl")
+include("urncomparison.jl")
 include("citable.jl")
+
 
 
 end # module
