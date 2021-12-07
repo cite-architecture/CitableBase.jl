@@ -106,5 +106,3 @@ $(SIGNATURES)
 function label(::CitableByCite2Urn, obj)  
     throw(DomainError(obj, string("Please implement the label function for type ", typeof(obj))))
 end
-
-

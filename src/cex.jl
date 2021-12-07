@@ -26,7 +26,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function cex(x::T; delimiter = "|") where {T} 
-    cex(CitableTrait(T), x; delimiter = delimiter)
+    cex(CexTrait(T), x; delimiter = delimiter)
 end
 
 """Delegate `fromcex` to specific functions based on 
@@ -35,7 +35,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function fromcex(s::AbstractString, T; delimiter = "|")
-    fromcex(CitableTrait(T), s; delimiter = delimiter)
+    fromcex(CexTrait(T), s, T; delimiter = delimiter)
 end
 
 
@@ -53,8 +53,8 @@ end
 
 $(SIGNATURES)
 """
-function fromcex(::NotCexSerializable, x; delimiter)
-    throw(DomainError(x, string(typeof(x), " is not a CexSerializable type.")))
+function fromcex(::NotCexSerializable, cex, T; delimiter)
+    throw(DomainError(T, "$(T) is not a CexSerializable type."))
 end
 
 
