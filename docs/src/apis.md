@@ -5,25 +5,22 @@ CurrentModule = CitableBase
 # API documentation 
 
 ## URNs
+
 ```@docs
 Urn
 ```
 
-### Concrete functions for Urns
+Concrete functions for Urns
 
 ```@docs
 components
 parts
 ```
-
-
-### URN abstractions to implement for specific types
+URN abstractions to implement for specific types
 
 ```@docs
 addversion
 dropversion
-urncontains
-urnsimilar
 ```
 
 
@@ -33,12 +30,29 @@ urnsimilar
 Citable
 ```
 
-
-### Citable abstractions to implement for specific types
+Functions to implement for citable resources:
 
 
 ```@docs
 urn
 label
+```
+
+
+## URN comparison
+
+```@docs
+UrnComparisonTrait
+urncontains
+urnsimilar
+```
+
+
+
+## CEX serialization
+
+```@docs
+CexTrait
 cex
+fromcex
 ```

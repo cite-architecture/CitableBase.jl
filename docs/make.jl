@@ -18,8 +18,8 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "URNs" => "urns.md",
-        "URN comparison" => "urncomparison.md",
         "Citable resources" => "citable.md",
+        "URN comparison" => "urncomparison.md",
         "CEX serialization" => "cex.md",
         "Implementations" => "implementations.md",
         "API documentation" => "apis.md"
