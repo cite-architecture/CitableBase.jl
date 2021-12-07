@@ -21,9 +21,14 @@ UrnComparisonTrait(x::UrnThing)  = UrnComparable()
 UrnComparisonTrait
 ```
 
-To fulfill the trait's contract, we need to implement two functions, `urncontains` and `urnsimilar`.  For this example, we'll just say that any pair of `UrnThing`s starting with the `fake` class contain each other and are similar.
+To fulfill the trait's contract, we need to implement three functions, `urnequals`, `urncontains` and `urnsimilar`.  For this example, we'll just say that any pair of `UrnThing`s starting with the `fake` class contain each other and are similar.
 
 ```jldoctest citable
+import CitableBase: urnequals
+function urnequals(u1::UrnThing, u2::UrnThing)
+   u1.urn == u2.urn
+end
+
 import CitableBase: urncontains
 function urncontains(u1::UrnThing, u2::UrnThing)
     startswith(u1.urn, "urn:fake:") && startswith(u2.urn, "urn:fake:")
@@ -70,6 +75,13 @@ urncontains(thing1, thing2)
 true
 ```
 
+```jldoctest citable
+urnequals(thing1,thing2)
+
+# output
+
+false
+```
 ## Filtering lists of citable objects 
 
 We'll define a type with a collection of citable objects, and make it `UrnComparable` in exactly the same way.
@@ -88,6 +100,11 @@ UrnComparisonTrait
 Now we'll use URN logic to filter the collection for matching content.  In this implementation, the function returns a (possibly empty) list of `UrnThing`s.
  
 ```jldoctest citable
+function urncontains(urnlist::UrnThingList, uthing::UrnThing)
+    filter(u -> urnequals(uthing, u), urnlist.arr)
+end
+
+
 function urncontains(urnlist::UrnThingList, uthing::UrnThing)
     filter(u -> urncontains(uthing, u), urnlist.arr)
 end
@@ -112,3 +129,12 @@ urnsimilar(ulist, thing1)
  UrnThing("urn:fake:id.subid")
  UrnThing("urn:fake:id2")
 ```
+
+```jldoctest citable
+urnequals(ulist, thing1)
+
+# output
+
+1-element Vector{UrnThing}:
+ UrnThing("urn:fake:id.subid")
+ ```

@@ -30,3 +30,10 @@ function urnsimilar(x::T) where {T}
     urnsimilar(UrnComparisonTrait(T), x)
 end
 
+
+"""URN-comparable objects must implement `urnequals`.
+$(SIGNATURES)
+"""
+function urnequals(x::T) where {T} 
+    urnequals(UrnComparisonTrait(T), x)
+end
