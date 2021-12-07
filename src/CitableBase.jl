@@ -1,26 +1,29 @@
 module CitableBase
 
-import Base:  ==
-
 using Documenter, DocStringExtensions
+import Base:  ==
 
 # Urn and its required functions:
 export Urn
 export dropversion, addversion
-export urnsimilar, urncontains
+export ==
 # Concrete implementations:
 export components, parts
 
-# Citable and its required functions
+# The three key traits of citable content, 
+# together with their required functions:
 export Citable, CitableTrait
 export CitableByCtsUrn, CitableByCite2Urn, NotCitable
-export urn, label, cex, fromcex, citableobject
-export ==
+export urn, label, citableobject
+export CexTrait, CexSerializable, NotCexSerializable
+export cex, fromcex 
+export UrnComparisonTrait, UrnComparable, NotUrnComparable
+export urnsimilar, urncontains
 
 include("urns.jl")
 include("urncomparison.jl")
 include("citable.jl")
-
+include("cex.jl")
 
 
 end # module

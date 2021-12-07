@@ -20,6 +20,7 @@ makedocs(
         "URNs" => "urns.md",
         "URN comparison" => "urncomparison.md",
         "Citable resources" => "citable.md",
+        "CEX serialization" => "cex.md",
         "Implementations" => "implementations.md",
         "API documentation" => "apis.md"
     ]

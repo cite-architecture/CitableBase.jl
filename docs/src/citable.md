@@ -77,36 +77,3 @@ label(citablething)
 "Some citable resource"
 ```
 
-
-### Serialization
-
-It must be possible to serialize a citable resource following to CiteEXchange format with the `cex` function.
-
-```jldoctest citable
-import CitableBase: cex
-function cex(c::MyOwnCite, delimiter = "|")
-    join([c.urn.urn, c.label], delimiter)
-end
-cex(citablething)
-
-# output
-
-"urn:fake:id.subid|Some citable resource"
-```
-
-In the other direction, we can read CEX to instantiate a citable object.
-```jldoctest citable
-import CitableBase: fromcex
-function fromcex(s::AbstractString, MyOwnCite, delimiter = "|")
-    parts = split(s, delimiter)
-    urn = MyOwnUrn(parts[1])
-    label = parts[2]
-    MyOwnCite(urn, label)
-end
-
-fromcex("urn:fake:id.subid|Some citable resource", MyOwnCite)
-
-# output
-
-MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
-```
