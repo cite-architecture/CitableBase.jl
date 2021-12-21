@@ -9,7 +9,7 @@ The CitableBase module defines four core abstractions of the CITE architecture:
 
 The following pages:
 
-1. illustrate how to implement the `Urn` type, the `Citable` type, the `UrnComparisonTrait` and the `CexTrait`
+1. illustrate how to implement the `Urn` type and its `UrnComparisonTrait`, the three traits of the `Citable` type, namely, the `CitableTrait`, the `UrnComparisonTrait` and the `CexTrait`
 2. list examples of implementations
 3. document public functions and types of the `CitableBase` module
 
