@@ -1,16 +1,22 @@
 "Trait for objects serializable in CEX format."
 abstract type CexTrait end
 
-
 """Value for the CexTrait for serializable content."""
 struct CexSerializable <: CexTrait end
 
 """Value for the CexTrait for content not serializable to CEX format."""
 struct NotCexSerializable <: CexTrait end
 
-"""Define default value of CitableTrait as NotCexSerializable."""
+"""The default value of `CitableTrait` is `NotCexSerializable`."""
 CexTrait(::Type) = NotCexSerializable() 
 
+"""Subtypes of `Citable` are `CexSerializable`."""
+CexTrait(::Type{<:Citable}) = UrnComparable() 
+
+
+function cexserializable(x::T) where {T}
+    CexTrait(T) != NotCexSerializable()
+end
 
 #=
 Define delegation for the 2 functions of the CexTrait:
@@ -58,7 +64,7 @@ function fromcex(::NotCexSerializable, cex, T; delimiter)
 end
 
 
-# Impose `cex` function on all content citable by Cite2Urn or CtsUrn
+#= Impose `cex` function on all content citable by Cite2Urn or CtsUrn
 
 """Citable content should implement `cex`.
 
@@ -95,3 +101,4 @@ $(SIGNATURES)
 function fromcex(::CitableByCtsUrn, txt; delimiter)
     throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
 end
+=#

@@ -1,14 +1,18 @@
-# Citable resources: an example implementation
+# Citable entities: an example implementation
+
+`CitableBase` defines three traits that all citable entities must implement:  
+
+- the `CitableTrait`.  Citable objects are identified by URN, and have a human readable label.
+- the `UrnComparisonTrait`.  Citable objects can be compared with other citable objects of the same type using URN logic.
+- the `CexTrait`.  Citable objects can be round tripped to/from serialization to text strings in CEX format.
 
 
-The `CitableBase` modules includes a `CitableTrait` using the Holy trait trick to define three categories of citable trait, `CitableByCtsUrn`, `CitableByCite2Urn` and `NotCitable`.  For those values of the `CitableTrait`, it despatches four functions: `urn`, `label`, `cex` and `fromcex`.  
-
-This page illustrates how to define a new trait value, and use it with a particular type of citable content that even has its own unique type of URN.
+The next three pages walk through implementing these three traits for a custom type of citable object.
 
 
 ## Defining the citable type
 
-We'll begin by defining our own concrete implementations of the `Urn` type and the `Citable` type.
+We'll begin by defining a custom type of citable object, citable by its own custom type of URN.  Note that we make the types `MyOwnUrn` and `MyOwnCite` subtypes of the abstract `Urn` and `Citable` types, respectively.
 
 ```jldoctest citable
 using CitableBase
@@ -29,51 +33,43 @@ MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
 ```
 
 
-## Define the type as a `CitableTrait`
+## Recognizing the three core traits of the CITE architecture
 
-Next we'll use the Holy trait trick to make our new type work with the citable trait.  We create our new value for the citable trait as a concrete type of the `CitableTrait` abstract type, and identify our new citable type as having this trait value.
+Because `MyOwnUrn` is a subtype of `Urn`, `MyOwnUrn` objects are assumed to implement the `UrnComparison` trait.
 
 ```jldoctest citable
-import CitableBase: CitableTrait
-struct MyUniquelyCitable <: CitableTrait end
-CitableTrait(::Type{MyOwnCite}) = MyUniquelyCitable()
+urncomparable(u)
 
 # output
 
-CitableTrait
+true
 ```
 
-## Implementing the required functions
-
-To implement the four functions of the `CitableTrait` interface, all we have to do is define parameters of the proper type.
-
-### Identification
-
-All citable resources are identified by a `Urn`, which can be found with the `urn` function.
+Because `MyOwnCite` is a subtype of `Citable`, objects of that type are now recognizable as citable objects implementing all three core traits
 
 ```jldoctest citable
-import CitableBase: urn
-function urn(c::MyOwnCite)
-    c.urn
-end
-urn(citablething)
+citable(citablething)
 
 # output
 
-MyOwnUrn("urn:fake:id.subid")
+true
 ```
 
-All citable resources must have a human-readable label.
+
 
 ```jldoctest citable
-import CitableBase: label
-function label(c::MyOwnCite)
-    c.label
-end
-label(citablething)
+urncomparable(citablething)
 
 # output
 
-"Some citable resource"
+true
 ```
 
+
+```jldoctest citable
+cexserializable(citablething)
+
+# output
+
+true
+```

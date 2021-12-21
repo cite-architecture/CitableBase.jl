@@ -11,6 +11,15 @@ function ==(u1::T, u2::T) where {T <: Urn}
     string(u1) == string(u2)
 end
 
+
+"""For subtypes of `Urn`, implement `urnequals` concretely.
+
+$(SIGNATURES)
+"""
+function urnequals(u1::T, u2::T) where {T <: Urn}
+    u1 == u2
+end
+
 """
 $(SIGNATURES)
 Splits a string on colons (separator for top-level components of URNs).
