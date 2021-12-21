@@ -22,14 +22,14 @@ UrnComparisonTrait(::Type{<:Citable}) = UrnComparable()
 """URN-comparable objects must implement `urncontains`.
 $(SIGNATURES)
 """
-function urncontains(x::T, y::T) where {T} 
+function urncontains(x::T, y) where {T} 
     urncontains(UrnComparisonTrait(T), x, y)
 end
 
 """URN-comparable objects must implement `urnsimilar`.
 $(SIGNATURES)
 """
-function urnsimilar(x::T, y::T) where {T} 
+function urnsimilar(x::T, y) where {T} 
     urnsimilar(UrnComparisonTrait(T), x, y)
 end
 
@@ -37,7 +37,7 @@ end
 """URN-comparable objects must implement `urnequals`.
 $(SIGNATURES)
 """
-function urnequals(x::T, y::T) where {T} 
+function urnequals(x::T, y) where {T} 
     urnequals(UrnComparisonTrait(T), x, y)
 end
 

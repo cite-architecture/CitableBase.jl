@@ -43,7 +43,13 @@ We need to implement three functions for our new URN type: `urnequals`, `urncont
    
 
 
-The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This in turn serves as an implementation of `urnequals` for subtypes of `Urn`.  Note that in order to compare two URNs for equality, you'll need to import or use `CitableBase` (as in the block above).
+The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This in turn serves as an implementation of `urnequals` for subtypes of `Urn`.  
+
+
+
+!!! warning
+
+    Note that in order to compare two URNs for equality, you'll need to import or use `CitableBase` (as in the block above).
 
 ```jldoctest urns
 FakeUrn("urn:fake:demo1") == FakeUrn("urn:fake:demo1")
@@ -59,13 +65,13 @@ For this artificial example, we'll define one URN as "containing" another if the
 
 ```jldoctest urns
 import CitableBase: urncontains
-function urncontains(u1::UrnThing, u2::UrnThing)
+function urncontains(u1::FakeUrn, u2::FakeUrn)
     startswith(u1.urn, "urn:fake:") && startswith(u2.urn, "urn:fake:")
 end
 
 
 import CitableBase: urnsimilar
-function urnsimilar(u1::UrnThing, u2::UrnThing)
+function urnsimilar(u1::FakeUrn, u2::FakeUrn)
     urncontains(u1, u2) || urnequals(u1, u2)
 end
 

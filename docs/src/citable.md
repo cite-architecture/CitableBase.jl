@@ -1,6 +1,6 @@
-# Citable resources: an example implementation
+# Citable entities: an example implementation
 
-Citable objects implement three traits:  
+`CitableBase` defines three traits that all citable entities must implement:  
 
 - the `CitableTrait`.  Citable objects are identified by URN, and have a human readable label.
 - the `UrnComparisonTrait`.  Citable objects can be compared with other citable objects of the same type using URN logic.

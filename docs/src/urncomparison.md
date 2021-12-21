@@ -1,19 +1,15 @@
 # Comparison using URN logic
 
-You can compare citable objects of the same using URN logic.  The `UrnComparisonTrait` requires you 
+You can compare citable objects of the same type using URN logic. 
 
-
-Import the trait, define your type, and declare its trait value to be `UrnComparable()`.
+In this example, we'll create a type that is *not* a subtype of `Citable`.  We import the `UrnComparisonTrait` trait, define the new type, and then define its trait value to be `UrnComparable()`.
 
 
 ## Comparing individual objects
 
 
-Subtypes of `Urn` are automatically categorized as `UrnComparable()`, but you can define the trait for any type.
-
-
 ```jldoctest citable
-using CitableBase: UrnComparable
+using CitableBase
 import CitableBase: UrnComparisonTrait
 struct UrnThing
     urn::AbstractString
@@ -25,7 +21,7 @@ UrnComparisonTrait(::Type{UrnThing})  = UrnComparable()
 UrnComparisonTrait
 ```
 
-To fulfill the trait's contract, we need to implement three functions, `urnequals`, `urncontains` and `urnsimilar`.  For this example, we'll just say that any pair of `UrnThing`s starting with the `fake` class contain each other and are similar.
+The `UrnComparisonTrait` requires us to implement three functions, `urnequals`, `urncontains` and `urnsimilar`.  For this example, we'll just say that any pair of `UrnThing`s starting with the `fake` class contain each other and are similar.
 
 ```jldoctest citable
 import CitableBase: urnequals
@@ -86,25 +82,47 @@ urnequals(thing1,thing2)
 
 false
 ```
-## Filtering lists of citable objects 
 
-We'll define a type with a collection of citable objects, and make it `UrnComparable` in exactly the same way.
+
+## Making lists of citable objects URN comparable
+
+We're not limited to implementing the `UrnComparable` trait for individual  objects.  The next example defines a type with a collection of citable objects.  We can make it URN comparable in exactly the same way.
+
+Because it is *not* a subtype of `Citable`, we again explicitly define its trait value as `UrnComparable()`.
 
 ```jldoctest citable
 struct UrnThingList
     arr::Vector{UrnThing}
 end
-UrnComparisonTrait(x::UrnThingList)  = UrnComparable()
+UrnComparisonTrait(::Type{UrnThingList})  = UrnComparable()
  
 # output
 
 UrnComparisonTrait
 ```
 
-Now we'll use URN logic to filter the collection for matching content.  In this implementation, the function returns a (possibly empty) list of `UrnThing`s.
+We can verify that objets of our new type are now recognized as `urncomparable`.
+
+```jldoctest citable
+ulist = UrnThingList([thing1, thing2, thing3])
+urncomparable(ulist)
+
+# output
+
+true
+```
+
+Now we'll our required functions not to return a boolean value, but to filter the collection for matching content
+using URN logic. The functions will return a (possibly empty) list of `UrnThing`s.
+
+
+
+!!! note
+
+    This is the same semantics as in the [CitableLibary package](https://cite-architecture.github.io/CitableLibrary.jl/stable/) where  the `UrnComparisonTrait` is used to filter citable collections.
  
 ```jldoctest citable
-function urncontains(urnlist::UrnThingList, uthing::UrnThing)
+function urnequals(urnlist::UrnThingList, uthing::UrnThing)
     filter(u -> urnequals(uthing, u), urnlist.arr)
 end
 
@@ -124,7 +142,7 @@ urnsimilar (generic function with 3 methods)
 
 
 ```jldoctest citable
-ulist = UrnThingList([thing1, thing2, thing3])
+
 urnsimilar(ulist, thing1)
 
 # output
@@ -141,4 +159,4 @@ urnequals(ulist, thing1)
 
 1-element Vector{UrnThing}:
  UrnThing("urn:fake:id.subid")
- ```
+```
