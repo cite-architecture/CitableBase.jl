@@ -19,6 +19,7 @@ makedocs(
         "Home" => "index.md",
         "URNs" => "urns.md",
         "Citable resources" => "citable.md",
+        "Citable trait" => "citabletrait.md",
         "URN comparison" => "urncomparison.md",
         "CEX serialization" => "cex.md",
         "Implementations" => "implementations.md",

@@ -13,16 +13,19 @@ export components, parts
 # The three key traits of citable content, 
 # together with their required functions:
 export Citable, CitableTrait
-export CitableByCtsUrn, CitableByCite2Urn, NotCitable
-export urn, label, citableobject
-export CexTrait, CexSerializable, NotCexSerializable
+export CitableByCtsUrn, CitableByCite2Urn, NotCitable, citable
+export urn, label
+
+export CexTrait, CexSerializable, NotCexSerializable, cexserializable
 export cex, fromcex 
-export UrnComparisonTrait, UrnComparable, NotUrnComparable
+
+export UrnComparisonTrait, UrnComparable, NotUrnComparable, urncomparable
 export urnsimilar, urncontains, urnequals
 
+
+include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")
-include("citable.jl")
 include("cex.jl")
 
 

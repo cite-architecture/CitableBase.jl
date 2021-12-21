@@ -16,7 +16,7 @@ struct MyOwnCite <: Citable
 end
 
 import CitableBase: CexTrait
-CexTrait(MyOwnCite) = CexSerializable() 
+CexTrait(::Type{MyOwnCite}) = CexSerializable() 
 
 # output
 

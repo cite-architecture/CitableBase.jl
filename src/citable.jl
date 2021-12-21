@@ -1,33 +1,36 @@
-
-
 "A citable unit of any kind is identified by a URN and has a human-readable label."
 abstract type Citable end
 
 """Abstraction of values for a citable trait."""
 abstract type CitableTrait end 
 
+#=
 """Value for the CitableTrait for citable text content."""
 struct CitableByCtsUrn <: CitableTrait end
 
 """Value for the CitableTrait for discrete objects."""
 struct CitableByCite2Urn <: CitableTrait end 
+=#
+
 
 """Value for the CitableTrait for everything not citable."""
 struct NotCitable <: CitableTrait end 
-
 """Define default value of CitableTrait as NotCitable."""
 CitableTrait(::Type) = NotCitable() 
 
+"""Value for the CitableTrait for all subtypes of `Citable`."""
+struct CitableObject <: CitableTrait end 
+"""Define value of CitableTrait for subtypes of `Citable`."""
+CitableTrait(::Type{<:Citable}) = CitableObject() 
 
 """True if `x` is a citable object."""
-function citableobject(x)
+function citable(x)
     CitableTrait(typeof(x)) != NotCitable()
 end
 
 
 #=
 Define delegation for the 2 functions of the CitableTrait:
-
 1. urn
 2. label
 =#
@@ -71,7 +74,7 @@ end
 
 
 
-# Impose required function on all citable texts:
+#=
 """Citable text content should implement `urn`.
 
 $(SIGNATURES)
@@ -106,3 +109,5 @@ $(SIGNATURES)
 function label(::CitableByCite2Urn, obj)  
     throw(DomainError(obj, string("Please implement the label function for type ", typeof(obj))))
 end
+
+=#

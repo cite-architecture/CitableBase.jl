@@ -1,4 +1,3 @@
-
 "Abstraction of values for URN manipulation."
 abstract type UrnComparisonTrait end
 
@@ -9,31 +8,43 @@ struct UrnComparable <: UrnComparisonTrait end
 struct NotUrnComparable <: UrnComparisonTrait end
 
 
-"""Define default value of UrnComparisonTrait as NotUrnComparable."""
+"""Default value of `UrnComparisonTrait` is `NotUrnComparable`."""
 UrnComparisonTrait(::Type) = NotUrnComparable() 
 
 """All subtypes of `Urn` are URN comparable."""
-UrnComparisonTrait(x::T)  where {T <: Urn} = UrnComparable() 
+UrnComparisonTrait(::Type{<:Urn}) = UrnComparable() 
+
+"""All subtypes of `Citable` are URN comparable."""
+UrnComparisonTrait(::Type{<:Citable}) = UrnComparable() 
+
 
 # Delegate functions based on trait value.
 """URN-comparable objects must implement `urncontains`.
 $(SIGNATURES)
 """
-function urncontains(x::T) where {T} 
-    urncontains(UrnComparisonTrait(T), x)
+function urncontains(x::T, y::T) where {T} 
+    urncontains(UrnComparisonTrait(T), x, y)
 end
 
 """URN-comparable objects must implement `urnsimilar`.
 $(SIGNATURES)
 """
-function urnsimilar(x::T) where {T} 
-    urnsimilar(UrnComparisonTrait(T), x)
+function urnsimilar(x::T, y::T) where {T} 
+    urnsimilar(UrnComparisonTrait(T), x, y)
 end
 
 
 """URN-comparable objects must implement `urnequals`.
 $(SIGNATURES)
 """
-function urnequals(x::T) where {T} 
-    urnequals(UrnComparisonTrait(T), x)
+function urnequals(x::T, y::T) where {T} 
+    urnequals(UrnComparisonTrait(T), x, y)
+end
+
+
+"""True if `T` implements the `UrnComparisonTrait`.
+$SIGNATURES
+"""
+function urncomparable(u::T) where {T}
+    UrnComparisonTrait(T) != NotUrnComparable()
 end

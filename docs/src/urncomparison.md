@@ -1,6 +1,9 @@
 # Comparison using URN logic
 
-You can make citable objects comparable with each other or with collections of other citable objects using URN similarity or URN containment by implementing the `UrnComparisonTrait`.  Import the trait, define your type, and declare its trait value to be `UrnComparable()`.
+You can compare citable objects of the same using URN logic.  The `UrnComparisonTrait` requires you 
+
+
+Import the trait, define your type, and declare its trait value to be `UrnComparable()`.
 
 
 ## Comparing individual objects
@@ -10,11 +13,12 @@ Subtypes of `Urn` are automatically categorized as `UrnComparable()`, but you ca
 
 
 ```jldoctest citable
+using CitableBase: UrnComparable
 import CitableBase: UrnComparisonTrait
 struct UrnThing
     urn::AbstractString
 end
-UrnComparisonTrait(x::UrnThing)  = UrnComparable()
+UrnComparisonTrait(::Type{UrnThing})  = UrnComparable()
 
 # output
 
