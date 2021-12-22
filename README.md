@@ -1,7 +1,7 @@
 ![build](https://github.com/cite-architecture/CitableBase.jl/actions/workflows/Documentation.yml/badge.svg)
 
 
-# CitableBase.jl
+# CitableBase.jl [![version](https://juliahub.com/docs/CitableBase/version.svg)](https://juliahub.com/ui/Packages/CitableBase/6BIMt)
 
 A Julia module defining the two core abstractions of the CITE architecture:
 
