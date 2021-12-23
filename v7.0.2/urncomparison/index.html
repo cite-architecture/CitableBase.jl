@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>URN comparison · CitableBase.jl</title><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.039/juliamono-regular.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.11/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">CitableBase.jl</a></span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../urns/">URNs</a></li><li><a class="tocitem" href="../citable/">Citable resources</a></li><li><a class="tocitem" href="../citabletrait/">Citable trait</a></li><li class="is-active"><a class="tocitem" href>URN comparison</a><ul class="internal"><li><a class="tocitem" href="#Comparing-individual-objects"><span>Comparing individual objects</span></a></li><li><a class="tocitem" href="#Making-lists-of-citable-objects-URN-comparable"><span>Making lists of citable objects URN comparable</span></a></li></ul></li><li><a class="tocitem" href="../cex/">CEX serialization</a></li><li><a class="tocitem" href="../implementations/">Implementations</a></li><li><a class="tocitem" href="../apis/">API documentation</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>URN comparison</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>URN comparison</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/cite-architecture/CitableBase.jl/blob/master/docs/src/urncomparison.md" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Comparison-using-URN-logic"><a class="docs-heading-anchor" href="#Comparison-using-URN-logic">Comparison using URN logic</a><a id="Comparison-using-URN-logic-1"></a><a class="docs-heading-anchor-permalink" href="#Comparison-using-URN-logic" title="Permalink"></a></h1><p>You can compare citable objects of the same type using URN logic. </p><p>In this example, we&#39;ll create a type that is <em>not</em> a subtype of <code>Citable</code>.  We import the <code>UrnComparisonTrait</code> trait, define the new type, and then define its trait value to be <code>UrnComparable()</code>.</p><h2 id="Comparing-individual-objects"><a class="docs-heading-anchor" href="#Comparing-individual-objects">Comparing individual objects</a><a id="Comparing-individual-objects-1"></a><a class="docs-heading-anchor-permalink" href="#Comparing-individual-objects" title="Permalink"></a></h2><pre><code class="language-julia hljs">using CitableBase
+import CitableBase: UrnComparisonTrait
+struct UrnThing
+    urn::AbstractString
+end
+UrnComparisonTrait(::Type{UrnThing})  = UrnComparable()
+
+# output
+
+UrnComparisonTrait</code></pre><p>The <code>UrnComparisonTrait</code> requires us to implement three functions, <code>urnequals</code>, <code>urncontains</code> and <code>urnsimilar</code>.  For this example, we&#39;ll just say that any pair of <code>UrnThing</code>s starting with the <code>fake</code> class contain each other and are similar.</p><pre><code class="language-julia hljs">import CitableBase: urnequals
+function urnequals(u1::UrnThing, u2::UrnThing)
+   u1.urn == u2.urn
+end
+
+import CitableBase: urncontains
+function urncontains(u1::UrnThing, u2::UrnThing)
+    startswith(u1.urn, &quot;urn:fake:&quot;) &amp;&amp; startswith(u2.urn, &quot;urn:fake:&quot;)
+end
+
+
+import CitableBase: urnsimilar
+function urnsimilar(u1::UrnThing, u2::UrnThing)
+    urncontains(u1, u2)
+end
+
+# output
+
+urnsimilar (generic function with 2 methods)</code></pre><p>Let&#39;s try it out.</p><pre><code class="language-julia hljs">thing1 = UrnThing(&quot;urn:fake:id.subid&quot;)
+thing2 = UrnThing(&quot;urn:fake:id2&quot;)
+thing3 = UrnThing(&quot;urn:notevenfake:id&quot;)
+urnsimilar(thing1, thing2)
+
+# output
+
+true</code></pre><pre><code class="language-julia hljs">urnsimilar(thing1, thing3)
+
+# output
+
+false</code></pre><pre><code class="language-julia hljs">urncontains(thing1, thing2)
+
+# output
+
+true</code></pre><pre><code class="language-julia hljs">urnequals(thing1,thing2)
+
+# output
+
+false</code></pre><h2 id="Making-lists-of-citable-objects-URN-comparable"><a class="docs-heading-anchor" href="#Making-lists-of-citable-objects-URN-comparable">Making lists of citable objects URN comparable</a><a id="Making-lists-of-citable-objects-URN-comparable-1"></a><a class="docs-heading-anchor-permalink" href="#Making-lists-of-citable-objects-URN-comparable" title="Permalink"></a></h2><p>We&#39;re not limited to implementing the <code>UrnComparable</code> trait for individual  objects.  The next example defines a type with a collection of citable objects.  We can make it URN comparable in exactly the same way.</p><p>Because it is <em>not</em> a subtype of <code>Citable</code>, we again explicitly define its trait value as <code>UrnComparable()</code>.</p><pre><code class="language-julia hljs">struct UrnThingList
+    arr::Vector{UrnThing}
+end
+UrnComparisonTrait(::Type{UrnThingList})  = UrnComparable()
+ 
+# output
+
+UrnComparisonTrait</code></pre><p>We can verify that objets of our new type are now recognized as <code>urncomparable</code>.</p><pre><code class="language-julia hljs">ulist = UrnThingList([thing1, thing2, thing3])
+urncomparable(ulist)
+
+# output
+
+true</code></pre><p>Now we&#39;ll our required functions not to return a boolean value, but to filter the collection for matching content using URN logic. The functions will return a (possibly empty) list of <code>UrnThing</code>s.</p><div class="admonition is-info"><header class="admonition-header">Note</header><div class="admonition-body"><p>This is the same semantics as in the <a href="https://cite-architecture.github.io/CitableLibrary.jl/stable/">CitableLibary package</a> where  the <code>UrnComparisonTrait</code> is used to filter citable collections.</p></div></div><pre><code class="language-julia hljs">function urnequals(urnlist::UrnThingList, uthing::UrnThing)
+    filter(u -&gt; urnequals(uthing, u), urnlist.arr)
+end
+
+
+function urncontains(urnlist::UrnThingList, uthing::UrnThing)
+    filter(u -&gt; urncontains(uthing, u), urnlist.arr)
+end
+
+function urnsimilar(urnlist::UrnThingList, uthing::UrnThing)
+    urncontains(urnlist, uthing)
+end
+
+# output
+
+urnsimilar (generic function with 3 methods)</code></pre><pre><code class="language-julia hljs">
+urnsimilar(ulist, thing1)
+
+# output
+
+2-element Vector{UrnThing}:
+ UrnThing(&quot;urn:fake:id.subid&quot;)
+ UrnThing(&quot;urn:fake:id2&quot;)</code></pre><pre><code class="language-julia hljs">urnequals(ulist, thing1)
+
+# output
+
+1-element Vector{UrnThing}:
+ UrnThing(&quot;urn:fake:id.subid&quot;)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../citabletrait/">« Citable trait</a><a class="docs-footer-nextpage" href="../cex/">CEX serialization »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.10 on <span class="colophon-date" title="Thursday 23 December 2021 20:53">Thursday 23 December 2021</span>. Using Julia version 1.5.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
