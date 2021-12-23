@@ -11,7 +11,7 @@ struct NotCexSerializable <: CexTrait end
 CexTrait(::Type) = NotCexSerializable() 
 
 """Subtypes of `Citable` are `CexSerializable`."""
-CexTrait(::Type{<:Citable}) = UrnComparable() 
+CexTrait(::Type{<:Citable}) = CexSerializable() 
 
 
 function cexserializable(x::T) where {T}
@@ -20,7 +20,6 @@ end
 
 #=
 Define delegation for the 2 functions of the CexTrait:
-
 
 - cex
 - fromcex
@@ -62,43 +61,3 @@ $(SIGNATURES)
 function fromcex(::NotCexSerializable, cex, T; delimiter)
     throw(DomainError(T, "$(T) is not a CexSerializable type."))
 end
-
-
-#= Impose `cex` function on all content citable by Cite2Urn or CtsUrn
-
-"""Citable content should implement `cex`.
-
-$(SIGNATURES)
-"""
-function cex(::CitableByCite2Urn, obj; delimiter)  
-    throw(DomainError(obj, string("Please implement the cex function for type ", typeof(obj))))
-end
-
-
-"""Citable text content should implement `cex`.
-
-$(SIGNATURES)
-"""
-function cex(::CitableByCtsUrn, txt; delimiter)
-    throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
-end
-
-# Impose `fromcex` function on all content citable by Cite2Urn or CtsUrn
-
-"""Citable content should implement `fromcex`.
-
-$(SIGNATURES)
-"""
-function fromcex(::CitableByCite2Urn, obj; delimiter)  
-    throw(DomainError(obj, string("Please implement the cex function for type ", typeof(obj))))
-end
-
-
-"""Citable text content should implement `fromcex`.
-
-$(SIGNATURES)
-"""
-function fromcex(::CitableByCtsUrn, txt; delimiter)
-    throw(DomainError(txt, string("Please implement the cex function for type ", typeof(txt))))
-end
-=#
