@@ -1,7 +1,5 @@
-
 "Unique identifiers expressible in the syntax of the IETF's URN specification."
 abstract type Urn end 
-
 
 """Override Base.== for all `Urn` types.
 
