@@ -61,7 +61,9 @@ distanthorizons = Isbn10Urn("urn:isbn:022661283X")
 
 ## Defining the `UrnComparisonTrait`
 
-S
+Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions.
+
+
 ```@example urns
 import CitableBase: UrnComparisonTrait
 struct IsbnComparable <: UrnComparisonTrait end
