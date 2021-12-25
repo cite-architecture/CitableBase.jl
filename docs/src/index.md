@@ -6,6 +6,8 @@ This package defines abstract types and traits for the essential concepts of the
 
 The CITE architecture can be described by four kinds of behavior, corresponding in Julia to four traits or interfaces.
 
+> ADD LINK TO IETF STANDARD FOR URNs
+
 1. *identification*.  Scholarly resources are identified using the syntax of the IETF URN specification, and have a human-readable label.  This is expressed by implementing the `CitableTrait`.
 2. *comparison*.  Citable resources can be compared using the URN logic of *equality*, *containment* and  *similarity*.  This is expressed by implementing the  `UrnComparisonTrait`.
 3.  *serialization*.  Citable resources can be losslessly serialized to plain-text representation in CEX format and instantiated from the same plain-text representation.  This is expressed by implementing the `CexTrait`.
