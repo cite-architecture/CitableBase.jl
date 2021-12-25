@@ -2,39 +2,69 @@
 
 !!! note "TBD"
 
-    This page will define an `Isbn10Urn` type and implement the `UrnComparisonTrait`.
+    This page will 
+    
+    - √ define an `Isbn10Urn` type 
+    - implement the `UrnComparisonTrait`.
 
-The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is incredibly complicated, with each of its four components being variable in length.    We'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).
+
+## The task
+
+ISBN numbers uniquely identified published editions of a book.  We want to create a type representing the 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages recognizing URNs.
+
+## Defining the `Isbn10Urn` type
+
+> ADD LINKS TO URN SPECIFICATION
 
 
+The `Urn` abstract type models a Uniform Resource Name (URN). The URN standard specifies syntax we'll follow here.  Our URNs for ISBNs will have three colon-delimited components, the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.
 
-The `Urn` abstract type models a Uniform Resource Name (URN). URNs have a string value with a specified syntax.  
-
-> ADD LINKS TO URN SPECIFICATION AND INFO ON ISBN10
 
 ```@example urns
 using CitableBase
 struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
-
-struct IsbnComparable <: UrnComparisonTrait end
-import CitableBase: UrnComparisonTrait
-UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
-
 ```
 
-```@example urns
-distanthorizons = Isbn10Urn("urn:isbn:022661283X")
-urncomparable(typeof(distanthorizons))
-```
+
+
+!!! warning "Note on the ISBN-10 format"
+
+    The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated:  it has four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep this example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field.
+
+
+
+
+
+As often in Julia, we'll override the default `show` method for our type.  (Note that in Julia this requires *importing* the specific method, not just using the package.)
+
 
 ```@example urns
 import Base: show
 function show(io::IO, u::Isbn10Urn)
-    print(io, u.isbn)
+    print(io, join(["<", u.isbn, ">"])
 end
 ```
+
+Now when we create objects of our new type, the display in our REPL (or other contexts) will be easily recognizable as an `Isbn10Urn`.
+
+```@example urns
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+```
+
+
+
+## Defining the `UrnComparisonTrait`
+
+```@example urns
+import CitableBase: UrnComparisonTrait
+struct IsbnComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+```
+
+
+urncomparable(typeof(distanthorizons))
 
 
 quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
