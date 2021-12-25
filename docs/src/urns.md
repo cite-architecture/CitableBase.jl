@@ -4,6 +4,9 @@
 
     This page will define an `Isbn10Urn` type and implement the `UrnComparisonTrait`.
 
+The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is incredibly complicated, with each of its four components being variable in length.    We'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).
+
+
 
 The `Urn` abstract type models a Uniform Resource Name (URN). URNs have a string value with a specified syntax.  
 
