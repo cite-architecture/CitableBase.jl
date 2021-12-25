@@ -43,7 +43,7 @@ As often in Julia, we'll override the default `show` method for our type.  (Note
 ```@example urns
 import Base: show
 function show(io::IO, u::Isbn10Urn)
-    print(io, join(["<", u.isbn, ">"])
+    print(io, u.isbn)
 end
 ```
 
