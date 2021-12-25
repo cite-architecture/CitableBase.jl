@@ -34,7 +34,10 @@ end
     The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated:  it has four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep this example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field.
 
 
-
+Our new type is a subtype of `Urn`.
+```@example urns
+supertype(Isbn10Urn)
+```
 
 
 As often in Julia, we'll override the default `show` method for our type.  (Note that in Julia this requires *importing* the specific method, not just using the package.)
@@ -55,8 +58,10 @@ distanthorizons = Isbn10Urn("urn:isbn:022661283X")
 
 
 
+
 ## Defining the `UrnComparisonTrait`
 
+S
 ```@example urns
 import CitableBase: UrnComparisonTrait
 struct IsbnComparable <: UrnComparisonTrait end
