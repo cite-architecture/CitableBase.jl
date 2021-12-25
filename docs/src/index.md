@@ -1,8 +1,11 @@
 # CitableBase
 
-This package defines abstract types and traits for the essential concepts of the CITE architecture. 
+This package defines traits and abstract types for the essential concepts of the CITE architecture. 
 
 ## Essential concepts
+
+
+### Behaviors of citable resources 
 
 The CITE architecture can be described by four kinds of behavior, corresponding in Julia to four traits or interfaces.
 
@@ -13,15 +16,18 @@ The CITE architecture can be described by four kinds of behavior, corresponding 
 3.  *serialization*.  Citable resources can be losslessly serialized to plain-text representation in CEX format and instantiated from the same plain-text representation.  This is expressed by implementing the `CexTrait`.
 4. *iteration*. Collections of citable content can be processed sequentially. This is expressed by implementing the iterators interface from Julia's `Iterators` module.
 
+
+### Abstractions of essential types 
+
 Using these building blocks, the `CitableBase` further defines three core abstractions:
 
 1. *identifiers* expressible using the syntax of the IETF URN specification.  This is represented by the `Urn` abstract type, and requires implementing the `UrnComparisonTrait`.
 2. *citable entities* are discrete objects identified by URN.  This is represented by the `Citable` abstract type, and requires implementing the `CitableTrait`, `UrnComparisonTrait`, and `CexTrait`.
 3. *citable collections* are collections of content identifiable by URN.  Unlike identifiers and citable entities, they do not fall within a single type hierarchy, and are not represented by subtyping an abstract type.  Instead, they are identified by the `CitableCollectionTrait`, and implement the `UrnComparisonTrait`, `CexTrait` and `Iterators`.  
 
-!!! note
+!!! tip "An illustration: the CitableCorpus package"
 
-    Some citable collections might also implement the `CitableTrait`, in effect making them simultaneously  a discrete citable obect (the collection as a whole), and a collection with citable content.  The  `CitableCorpus` package illustrates these distinctions handily.  The `CitablePassage` is a citable object representing a single passage of text.  The `CitableDocument` is both a citable object with its own URN and label, and a collection of citable passages.  The `CitableCorpus` is a pure citable collection of citable documents and citable passages, but does not have its own distinct identifier a label: it's purely a container type.
+    Some citable collections might also implement the `CitableTrait`, in effect making them simultaneously  a discrete citable obect (the collection as a whole), and a collection with citable content.  The  `CitableCorpus` package illustrates these distinctions handily.  Its `CitablePassage` is a citable object representing a single passage of text.  The `CitableDocument` is both a citable object with its own URN and label, and a collection of citable passages.  The `CitableCorpus` is a pure citable collection of citable documents and citable passages, but does not have its own distinct identifier a label: it's purely a container type.
 
 
 
