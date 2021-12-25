@@ -6,6 +6,14 @@
     This page will define a `CitableBook` type and implement the `CitableTrait`, `UrnComparisonTrait`, and `CexTrait`.
 
 
+For this example, we'll define a custom type of citable collection that we'll use throughout this documentation.  The type will manage a list of books, identified by their ISBN numbers.  We'll invent our own URN type for ISBN numbers, and define a `ReadingList` type as just a list of these ISBN values.  For our URN type, we'll follow the URN syntax requirements for a URN type named `isbn`.
+
+  
+
+
+!!! warning
+
+    In a real program, we would enforce this limitation with appropriate validation of the constructor, but to keep this example brief and focused on the requirements of citable collections, we'll pass through strings to the constructor unchecked.
 
 `CitableBase` defines three traits that all citable entities must implement:  
 
