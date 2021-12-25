@@ -8,7 +8,7 @@ In this example, we'll create a type that is *not* a subtype of `Citable`.  We i
 ## Comparing individual objects
 
 
-```jldoctest citable
+```
 using CitableBase
 import CitableBase: UrnComparisonTrait
 struct UrnThing
@@ -23,7 +23,7 @@ UrnComparisonTrait
 
 The `UrnComparisonTrait` requires us to implement three functions, `urnequals`, `urncontains` and `urnsimilar`.  For this example, we'll just say that any pair of `UrnThing`s starting with the `fake` class contain each other and are similar.
 
-```jldoctest citable
+```
 import CitableBase: urnequals
 function urnequals(u1::UrnThing, u2::UrnThing)
    u1.urn == u2.urn
@@ -48,7 +48,7 @@ urnsimilar (generic function with 2 methods)
 Let's try it out.
 
 
-```jldoctest citable
+```
 thing1 = UrnThing("urn:fake:id.subid")
 thing2 = UrnThing("urn:fake:id2")
 thing3 = UrnThing("urn:notevenfake:id")
@@ -59,7 +59,7 @@ urnsimilar(thing1, thing2)
 true
 ```
 
-```jldoctest citable
+```
 urnsimilar(thing1, thing3)
 
 # output
@@ -67,7 +67,7 @@ urnsimilar(thing1, thing3)
 false
 ```
 
-```jldoctest citable
+```
 urncontains(thing1, thing2)
 
 # output
@@ -75,7 +75,7 @@ urncontains(thing1, thing2)
 true
 ```
 
-```jldoctest citable
+```
 urnequals(thing1,thing2)
 
 # output
@@ -90,7 +90,7 @@ We're not limited to implementing the `UrnComparable` trait for individual  obje
 
 Because it is *not* a subtype of `Citable`, we again explicitly define its trait value as `UrnComparable()`.
 
-```jldoctest citable
+```
 struct UrnThingList
     arr::Vector{UrnThing}
 end
@@ -103,7 +103,7 @@ UrnComparisonTrait
 
 We can verify that objets of our new type are now recognized as `urncomparable`.
 
-```jldoctest citable
+```
 ulist = UrnThingList([thing1, thing2, thing3])
 urncomparable(ulist)
 
@@ -121,7 +121,7 @@ using URN logic. The functions will return a (possibly empty) list of `UrnThing`
 
     This is the same semantics as in the [CitableLibary package](https://cite-architecture.github.io/CitableLibrary.jl/stable/) where  the `UrnComparisonTrait` is used to filter citable collections.
  
-```jldoctest citable
+```
 function urnequals(urnlist::UrnThingList, uthing::UrnThing)
     filter(u -> urnequals(uthing, u), urnlist.arr)
 end
@@ -141,7 +141,7 @@ urnsimilar (generic function with 3 methods)
 ```
 
 
-```jldoctest citable
+```
 
 urnsimilar(ulist, thing1)
 
@@ -152,7 +152,7 @@ urnsimilar(ulist, thing1)
  UrnThing("urn:fake:id2")
 ```
 
-```jldoctest citable
+```
 urnequals(ulist, thing1)
 
 # output

@@ -1,4 +1,11 @@
-# Citable entities: an example implementation
+# Citable entities
+
+
+!!! note "TBD"
+
+    This page will define a `CitableBook` type and implement the `CitableTrait`, `UrnComparisonTrait`, and `CexTrait`.
+
+
 
 `CitableBase` defines three traits that all citable entities must implement:  
 
@@ -14,7 +21,7 @@ The next three pages walk through implementing these three traits for a custom t
 
 We'll begin by defining a custom type of citable object, citable by its own custom type of URN.  Note that we make the types `MyOwnUrn` and `MyOwnCite` subtypes of the abstract `Urn` and `Citable` types, respectively.
 
-```jldoctest citable
+```
 using CitableBase
 
 struct MyOwnUrn <: Urn
@@ -37,7 +44,7 @@ MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
 
 Because `MyOwnUrn` is a subtype of `Urn`, `MyOwnUrn` objects are assumed to implement the `UrnComparison` trait.
 
-```jldoctest citable
+```
 urncomparable(u)
 
 # output
@@ -47,7 +54,7 @@ true
 
 Because `MyOwnCite` is a subtype of `Citable`, objects of that type are now recognizable as citable objects implementing all three core traits
 
-```jldoctest citable
+```
 citable(citablething)
 
 # output
@@ -57,7 +64,7 @@ true
 
 
 
-```jldoctest citable
+```
 urncomparable(citablething)
 
 # output
@@ -66,7 +73,7 @@ true
 ```
 
 
-```jldoctest citable
+```
 cexserializable(citablething)
 
 # output
