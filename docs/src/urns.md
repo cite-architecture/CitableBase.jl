@@ -10,7 +10,7 @@
 
 ## The task
 
-ISBN numbers uniquely identified published editions of a book.  We want to create a type representing a 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
+ISBN numbers uniquely identify published editions of a book.  We want to create a type representing a 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
 
 ## Defining the `Isbn10Urn` type
 

@@ -1,3 +1,42 @@
+```@setup book
+using CitableBase
+struct Isbn10Urn <: Urn
+    isbn::AbstractString
+end
+import Base: show
+function show(io::IO, u::Isbn10Urn)
+    print(io, u.isbn)
+end
+import CitableBase: UrnComparisonTrait
+struct IsbnComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+import CitableBase: urnequals
+function urnequals(u1::Isbn10Urn, u2::Isbn10Urn)
+    u1 == u2
+end
+import CitableBase: urncontains
+function urncontains(u1::Isbn10Urn, u2::Isbn10Urn)
+    initial1 = components(u1.isbn)[3][1]
+    initial2 = components(u2.isbn)[3][1]
+
+    initial1 == initial2
+end
+
+function english(urn::Isbn10Urn)
+    langarea = components(urn.isbn)[3][1]
+    langarea == '0' || langarea == '1'
+end
+
+import CitableBase: urnsimilar
+function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
+    initial1 = components(u1.isbn)[3][1]
+    initial2 = components(u2.isbn)[3][1]
+
+    (english(u1) && english(u2)) ||  initial1 == initial2
+end
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+enumerations = Isbn10Urn("urn:isbn:022656875X")
+```
 # Citable entities
 
 
@@ -11,14 +50,80 @@
     - implement `CexTrait`
 
 
-For this example, we'll define a custom type of citable collection that we'll use throughout this documentation.  The type will manage a list of books, identified by their ISBN numbers.  We'll invent our own URN type for ISBN numbers, and define a `ReadingList` type as just a list of these ISBN values.  For our URN type, we'll follow the URN syntax requirements for a URN type named `isbn`.
+## The task
 
-  
+We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to the object, and serialize it to plain-text format.
 
 
-!!! warning
+## Defining the `CitableBook`
 
-    In a real program, we would enforce this limitation with appropriate validation of the constructor, but to keep this example brief and focused on the requirements of citable collections, we'll pass through strings to the constructor unchecked.
+
+
+```@example book
+abstract type CitablePublication end
+struct CitableBook <: CitablePublication
+    urn::Isbn10Urn
+    title::AbstractString
+    authors::AbstractString
+end
+```
+
+
+
+```@example book
+distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
+enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
+```
+
+## Defining the `CitableTrait`
+
+
+
+```@example book
+import CitableBase: CitableTrait
+struct CitableByIsbn10 <: CitableTrait end
+CitableTrait(::Type{CitableBook}) = CitableByIsbn10()
+```
+
+```@example book
+citable(distantbook)
+```
+
+### Defining the required functions `urn` and `label`
+
+
+```@example book
+import CitableBase: urn
+function urn(book::CitableBook)
+    book.urn
+end
+
+import CitableBase: urn
+function label(book::CitableBook)
+    join([book.authors, "*" * book.title * "*"], ", ")
+end
+```
+
+```@example book
+urn(distantbook)
+```
+
+
+```@example book
+label(distantbook)
+```
+
+
+
+
+---
+
+>
+> ---
+>
+> QUARRY UNEDITED MATERIAL BELOW HERE
+
+
 
 `CitableBase` defines three traits that all citable entities must implement:  
 
