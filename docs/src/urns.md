@@ -4,21 +4,20 @@
 
     This page will 
     
-    - √ define an `Isbn10Urn` type 
-    - implement the `UrnComparisonTrait`.
+    - √ define a new type, `Isbn10Urn` type 
+    - implement the `UrnComparisonTrait` for the new type
 
 
 ## The task
 
-ISBN numbers uniquely identified published editions of a book.  We want to create a type representing the 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages recognizing URNs.
+ISBN numbers uniquely identified published editions of a book.  We want to create a type representing a 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
 
 ## Defining the `Isbn10Urn` type
 
 > ADD LINKS TO URN SPECIFICATION
 
 
-The `Urn` abstract type models a Uniform Resource Name (URN). The URN standard specifies syntax we'll follow here.  Our URNs for ISBNs will have three colon-delimited components, the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.
-
+The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn:022661283X`.
 
 ```@example urns
 using CitableBase
@@ -31,14 +30,13 @@ end
 
 !!! warning "Note on the ISBN-10 format"
 
-    The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated:  it has four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep this example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field.
+    Parsing the full [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated: ISBN-10 numbers have four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep this example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field of our type.
 
 
 Our new type is a subtype of `Urn`.
 ```@example urns
 supertype(Isbn10Urn)
 ```
-
 
 As often in Julia, we'll override the default `show` method for our type.  (Note that in Julia this requires *importing* the specific method, not just using the package.)
 
@@ -61,7 +59,11 @@ distanthorizons = Isbn10Urn("urn:isbn:022661283X")
 
 ## Defining the `UrnComparisonTrait`
 
-Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions.
+
+Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions. `CitableBase` uses the "Holy trait trick" to recognize types implementing the `UrnComparisonTrait`.  We need to import the `UrnComparisonTrait`, and define a function that assigns it a  value for instances of our new type.  For that value, we'll define a subtype of `UrnComparisonTrait`.
+
+> ADD LINK TO explanation of the HTT
+
 
 
 ```@example urns
@@ -70,9 +72,11 @@ struct IsbnComparable <: UrnComparisonTrait end
 UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
 ```
 
+You can use the `urncomparable` function to test whether the trait is recognized for an instance of your new type.
 
+```@example urns
 urncomparable(typeof(distanthorizons))
-
+```
 
 quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
 enumerations = Isbn10Urn("urn:isbn:022656875X")
@@ -95,13 +99,25 @@ true
 
 
 
-# Filtering with URN logic
+## Implementing the logic of URN comparison
+
+To fulfill the contract of the `UrnComparisonTrait`, we must implement three boolean functions for three kinds of URN comparison: `urnequals` (for *equality*), `urncontains` (for *containment*) and and `urnsimilar` (for *similarity*).  
 
 
-The [`CitableBase` package](https://cite-architecture.github.io/CitableBase.jl/stable/) identifies three kinds of URN comparison: *equality*, *containment* and *similarity*.  We want to be able to apply that logic to query our new `ReadingList` type.  If your citable collection includes objects cited by `Cite2Urn` or `CtsUrn`, this is as simple as filtering the collection using their `urnequals`, `urncontains` or `urnsimilar` functions.  Since we have defined a custom `Isbn10Urn` type, we'll need to implement those functions for our new URN type. We'll digress briefly with that implementation before turning to filtering our citable collection.
+### Equality
 
 
-The `CitableBase` package provides a concrete implementation of `urnequals`, but we need to import and define functions for `urncontains` and `urnsimilar`
+
+
+The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This makes it trivial to implement `urnequals`.
+
+
+!!! tip "Why do we need urnequals?"
+
+    Because collections will also do this!
+
+
+
 
 
 ### Containment
@@ -158,24 +174,6 @@ Both *Distant Horizons* and *Can We Be Wrong?* are published in English-language
 urnsimilar(distanthorizons, wrong)
 ```
 
-
-
-
-## URN comparison
-
-We need to implement three functions for our new URN type: `urnequals`, `urncontains` and `urnsimilar`.  
-
-
-
-!!! note
-
-    In addition to URN values, these three functions can be implemented for other types of objects.  See the following pages for an example of how they are applied to citable objects (subtypes of `Citable`);  for their use with collections of citable content, see the documentation for the [CitableLibary package](https://cite-architecture.github.io/CitableLibrary.jl/stable/).
-
-
-   
-
-
-The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This in turn serves as an implementation of `urnequals` for subtypes of `Urn`.  
 
 
 
