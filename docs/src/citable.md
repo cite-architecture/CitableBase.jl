@@ -79,6 +79,7 @@ enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary St
 
 
 
+
 ```@example book
 import CitableBase: CitableTrait
 struct CitableByIsbn10 <: CitableTrait end
@@ -113,8 +114,30 @@ urn(distantbook)
 label(distantbook)
 ```
 
+## Defining the `UrnComparisonTrait`
+
+```@example book
+struct BookComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{CitableBook}) = BookComparable()
+```
 
 
+### Defining the required functions `urn` and `label`
+
+```@example book
+function urnequals(bk1:::CitableBook, bk2::CitableBook)
+    urnequals(bk1.urn, bk2.urn)
+end
+```
+
+```@example book
+dupebook = distantbook
+urnequals(distantbook, dupebook)
+```
+
+```@example book
+urnequals(distantbook, enumerationsbook)
+```
 
 ---
 
