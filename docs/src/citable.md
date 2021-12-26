@@ -99,7 +99,7 @@ function urn(book::CitableBook)
     book.urn
 end
 
-import CitableBase: urn
+import CitableBase: label
 function label(book::CitableBook)
     join([book.authors, "*" * book.title * "*"], ", ")
 end
@@ -125,8 +125,8 @@ UrnComparisonTrait(::Type{CitableBook}) = BookComparable()
 ### Defining the required functions `urn` and `label`
 
 ```@example book
-function urnequals(bk1:::CitableBook, bk2::CitableBook)
-    urnequals(bk1.urn, bk2.urn)
+function urnequals(bk1::CitableBook, bk2::CitableBook)
+    bk1.urn == bk2.urn
 end
 ```
 
