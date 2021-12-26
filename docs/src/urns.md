@@ -78,8 +78,58 @@ You can use the `urncomparable` function to test whether the trait is recognized
 urncomparable(typeof(distanthorizons))
 ```
 
-quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
+
+
+
+
+## Implementing the logic of URN comparison
+
+To fulfill the contract of the `UrnComparisonTrait`, we must implement three boolean functions for three kinds of URN comparison: `urnequals` (for *equality*), `urncontains` (for *containment*) and and `urnsimilar` (for *similarity*).  
+
+
+### Equality
+
+
+
+The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This makes it trivial to implement `urnequals` once we use `CitableBase` and import `urnequals`.
+
+
+```@example urns
+import CitableBase: urnequals
+function urnequals(u1::Isbn10Urn, u2::Isbn10Urn)
+    u1 == u2
+end
+```
+
+```@example urns
+dupe = distanthorizons
+urnequals(distanthorizons, dupe)
+```
+
+```@example urns
 enumerations = Isbn10Urn("urn:isbn:022656875X")
+urnequals(distanthorizons, enumerations)
+```
+
+
+
+!!! tip "Why do we need urnequals?"
+
+    Because collections will also do this!
+
+
+
+
+
+
+> ## QUARRY THIS STUFF
+>
+> Unedited below here.
+
+
+
+quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
+
 wrong = Isbn10Urn("urn:isbn:1108922036")
 jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
 fake = FakeUrn("urn:fake:objectclass.objectid")
@@ -96,25 +146,6 @@ urncomparable(fake)
 true
 ```
 
-
-
-
-## Implementing the logic of URN comparison
-
-To fulfill the contract of the `UrnComparisonTrait`, we must implement three boolean functions for three kinds of URN comparison: `urnequals` (for *equality*), `urncontains` (for *containment*) and and `urnsimilar` (for *similarity*).  
-
-
-### Equality
-
-
-
-
-The `==` function of Julia Base is overridden in `CitableBase` for all subtypes of `Urn`.  This makes it trivial to implement `urnequals`.
-
-
-!!! tip "Why do we need urnequals?"
-
-    Because collections will also do this!
 
 
 
@@ -179,7 +210,7 @@ urnsimilar(distanthorizons, wrong)
 
 !!! warning
 
-    Note that in order to compare two URNs for equality, you'll need to import or use `CitableBase` (as in the block above).
+   
 
 ```
 FakeUrn("urn:fake:demo1") == FakeUrn("urn:fake:demo1")
