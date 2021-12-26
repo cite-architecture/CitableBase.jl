@@ -3,7 +3,12 @@
 
 !!! note "TBD"
 
-    This page will define a `CitableBook` type and implement the `CitableTrait`, `UrnComparisonTrait`, and `CexTrait`.
+    This page will 
+    
+    - define a `CitableBook` type
+    - implement the `CitableTrait`
+    - implement the `UrnComparisonTrait`
+    - implement `CexTrait`
 
 
 For this example, we'll define a custom type of citable collection that we'll use throughout this documentation.  The type will manage a list of books, identified by their ISBN numbers.  We'll invent our own URN type for ISBN numbers, and define a `ReadingList` type as just a list of these ISBN values.  For our URN type, we'll follow the URN syntax requirements for a URN type named `isbn`.

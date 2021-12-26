@@ -1,11 +1,11 @@
 # Identification with URNs
 
-!!! note "TBD"
-
-    This page will 
-    
-    - √ define a new type, `Isbn10Urn` type 
-    - implement the `UrnComparisonTrait` for the new type
+> ## Summary 
+>   
+> On this page, we
+>
+> - define a new URN type representing ISBN-10 number
+> - implement the `UrnComparisonTrait` for the new type
 
 
 ## The task
@@ -121,41 +121,11 @@ urnequals(distanthorizons, enumerations)
 
 
 
-
-> ## QUARRY THIS STUFF
->
-> Unedited below here.
-
-
-
-quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
-
-wrong = Isbn10Urn("urn:isbn:1108922036")
-jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
-fake = FakeUrn("urn:fake:objectclass.objectid")
-typeof(fake) |> supertype
-
-
-Because it is a subtype of `Urn`, our new type is recognized as comparable on URN logic.
-
-```
-urncomparable(fake)
-
-# output
-
-true
-```
-
-
-
-
-
-
 ### Containment
 
-For our ISBN type, we'll define "containment" as true when two ISBNS belong to the same initial-digit group (`0` - `4`).  We'll use the `components` functions from `CitableBase` to extract the third part of the URN string, and compare its first character.
+For our ISBN type, we'll define "containment" as true when two ISBNS belong to the same initial-digit group (`0` - `4`).  We'll use the `components` functions from `CitableBase` to extract the third part of each URN string, and compare their first characters.
 
-```
+```@example urns
 import CitableBase: urncontains
 function urncontains(u1::Isbn10Urn, u2::Isbn10Urn)
     initial1 = components(u1.isbn)[3][1]
@@ -167,15 +137,17 @@ end
 
 Both *Distant Horizons* and *Enumerations* are in ISBN group 0.
 
-```
+```@example urns
 urncontains(distanthorizons, enumerations)
 ```
 
 But *Can We Be Wrong?* is in ISBN group 1.
 
-```
+```@example urns
+wrong = Isbn10Urn("urn:isbn:1108922036")
 urncontains(distanthorizons, wrong)
 ```
+
 
 
 ### Similarity
@@ -183,7 +155,7 @@ urncontains(distanthorizons, wrong)
 We'll define "similarity" as belonging to the same language area.  In this definition, both `0` and `1` indicate English-language countries.
 
 
-```
+```@example urns
 # True if ISBN starts with `0` or `1`
 function english(urn::Isbn10Urn)
     langarea = components(urn.isbn)[3][1]
@@ -201,107 +173,24 @@ end
 
 Both *Distant Horizons* and *Can We Be Wrong?* are published in English-language areas.
 
-```
+```@example urns
 urnsimilar(distanthorizons, wrong)
 ```
 
+But *Can We Be Wrong?* is in ISBN group 1.
 
-
-
-!!! warning
-
-   
-
-```
-FakeUrn("urn:fake:demo1") == FakeUrn("urn:fake:demo1")
-
-# output
-
-true
-```
-
-To implement `urncontains` and `urnsimilar`, first import the method from `CitableBase`; then, implement the function with parameters for your new type.  
-
-For this artificial example, we'll define one URN as "containing" another if they both belong to the URN type "urn:fake:".  We'll use a good generic definition for URN similarity: two URNs are similar if one contains the other or if both are equal.
-
-```
-import CitableBase: urncontains
-function urncontains(u1::FakeUrn, u2::FakeUrn)
-    startswith(u1.urn, "urn:fake:") && startswith(u2.urn, "urn:fake:")
-end
-
-
-import CitableBase: urnsimilar
-function urnsimilar(u1::FakeUrn, u2::FakeUrn)
-    urncontains(u1, u2) || urnequals(u1, u2)
-end
-
-urnsimilar(FakeUrn("urn:fake:demo1"),  FakeUrn("urn:fake:demo2"))
-
-# output
-
-true
-```
-
-```
-
-urncontains(FakeUrn("urn:fake:demo1"),  FakeUrn("urn:fake:demo2"))
-
-# output
-
-true
-```
-
-
-## URN manipulation
-
-Subtypes of `Urn` should also override the Base definition of `print`. This makes it possible to use the generic `components` and `parts` functions in `CitableBase`.
-
-```
-import Base: print
-function print(io::IO, u::FakeUrn)
-    print(io, u.urn)
-end
-print(fake)
-
-# output
-
-urn:fake:objectclass.objectid
-```
-
-Top-level syntactic units are separated by colons: `CitableBase` refers to these units as *components*.
-
-
-```
-components(fake)
-
-# output
-
-3-element Vector{SubString{String}}:
- "urn"
- "fake"
- "objectclass.objectid"
-```
-
-At a second syntactic level, units are separated by periods.  `CitableBase` refers to these as *parts* of a component.
-
-```
-components(fake)[3] |> parts
-
-# output
-
-2-element Vector{SubString{String}}:
- "objectclass"
- "objectid"
+```@example urns
+wrong = Isbn10Urn("urn:isbn:1108922036")
+urncontains(distanthorizons, wrong)
 ```
 
 
 
 
-Implementations of the `URN` interface should  dispatch the following two methods to type-specific functions:
 
-- `dropversion(u::Urn)`
-- `addversion(u::Urn, versionId)`
+
+
+
 
 
 
