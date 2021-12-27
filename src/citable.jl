@@ -4,16 +4,11 @@ abstract type Citable end
 """Abstraction of values for a citable trait."""
 abstract type CitableTrait end 
 
-
 """Value for the CitableTrait for everything not citable."""
 struct NotCitable <: CitableTrait end 
+
 """Define default value of CitableTrait as NotCitable."""
 CitableTrait(::Type) = NotCitable() 
-
-"""Value for the CitableTrait for all subtypes of `Citable`."""
-struct CitableObject <: CitableTrait end 
-"""Define value of CitableTrait for subtypes of `Citable`."""
-CitableTrait(::Type{<:Citable}) = CitableObject() 
 
 """True if `x` is a citable object."""
 function citable(x)
@@ -25,7 +20,6 @@ Define delegation for the 2 functions of the CitableTrait:
 1. urn
 2. label
 =#
-
 
 """Delegate `urn` to specific functions based on 
 type's citable trait value.

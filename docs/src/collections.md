@@ -1,11 +1,108 @@
+```@setup collections
+using CitableBase
+struct Isbn10Urn <: Urn
+    isbn::AbstractString
+end
+import Base: show
+function show(io::IO, u::Isbn10Urn)
+    print(io, u.isbn)
+end
+import CitableBase:  UrnComparisonTrait
+struct IsbnComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+import CitableBase: urnequals
+function urnequals(u1::Isbn10Urn, u2::Isbn10Urn)
+    u1 == u2
+end
+import CitableBase: urncontains
+function urncontains(u1::Isbn10Urn, u2::Isbn10Urn)
+    initial1 = components(u1.isbn)[3][1]
+    initial2 = components(u2.isbn)[3][1]
+
+    initial1 == initial2
+end
+
+function english(urn::Isbn10Urn)
+    langarea = components(urn.isbn)[3][1]
+    langarea == '0' || langarea == '1'
+end
+
+import CitableBase: urnsimilar
+function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
+    initial1 = components(u1.isbn)[3][1]
+    initial2 = components(u2.isbn)[3][1]
+
+    (english(u1) && english(u2)) ||  initial1 == initial2
+end
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+enumerations = Isbn10Urn("urn:isbn:022656875X")
+wrong = Isbn10Urn("urn:isbn:1108922036")
+
+abstract type CitablePublication end
+struct CitableBook <: CitablePublication
+    urn::Isbn10Urn
+    title::AbstractString
+    authors::AbstractString
+end
+distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
+enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
+
+import CitableBase: CitableTrait
+struct CitableByIsbn10 <: CitableTrait end
+CitableTrait(::Type{CitableBook}) = CitableByIsbn10()
+
+import CitableBase: urn
+function urn(book::CitableBook)
+    book.urn
+end
+
+import CitableBase: label
+function label(book::CitableBook)
+    join([book.authors, "*" * book.title * "*"], ", ")
+end
+
+struct BookComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{CitableBook}) = BookComparable()
+
+function urnequals(bk1::CitableBook, bk2::CitableBook)
+    bk1.urn == bk2.urn
+end
+function urncontains(bk1::CitableBook, bk2::CitableBook)
+    urncontains(bk1.urn, bk2.urn)
+end
+function urnsimilar(bk1::CitableBook, bk2::CitableBook)
+    urnsimilar(bk1.urn, bk2.urn)
+end
+wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
+
+struct BookCex <: CexTrait end
+CexTrait(::Type{CitableBook}) = BookCex()
+
+import CitableBase: cex
+function cex(book::CitableBook; delimiter = "|")
+    join([string(book.urn), book.title, book.authors], delimiter)
+end
+
+import CitableBase: fromcex
+function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
+    fields = split(cexstring, delimiter)
+    urn = Isbn1
+    0Urn(fields[1])
+    CitableBook(urn, fields[2], fields[3])
+end
+```
+
+
+
+
 # Citable collections
 
 !!! note "TBD"
 
     This page will 
     
-    - define a `ReadingList` type 
-    - implement the `CitableCollectionTrait`
+    - √ define a `ReadingList` type 
+    - √ implement the `CitableCollectionTrait`
     - implement `UrnComparisonTrait`, 
     - implement the `CexTrait`
     - implement `Iterators`.
@@ -16,9 +113,47 @@
 
 ## Defining the `ReadingList` type
 
+```@example collections
+struct ReadingList
+    booklist::Vector{<: CitablePublication}
+end
+```
+
+```@example collections
+books = [distantbook, enumerationsbook, wrongbook,
+    CitableBook(
+        Isbn10Urn("3030234133"),"Quantitative Intertextuality
+Analyzing the Markers of Information Reuse", "Christopher W. Forstall and Walter J. Scheirer"
+    )
+]
+rl = ReadingList(books)
+```
+
+
 ## Defining the `CitableCollectionTrait`
 
+```@example collections
+import CitableBase: CitableCollectionTrait
+struct CitableReadingList <: CitableCollectionTrait end
+CitableCollectionTrait(::Type{ReadingList}) = CitableReadingList()
+```
+
+```@example collections
+citablecollection(rl)
+```
+
 ## Defining the `UrnComparisonTrait`
+
+```@example book
+struct ReadingListComparable <: UrnComparisonTrait end
+UrnComparisonTrait(::Type{ReadingList}) = ReadingListComparable()
+```
+
+```@example book
+urncomparable(rl)
+```
+
+
 
 ## Defining the `CexTrait`
 

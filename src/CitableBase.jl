@@ -21,6 +21,8 @@ export urn, label
 export CexTrait, NotCexSerializable, cexserializable
 export cex, fromcex 
 
+export CitableCollectionTrait, NotCitableCollection, citablecollection
+
 include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")

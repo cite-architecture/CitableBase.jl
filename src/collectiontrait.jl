@@ -1,9 +1,6 @@
 """Abstraction of values for a citable library collection trait."""
 abstract type CitableCollectionTrait end
 
-"""Value for the CitableCollectionTrait for citable collections."""
-struct CitableCollection <: CitableCollectionTrait end
-
 """Value for the CitableCollectionTrait for evertything that is not a citable library collection."""
 struct NotCitableCollection <: CitableCollectionTrait end
 
