@@ -2,10 +2,10 @@
 
 > ## Summary 
 >   
-> On this page, we
+> This page
 >
-> - define a new URN type representing ISBN-10 number
-> - implement the `UrnComparisonTrait` for the new type
+> - defines a new URN type representing an ISBN-10 number
+> - implements the `UrnComparisonTrait` for the new type
 
 
 ## The task
@@ -13,9 +13,6 @@
 ISBN numbers uniquely identify published editions of a book.  We want to create a type representing a 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
 
 ## Defining the `Isbn10Urn` type
-
-> ADD LINKS TO URN SPECIFICATION
-
 
 The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn10:022661283X`.
 
@@ -30,7 +27,9 @@ end
 
 !!! warning "Note on the ISBN-10 format"
 
-    Parsing the full [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated: ISBN-10 numbers have four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep this example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field of our type.
+    There is in fact a URN namespace for ISBN numbers identifeid by the `isbn` namespace identifier. (See this [blogpost about citing publications with URNs](https://www.benmeadowcroft.com/webdev/articles/urns-and-citations/).)  This guide invents an `isbn10` URN type solely to illustrate how you could create your own URN type using the `CitableBase` package.
+
+    Parsing the full [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated: ISBN-10 numbers have four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep our example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field of our type.
 
 
 Our new type is a subtype of `Urn`.
@@ -113,9 +112,9 @@ urnequals(distanthorizons, enumerations)
 
 
 
-!!! tip "Why do we need urnequals?"
+!!! tip "Why do we need 'urnequals' when we already have '==' ?"
 
-    Because collections will also do this!
+    Our implementation of the `UrnComparisonTrait`'s functions use two parameters of the same type, compare the two URNs, and produce a boolean result.  In the following section, we will implement the same trio of functions, but with one URN parameter and one parameter giving a citable collection.  In those implementations, we can filter the collection by comparing the URN to the URNs of individual items in the collection.  We can reserve `==` for comparing the contents of two collections, and use `urnequals` to filter a collection's content.
 
 
 
@@ -177,7 +176,7 @@ Both *Distant Horizons* and *Can We Be Wrong?* are published in English-language
 urnsimilar(distanthorizons, wrong)
 ```
 
-But *Can We Be Wrong?* is in ISBN group 1.
+But they are coded for different ISBN areas.
 
 ```@example urns
 wrong = Isbn10Urn("urn:isbn10:1108922036")
