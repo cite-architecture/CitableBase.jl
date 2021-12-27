@@ -2,12 +2,21 @@
 
 !!! note "TBD"
 
-    This page will define a `ReadingList` type and implement the `CitableCollectionTrait`, `UrnComparisonTrait`, `CexTrait` and `Iterators`.
+    This page will 
+    
+    - define a `ReadingList` type 
+    - implement the `CitableCollectionTrait`
+    - implement `UrnComparisonTrait`, 
+    - implement the `CexTrait`
+    - implement `Iterators`.
 
+---
 
-
-
-
+> ---
+> ---
+>
+> QUARRY UNEDITED MATERIAL BELOW THIS
+>
 
 ## Filtering a citable collection
 
