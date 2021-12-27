@@ -36,6 +36,7 @@ function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
 end
 distanthorizons = Isbn10Urn("urn:isbn:022661283X")
 enumerations = Isbn10Urn("urn:isbn:022656875X")
+wrong = Isbn10Urn("urn:isbn:1108922036")
 ```
 # Citable entities
 
@@ -44,15 +45,15 @@ enumerations = Isbn10Urn("urn:isbn:022656875X")
 
     This page will 
     
-    - define a `CitableBook` type
-    - implement the `CitableTrait`
+    - √ define a `CitableBook` type
+    - √ implement the `CitableTrait`
     - implement the `UrnComparisonTrait`
     - implement `CexTrait`
 
 
 ## The task
 
-We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to the object, and serialize it to plain-text format.
+We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to compare objects of our new type, and serialize citable books to plain-text format.
 
 
 ## Defining the `CitableBook`
@@ -121,12 +122,21 @@ struct BookComparable <: UrnComparisonTrait end
 UrnComparisonTrait(::Type{CitableBook}) = BookComparable()
 ```
 
+```@example book
+urncomparable(distantbook)
+```
 
-### Defining the required functions `urn` and `label`
+### Defining the required functions `urnequals`, `urncontains` and `urnsimilar`
 
 ```@example book
 function urnequals(bk1::CitableBook, bk2::CitableBook)
     bk1.urn == bk2.urn
+end
+function urncontains(bk1::CitableBook, bk2::CitableBook)
+    urncontains(bk1.urn, bk2.urn)
+end
+function urnsimilar(bk1::CitableBook, bk2::CitableBook)
+    urnsimilar(bk1.urn, bk2.urn)
 end
 ```
 
@@ -139,6 +149,33 @@ urnequals(distantbook, dupebook)
 urnequals(distantbook, enumerationsbook)
 ```
 
+
+
+```@example book
+urncontains(distantbook, enumerationsbook)
+```
+
+```@example book
+urnsimilar(distantbook, enumerationsbook)
+```
+
+
+```@example book
+wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
+urnsimilar(distantbook, wrongbook)
+```
+
+
+
+## Defining the `CexTrait`
+
+
+
+
+
+### Defining the required functions `cex` and `fromcex`
+
+
 ---
 
 >
@@ -148,70 +185,9 @@ urnequals(distantbook, enumerationsbook)
 
 
 
-`CitableBase` defines three traits that all citable entities must implement:  
-
-- the `CitableTrait`.  Citable objects are identified by URN, and have a human readable label.
-- the `UrnComparisonTrait`.  Citable objects can be compared with other citable objects of the same type using URN logic.
-- the `CexTrait`.  Citable objects can be round tripped to/from serialization to text strings in CEX format.
-
-
-The next three pages walk through implementing these three traits for a custom type of citable object.
-
-
-## Defining the citable type
-
-We'll begin by defining a custom type of citable object, citable by its own custom type of URN.  Note that we make the types `MyOwnUrn` and `MyOwnCite` subtypes of the abstract `Urn` and `Citable` types, respectively.
-
-```
-using CitableBase
-
-struct MyOwnUrn <: Urn
-        urn::AbstractString
-end
-struct MyOwnCite <: Citable
-    urn::MyOwnUrn
-    label::AbstractString
-end
-u = MyOwnUrn("urn:fake:id.subid")
-citablething = MyOwnCite(u, "Some citable resource")
-
-# output
-
-MyOwnCite(MyOwnUrn("urn:fake:id.subid"), "Some citable resource")
-```
 
 
 ## Recognizing the three core traits of the CITE architecture
-
-Because `MyOwnUrn` is a subtype of `Urn`, `MyOwnUrn` objects are assumed to implement the `UrnComparison` trait.
-
-```
-urncomparable(u)
-
-# output
-
-true
-```
-
-Because `MyOwnCite` is a subtype of `Citable`, objects of that type are now recognizable as citable objects implementing all three core traits
-
-```
-citable(citablething)
-
-# output
-
-true
-```
-
-
-
-```
-urncomparable(citablething)
-
-# output
-
-true
-```
 
 
 ```
