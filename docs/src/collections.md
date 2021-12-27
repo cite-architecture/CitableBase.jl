@@ -192,18 +192,12 @@ function cex(reading::ReadingList; delimiter = "|")
     header * join(strings, "\n")
 end
 
-function fromcex(readingcex::AbstractString, ReadingList; delimiter = "|", configuration = nothing)
-    items = []
-    lines = split(readingcex, "\n")
-    inblock = false
-    for ln in lines
-        if ln == "#!citecollection"
-            inblock = true
-        elseif inblock
-            push!(items, fromcex(ln; delimiter = delimiter))
-        end 
-    end
-    ReadingList(items)
+
+"Overrid for specific trait value"
+function fromcex(::Type{BookCex}, x::C, str::AbstractString, T) where {C <: CexTrait}
+    @warn("IT'S A BOOK")
+    @warn("Instantiate a $(T) from $(str)")
+    nothing
 end
 ```
 
