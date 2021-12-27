@@ -199,7 +199,15 @@ cex(distantbook)
 
 ```@example book
 import CitableBase: fromcex
+#=
 function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
+    fields = split(cexstring, delimiter)
+    urn = Isbn10Urn(fields[1])
+    CitableBook(urn, fields[2], fields[3])
+end
+=#
+
+function fromcex(BookCex, cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
     fields = split(cexstring, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])

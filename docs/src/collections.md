@@ -102,7 +102,7 @@ end
     
     - √ define a `ReadingList` type 
     - √ implement the `CitableCollectionTrait`
-    - implement `UrnComparisonTrait`, 
+    - √ implement `UrnComparisonTrait`, 
     - implement the `CexTrait`
     - implement `Iterators`.
 
@@ -114,7 +114,7 @@ end
 
 ```@example collections
 struct ReadingList
-    booklist::Vector{<: CitablePublication}
+    publications::Vector{<: CitablePublication}
 end
 ```
 
@@ -155,7 +155,65 @@ urncomparable(rl)
 
 
 
+```@example collections
+function urnequals(reading::ReadingList, urn::Isbn10Urn)
+    filter(item -> urnequals(item.urn, urn), reading.publications)
+end
+
+function urncontains(reading::ReadingList, urn::Isbn10Urn)
+    filter(item -> urncontains(item.urn, urn), reading.publications)
+end
+
+function urnsimilar(reading::ReadingList, urn::Isbn10Urn)
+    filter(item -> urnsimilar(item.urn, urn), reading.publications)
+end
+```
+
+```@example collections
+urnequals(rl, distanthorizons)
+```
+
 ## Defining the `CexTrait`
+```@example collections
+struct ReadingListCex <: CexTrait end
+CexTrait(::Type{ReadingList}) = ReadingListCex()
+```
+
+```@example collections
+cexserializable(rl)
+```
+
+```@example collections
+function cex(reading::ReadingList; delimiter = "|")
+    header = "#!citecollection\n"
+    strings = map(ref -> ref.urn, reading.publications)
+    header * join(strings, "\n")
+end
+
+function fromcex(readingcex::AbstractString, ReadingList; delimiter = "|", configuration = nothing)
+    items = []
+    lines = split(readingcex, "\n")
+    inblock = false
+    for ln in lines
+        if ln == "#!citecollection"
+            inblock = true
+        elseif inblock
+            push!(items, fromcex(ln; delimiter = delimiter))
+        end 
+    end
+    ReadingList(items)
+end
+```
+
+
+```@example collections
+cex(rl)
+```
+
+```@example collections
+rlcex = cex(rl)
+fromcex(rlcex, ReadingList)
+```
 
 ## Defining the `Iterators`
 
