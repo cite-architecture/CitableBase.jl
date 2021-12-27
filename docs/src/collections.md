@@ -10,12 +10,27 @@
     - implement the `CexTrait`
     - implement `Iterators`.
 
+
+
+## The task
+
+## Defining the `ReadingList` type
+
+## Defining the `CitableCollectionTrait`
+
+## Defining the `UrnComparisonTrait`
+
+## Defining the `CexTrait`
+
+## Defining the `Iterators`
+
+
 ---
 
 > ---
 > ---
 >
-> QUARRY UNEDITED MATERIAL BELOW THIS
+> # QUARRY UNEDITED MATERIAL BELOW THIS
 >
 
 ## Filtering a citable collection
