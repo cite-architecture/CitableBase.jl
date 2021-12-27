@@ -41,14 +41,14 @@ wrong = Isbn10Urn("urn:isbn10:1108922036")
 # Citable entities
 
 
-!!! note "TBD"
-
-    This page will 
-    
-    - √ define a `CitableBook` type
-    - √ implement the `CitableTrait`
-    - √ implement the `UrnComparisonTrait`
-    - √ implement `CexTrait`
+> # Summary
+>
+> This page
+>
+> - defines a new type of citable object, the `CitableBook`
+> - implements citation functions for it (the `CitableTrait`)
+> - implements comparison using URN logic (the `UrnComparisonTrait`)
+> - implements round-trip serialization (the `CexTrait`)
 
 
 ## The task
@@ -58,7 +58,9 @@ We will define a type representing a book identified by ISBN-10 number.  Our typ
 
 ## Defining the `CitableBook`
 
+We'll take advantage of Julia's type hierarchy to create an abstract `CitablePublication` type, and make `CitableBook` a subtype of it.  We won't create any further subtypes in this guide, but doing this would simplify our work if we later decided we wanted to implement a type for some other form of citable publication.
 
+We'll identify the book using the `Isbn10Urn` type we previously defined. Again, we'll keep the example simple, and just record strings for authors and a title.  You could elaborate this type however you choose.
 
 ```@example book
 abstract type CitablePublication end
@@ -69,12 +71,15 @@ struct CitableBook <: CitablePublication
 end
 ```
 
+As we did with the `Isbn10Urn`, we'll override the `Base` package's `show` function for our new type.
+
 ```@example book
 function show(io::IO, book::CitableBook)
     print(io, book.authors, ", *", book.title, "* (", book.urn, ")")
 end
 ```
 
+We can test ourselves by creating a couple of examples of our new type.
 
 ```@example book
 distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
@@ -82,6 +87,9 @@ enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary St
 ```
 
 ## Defining the `CitableTrait`
+
+The first trait we will implement is the `CitableTrait`.  We'll follow the same pattern we saw when we implemented the `UrnComparisonTrait` for the `Isbn10Urn` type.  We will import the abstract `CitableTrait`, define a concrete subtype of it, and define a function assigning an instance of our concrete subtype to any instance or `CitableBook` passed to `CitableTrait`.
+
 
 
 
@@ -97,7 +105,7 @@ CitableTrait(::Type{CitableBook}) = CitableByIsbn10()
 citable(distantbook)
 ```
 
-### Defining the required functions `urn` and `label`
+### Implementing the required functions `urn` and `label`
 
 
 ```@example book
