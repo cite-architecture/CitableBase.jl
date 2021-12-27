@@ -47,8 +47,8 @@ wrong = Isbn10Urn("urn:isbn:1108922036")
     
     - √ define a `CitableBook` type
     - √ implement the `CitableTrait`
-    - implement the `UrnComparisonTrait`
-    - implement `CexTrait`
+    - √ implement the `UrnComparisonTrait`
+    - √ implement `CexTrait`
 
 
 ## The task
@@ -170,30 +170,45 @@ urnsimilar(distantbook, wrongbook)
 ## Defining the `CexTrait`
 
 
+```@example book
+struct BookCex <: CexTrait end
+CexTrait(::Type{CitableBook}) = BookCex()
+```
+
+```@example book
+cexserializable(distantbook)
+```
+
+
 
 
 
 ### Defining the required functions `cex` and `fromcex`
 
-
----
-
->
-> ---
->
-> QUARRY UNEDITED MATERIAL BELOW HERE
-
-
-
-
-
-## Recognizing the three core traits of the CITE architecture
-
-
+```@example book
+import CitableBase: cex
+function cex(book::CitableBook; delimiter = "|")
+    join([string(book.urn), book.title, book.authors], delimiter)
+end
 ```
-cexserializable(citablething)
 
-# output
+```@example book
+cex(distantbook)
+```
 
-true
+
+```@example book
+import CitableBase: fromcex
+function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
+    fields = split(cexstring, delimiter)
+    urn = Isbn10Urn(fields[1])
+    CitableBook(urn, fields[2], fields[3])
+end
+```
+
+
+
+```@example book
+cexoutput = cex(distantbook)
+fromcex(cexoutput, CitableBook)
 ```

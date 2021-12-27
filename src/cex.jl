@@ -39,7 +39,8 @@ type's citable trait value.
 
 $(SIGNATURES)
 """
-function fromcex(s::AbstractString, T::Type{<: DataType}; delimiter = "|") 
+function fromcex(s::AbstractString, T::Type{<: DataType}; 
+    delimiter = "|", configuration = nothing) 
     fromcex(CexTrait(T), s, T; delimiter = delimiter)
 end
 
@@ -58,6 +59,6 @@ end
 
 $(SIGNATURES)
 """
-function fromcex(::NotCexSerializable, cex, T::Type{<: DataType}; delimiter) 
+function fromcex(::NotCexSerializable, cex, T::Type{<: DataType}; delimiter, configuration) 
     throw(DomainError(T, "$(T) is not a CexSerializable type."))
 end
