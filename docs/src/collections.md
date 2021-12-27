@@ -86,8 +86,7 @@ end
 import CitableBase: fromcex
 function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
     fields = split(cexstring, delimiter)
-    urn = Isbn1
-    0Urn(fields[1])
+    urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
 end
 ```
@@ -144,12 +143,13 @@ citablecollection(rl)
 
 ## Defining the `UrnComparisonTrait`
 
-```@example book
+
+```@example collections
 struct ReadingListComparable <: UrnComparisonTrait end
 UrnComparisonTrait(::Type{ReadingList}) = ReadingListComparable()
 ```
 
-```@example book
+```@example collections
 urncomparable(rl)
 ```
 
