@@ -17,7 +17,7 @@ ISBN numbers uniquely identify published editions of a book.  We want to create 
 > ADD LINKS TO URN SPECIFICATION
 
 
-The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn:022661283X`.
+The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn10:022661283X`.
 
 ```@example urns
 using CitableBase
@@ -51,7 +51,7 @@ end
 Now when we create objects of our new type, the display in our REPL (or other contexts) will be easily recognizable as an `Isbn10Urn`.
 
 ```@example urns
-distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 ```
 
 
@@ -107,7 +107,7 @@ urnequals(distanthorizons, dupe)
 ```
 
 ```@example urns
-enumerations = Isbn10Urn("urn:isbn:022656875X")
+enumerations = Isbn10Urn("urn:isbn10:022656875X")
 urnequals(distanthorizons, enumerations)
 ```
 
@@ -144,7 +144,7 @@ urncontains(distanthorizons, enumerations)
 But *Can We Be Wrong?* is in ISBN group 1.
 
 ```@example urns
-wrong = Isbn10Urn("urn:isbn:1108922036")
+wrong = Isbn10Urn("urn:isbn10:1108922036")
 urncontains(distanthorizons, wrong)
 ```
 
@@ -180,7 +180,7 @@ urnsimilar(distanthorizons, wrong)
 But *Can We Be Wrong?* is in ISBN group 1.
 
 ```@example urns
-wrong = Isbn10Urn("urn:isbn:1108922036")
+wrong = Isbn10Urn("urn:isbn10:1108922036")
 urncontains(distanthorizons, wrong)
 ```
 

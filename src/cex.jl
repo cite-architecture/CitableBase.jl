@@ -56,6 +56,9 @@ function cex(::NotCexSerializable, x; delimiter)
     throw(DomainError(x, string(typeof(x), " is not a CexSerializable type.")))
 end
 
+
+
+#=
 """It is an error to invoke the `fromcex` function on material that is not CEX serializable.
 
 $(SIGNATURES)
@@ -73,35 +76,49 @@ function fromcexORIG(C::Type{<: CexTrait}, s::AbstractString, T::Type{<: DataTyp
     delimiter = "|", configuration = nothing)  
     throw(DomainError(C, "No implementation of fromcex for trait $(C)."))
 end
+=#
 
+"""It is an error to invoke the `fromcex` function on material that is not CEX serializable.
 
-
-function fromcex(::NotCexSerializable, cex, T::Type{<: Any}; delimiter, configuration) 
+$(SIGNATURES)
+"""
+function fromcex(::NotCexSerializable, cex, T::Type{<: Any}; delimiter , configuration) 
     throw(DomainError(T, "$(T) is not a CexSerializable type."))
 end
 
-"Sig with 2 params for string/target type"
-function fromcex(str::AbstractString, T)
-    fromcex(CexTrait(T), str, T)
+"""Instantiate an object of type `T` from CEX-formatted data `cexsrc` by dispatching based on `CexTrait` of `T`.
+
+$(SIGNATURES)
+"""    
+function fromcex(cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
+    fromcex(CexTrait(T), cexsrc, T, delimiter = delimiter, configuration = configuration)
 end
 
 
-"Sig with 3 params for trait instance/string/target type"
-function fromcex(x::C, str::AbstractString, T) where {C <: CexTrait}
-    @warn("x/C/T/str", x, C, T, str)
-    @warn("Dispatch on C of type", C, typeof(C))
-    fromcex(C, x, str, T)
+"""Instantiate an object of type `T` from CEX-formatted data `cexsrc` by dispatching on the value and type of `traitvalue`.  `traitvalue` should be an object subtyped from `CexTrait`, and should be accesible as `CexTrait(T)`.
+
+$(SIGNATURES)
+"""
+function fromcex(traitvalue::TraitType, cexsrc::AbstractString, T;
+    delimiter, configuration) where {TraitType <: CexTrait}
+
+
+    @warn("traitvalue/TraitType/T/cexstr", traitvalue, TraitType, T, cexsrc)
+    @warn("Dispatch on C of type", TraitType, typeof(TraitType))
+    fromcex(TraitType, traitvalue, cexsrc, T, delimiter = delimiter, configuration = configuration)
 end
 
-
-
-"Sig with 4 params for trait type/trait instance/string/target type"
-function fromcex(c2, x::C, str::AbstractString, T) where {C <: CexTrait}
-    @warn("Yay c2, x/C/T/str", c2, x, C, T, str)
-    typeOfC = C <: CexTrait
-    typeOfc2 = c2 <: CexTrait
-    @warn("Type of C/c2/D", typeOfC,  typeOfc2)
-    nothing
+#"Sig with 4 params for trait type/trait instance/string/target type"
+"""Instantiate an object of type `T` from CEX-formatted data `cexsrc` by dispatching on the value and type of an object subtyped from `CexTrait`.
+$(SIGNATURES)
+"""
+function fromcex(traittype, traitinstance::C, str::AbstractString, T;
+    delimiter , configuration) where {C <: CexTrait}
+    @warn("Yay traittype, traitinstance/C/T/str", traittype, traitinstance, C, T, str)
+    typeOfClass = C <: CexTrait
+    typeOfInstance = traittype <: CexTrait
+    @warn("Type of trait class/trait instance <: CexTrait", typeOfClass,  typeOfInstance)
+    throw(DomainError(C, "`fromcex` is not implemented for trait $(C) on type $(T)."))  
 end
 
 

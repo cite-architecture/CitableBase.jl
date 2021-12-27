@@ -34,9 +34,9 @@ function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
 
     (english(u1) && english(u2)) ||  initial1 == initial2
 end
-distanthorizons = Isbn10Urn("urn:isbn:022661283X")
-enumerations = Isbn10Urn("urn:isbn:022656875X")
-wrong = Isbn10Urn("urn:isbn:1108922036")
+distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
+enumerations = Isbn10Urn("urn:isbn10:022656875X")
+wrong = Isbn10Urn("urn:isbn10:1108922036")
 ```
 # Citable entities
 
@@ -69,6 +69,11 @@ struct CitableBook <: CitablePublication
 end
 ```
 
+```@example book
+function show(io::IO, book::CitableBook)
+    print(io, book.authors, ", *", book.title, "* (", book.urn, ")")
+end
+```
 
 
 ```@example book
@@ -86,6 +91,7 @@ import CitableBase: CitableTrait
 struct CitableByIsbn10 <: CitableTrait end
 CitableTrait(::Type{CitableBook}) = CitableByIsbn10()
 ```
+
 
 ```@example book
 citable(distantbook)
@@ -200,24 +206,20 @@ cex(distantbook)
 
 ```@example book
 import CitableBase: fromcex
-#=
-function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
-    fields = split(cexstring, delimiter)
+function fromcex(traittype, trait::BookCex, cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
+    fields = split(cexsrc, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
 end
-=#
-"Implement for CitableBook"
-function fromcex(::Type{BookCex}, cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
-    fields = split(cexstring, delimiter)
-    urn = Isbn10Urn(fields[1])
-    CitableBook(urn, fields[2], fields[3])
-end
+
+
 ```
 
 
 
 ```@example book
 cexoutput = cex(distantbook)
-fromcex(cexoutput, CitableBook)
+restored = fromcex(cexoutput, CitableBook)
 ```
+
+

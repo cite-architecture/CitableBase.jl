@@ -34,15 +34,18 @@ function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
 
     (english(u1) && english(u2)) ||  initial1 == initial2
 end
-distanthorizons = Isbn10Urn("urn:isbn:022661283X")
-enumerations = Isbn10Urn("urn:isbn:022656875X")
-wrong = Isbn10Urn("urn:isbn:1108922036")
+distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
+enumerations = Isbn10Urn("urn:isbn10:022656875X")
+wrong = Isbn10Urn("urn:isbn10:1108922036")
 
 abstract type CitablePublication end
 struct CitableBook <: CitablePublication
     urn::Isbn10Urn
     title::AbstractString
     authors::AbstractString
+end
+function show(io::IO, book::CitableBook)
+    print(io, book.authors, ", *", book.title, "* (", book.urn, ")")
 end
 distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
 enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
@@ -85,9 +88,8 @@ function cex(book::CitableBook; delimiter = "|")
 end
 
 import CitableBase: fromcex
-"Implement for CitableBook"
-function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
-    fields = split(cexstring, delimiter)
+function fromcex(traittype, trait::BookCex, cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
+    fields = split(cexsrc, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
 end
@@ -105,8 +107,8 @@ end
     - √ define a `ReadingList` type 
     - √ implement the `CitableCollectionTrait`
     - √ implement `UrnComparisonTrait`, 
-    - implement the `CexTrait`
-    - implement `Iterators`.
+    - √ implement the `CexTrait`
+    - √ implement `Iterators`.
 
 
 
@@ -121,12 +123,16 @@ end
 ```
 
 ```@example collections
-books = [distantbook, enumerationsbook, wrongbook,
-    CitableBook(
-        Isbn10Urn("3030234133"),"Quantitative Intertextuality
-Analyzing the Markers of Information Reuse", "Christopher W. Forstall and Walter J. Scheirer"
-    )
-]
+function show(io::IO, readingList::ReadingList)
+    print(io, "ReadingList with ", length(readingList.publications), " items")
+end
+```
+
+```@example collections
+qi = CitableBook(Isbn10Urn("urn:isbn10:3030234133"),
+    "Quantitative Intertextuality Analyzing the Markers of Information Reuse", 
+    "Christopher W. Forstall and Walter J. Scheirer")
+books = [distantbook, enumerationsbook, wrongbook, qi]
 rl = ReadingList(books)
 ```
 
@@ -188,16 +194,33 @@ cexserializable(rl)
 ```@example collections
 function cex(reading::ReadingList; delimiter = "|")
     header = "#!citecollection\n"
-    strings = map(ref -> ref.urn, reading.publications)
+    strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
     header * join(strings, "\n")
 end
 
 
 "Overrid for specific trait value"
-function fromcex(::Type{BookCex}, x::C, str::AbstractString, T) where {C <: CexTrait}
+function fromcex(
+    traittype, trait::ReadingListCex, 
+    cexsrc::AbstractString, T; 
+    delimiter = "|", configuration = nothing)
+
     @warn("IT'S A BOOK")
-    @warn("Instantiate a $(T) from $(str)")
-    nothing
+    @warn("Instantiate a $(T) from $(cexsrc)")
+    isbns = CitableBook[]
+    lines = split(cexsrc, "\n")
+    inblock = false
+    for ln in lines
+        if ln == "#!citecollection"
+            inblock = true
+        elseif inblock
+            
+            bk = fromcex(ln, CitableBook)
+            @warn("book from ln", bk, ln)
+            push!(isbns, bk)
+        end
+    end
+    ReadingList(isbns)
 end
 ```
 
@@ -212,6 +235,30 @@ fromcex(rlcex, ReadingList)
 ```
 
 ## Defining the `Iterators`
+
+
+```@example collections
+import Base: iterate
+
+function iterate(rlist::ReadingList)
+    (rlist.publications[1], 2)
+end
+
+function iterate(rlist::ReadingList, state)
+    if state > length(rlist.publications)
+        nothing
+    else
+        (rlist.publications[state], state + 1)
+    end
+end
+```
+
+```@example collections
+for item in rl
+    println(item)
+end
+```
+
 
 
 ---
@@ -250,7 +297,7 @@ urnequals(jane, rl)
 
 
 ```
-group1 = Isbn10Urn("urn:isbn:1")
+group1 = Isbn10Urn("urn:isbn10:1")
 urncontains(group1, rl)
 ```
 
@@ -268,11 +315,11 @@ struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
 
-distanthorizons = Isbn10Urn("urn:isbn:022661283X")
-quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
-enumerations = Isbn10Urn("urn:isbn:022656875X")
-wrong = Isbn10Urn("urn:isbn:1108922036")
-jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
+distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
+quantitativeintertextuality = Isbn10Urn("urn:isbn10:3030234134")
+enumerations = Isbn10Urn("urn:isbn10:022656875X")
+wrong = Isbn10Urn("urn:isbn10:1108922036")
+jane = Isbn10Urn("urn:isbn10:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
 
 struct ReadingList
     reff::Vector{Isbn10Urn}
@@ -367,25 +414,3 @@ rl == rl2
 
 
 
-
-```
-import Base: iterate
-
-function iterate(rlist::ReadingList)
-    (rlist.reff[1], 2)
-end
-
-function iterate(rlist::ReadingList, state)
-    if state > length(rlist.reff)
-        nothing
-    else
-        (rlist.reff[state], state + 1)
-    end
-end
-```
-
-```
-for item in rl
-    println(item)
-end
-```
