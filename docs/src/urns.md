@@ -14,7 +14,7 @@ ISBN numbers uniquely identify published editions of a book.  We want to create 
 
 ## Defining the `Isbn10Urn` type
 
-The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn10:022661283X`.
+The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn10:022661283X`. (Yes, the last "digit" of an ISBN number can be `X`.)
 
 ```@example urns
 using CitableBase
@@ -25,7 +25,7 @@ end
 
 
 
-!!! warning "Note on the ISBN-10 format"
+!!! warning "Note on the ISBN format and our `Isbn10Urn` type"
 
     There is in fact a URN namespace for ISBN numbers identifeid by the `isbn` namespace identifier. (See this [blogpost about citing publications with URNs](https://www.benmeadowcroft.com/webdev/articles/urns-and-citations/).)  This guide invents an `isbn10` URN type solely to illustrate how you could create your own URN type using the `CitableBase` package.
 
@@ -61,9 +61,13 @@ distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 
 Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions. `CitableBase` uses the "Holy trait trick" to recognize types implementing the `UrnComparisonTrait`.  We need to import the `UrnComparisonTrait`, and define a function that assigns it a  value for instances of our new type.  For that value, we'll define a subtype of `UrnComparisonTrait`.
 
-> ADD LINK TO explanation of the HTT
+
+!!! tip "The Tim Holy Trait Trick"
+
+    The `CitableBase` package implements traits using the "Tim Holy Trait Trick" (THTT). For a clear introduction to THTT, see this post on [julia bloggers](https://www.juliabloggers.com/the-emergent-features-of-julialang-part-ii-traits/).
 
 
+The first line imports the abstract `UrnComparisonTrait`, then the second line defines a concrete subtype of it. The concrete type has no fields, because we'll just use instances of this type as our trait's values. The third line makes use of the `::Type` notation to bulk assign the value `IsbnComparable()` to all instances of the `UrnComparisonTrait` type tree.
 
 ```@example urns
 import CitableBase: UrnComparisonTrait
@@ -71,7 +75,7 @@ struct IsbnComparable <: UrnComparisonTrait end
 UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
 ```
 
-You can use the `urncomparable` function to test whether the trait is recognized for an instance of your new type.
+`CitableBase` offers the `urncomparable` function to test whether the trait is recognized for an instance of your new type.
 
 ```@example urns
 urncomparable(typeof(distanthorizons))
@@ -79,11 +83,9 @@ urncomparable(typeof(distanthorizons))
 
 
 
-
-
 ## Implementing the logic of URN comparison
 
-To fulfill the contract of the `UrnComparisonTrait`, we must implement three boolean functions for three kinds of URN comparison: `urnequals` (for *equality*), `urncontains` (for *containment*) and and `urnsimilar` (for *similarity*).  
+To fulfill the contract of the `UrnComparisonTrait`, we must implement three boolean functions for three kinds of URN comparison: `urnequals` (for *equality*), `urncontains` (for *containment*) and and `urnsimilar` (for *similarity*).  Because we have defined our type as implementing the `UrnComparisonTrait`, `CitableBase` can dispatch to functions including an `Isbn10Urn` as the first parameter.
 
 
 ### Equality
