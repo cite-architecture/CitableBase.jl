@@ -187,6 +187,7 @@ cexserializable(distantbook)
 
 ```@example book
 import CitableBase: cex
+"Implement for CitableBook"
 function cex(book::CitableBook; delimiter = "|")
     join([string(book.urn), book.title, book.authors], delimiter)
 end
@@ -206,8 +207,8 @@ function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = 
     CitableBook(urn, fields[2], fields[3])
 end
 =#
-
-function fromcex(BookCex, cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
+"Implement for CitableBook"
+function fromcex(::Type{BookCex}, cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
     fields = split(cexstring, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])

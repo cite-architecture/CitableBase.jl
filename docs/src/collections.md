@@ -79,11 +79,13 @@ struct BookCex <: CexTrait end
 CexTrait(::Type{CitableBook}) = BookCex()
 
 import CitableBase: cex
+"Implement for CitableBook"
 function cex(book::CitableBook; delimiter = "|")
     join([string(book.urn), book.title, book.authors], delimiter)
 end
 
 import CitableBase: fromcex
+"Implement for CitableBook"
 function fromcex(cexstring::AbstractString, T; delimiter = "|", configuration = nothing)
     fields = split(cexstring, delimiter)
     urn = Isbn10Urn(fields[1])

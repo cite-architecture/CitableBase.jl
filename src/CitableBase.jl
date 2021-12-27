@@ -23,6 +23,9 @@ export cex, fromcex
 
 export CitableCollectionTrait, NotCitableCollection, citablecollection
 
+# Debug:
+export fromcex
+
 include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")
