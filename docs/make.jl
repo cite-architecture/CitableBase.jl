@@ -17,12 +17,9 @@ makedocs(
     sitename = "CitableBase.jl",
     pages = [
         "Home" => "index.md",
-        "URNs" => "urns.md",
-        "Citable resources" => "citable.md",
-        "Citable trait" => "citabletrait.md",
-        "URN comparison" => "urncomparison.md",
-        "CEX serialization" => "cex.md",
-        "Implementations" => "implementations.md",
+        "Identifiers" => "urns.md",
+        "Citable objects" => "citable.md",
+        "Citable collections" => "collections.md",
         "API documentation" => "apis.md"
     ]
     )

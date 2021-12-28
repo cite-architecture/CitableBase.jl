@@ -7,41 +7,57 @@ struct CexSerializable <: CexTrait end
 """Value for the CexTrait for content not serializable to CEX format."""
 struct NotCexSerializable <: CexTrait end
 
-"""The default value of `CitableTrait` is `NotCexSerializable`."""
-CexTrait(::Type) = NotCexSerializable() 
+"""The default value of `CexTrait` is `NotCexSerializable`.
 
-"""Subtypes of `Citable` are `CexSerializable`."""
-CexTrait(::Type{<:Citable}) = CexSerializable() 
+$(SIGNATURES)
+"""
+function cextrait(::Type) 
+    NotCexSerializable() 
+end    
 
+"""Subtypes of `Citable` are `CexSerializable`.
 
+$(SIGNATURES)
+"""
+function cextrait(::Type{<:Citable})  
+    CexSerializable() 
+end
+
+"""True if type `T` is serializable to CEX format
+$(SIGNATURES)
+"""
 function cexserializable(x::T) where {T}
-    CexTrait(T) != NotCexSerializable()
+    #@warn("x/T/trait", x, T, cextrait(T))
+    cextrait(T) != NotCexSerializable()
 end
 
 #=
 Define delegation for the 2 functions of the CexTrait:
-
 - cex
 - fromcex
 =#
 
 """Delegate `cex` to specific functions based on 
-type's citable trait value.
+type's `cextrait` value.
 
 $(SIGNATURES)
 """
 function cex(x::T; delimiter = "|") where {T} 
-    cex(CexTrait(T), x; delimiter = delimiter)
+    cex(cextrait(T), x; delimiter = delimiter)
 end
 
-"""Delegate `fromcex` to specific functions based on 
-type's citable trait value.
+
+"""Instantiate an object of type `T` from CEX-formatted data `cexsrc` by dispatching based on `cextrait` of `T`.
 
 $(SIGNATURES)
-"""
-function fromcex(s::AbstractString, T::Type{<: DataType}; delimiter = "|") 
-    fromcex(CexTrait(T), s, T; delimiter = delimiter)
+"""    
+function fromcex(cexsrc::AbstractString, T; 
+    delimiter = "|", configuration = nothing)
+    fromcex(cextrait(T), cexsrc, T, 
+    delimiter = delimiter, configuration = configuration)
 end
+
+
 
 
 # Catch attempts to use these functions on NotCexSerializable:
@@ -58,6 +74,16 @@ end
 
 $(SIGNATURES)
 """
-function fromcex(::NotCexSerializable, cex, T::Type{<: DataType}; delimiter) 
+function fromcex(::NotCexSerializable, cex, T::Type{<: Any}; delimiter , configuration) 
     throw(DomainError(T, "$(T) is not a CexSerializable type."))
+end
+
+"""It is an error invoke `fromcex` function with an
+unimplemented trait value.
+
+$(SIGNATURES)
+"""
+function fromcex(traitvalue::TraitType, cexsrc::AbstractString, T;
+    delimiter, configuration) where {TraitType <: CexTrait}
+    throw(DomainError(traitvalue, "`fromcex` is not implemented for trait $(traitvalue) on type $(T)."))  
 end

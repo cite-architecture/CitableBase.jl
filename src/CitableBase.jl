@@ -3,30 +3,38 @@ module CitableBase
 using Documenter, DocStringExtensions
 import Base:  ==
 
-# Urn and its required functions:
+# Urn and its functions
 export Urn
 export dropversion, addversion
 export ==
 # Concrete implementations:
 export components, parts
 
+# Citable object abstract type
+export Citable
+
 # The three key traits of citable content, 
 # together with their required functions:
-export Citable, CitableTrait
-export CitableByCtsUrn, CitableByCite2Urn, NotCitable, citable
-export urn, label
-
-export CexTrait, CexSerializable, NotCexSerializable, cexserializable
-export cex, fromcex 
-
-export UrnComparisonTrait, UrnComparable, NotUrnComparable, urncomparable
+export UrnComparisonTrait, NotUrnComparable
+export urncomparisontrait, urncomparable
 export urnsimilar, urncontains, urnequals
 
+export CitableTrait, NotCitable
+export citabletrait, citable
+export urn, label
+
+export CexTrait, NotCexSerializable 
+export cextrait, cexserializable
+export cex, fromcex 
+
+# The citable collection trait
+export CitableCollectionTrait, NotCitableCollection
+export citablecollectiontrait, citablecollection
 
 include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")
 include("cex.jl")
-
+include("collectiontrait.jl")
 
 end # module

@@ -2,3 +2,5 @@ Manifest.toml
 *.~
 docs/build/
 scratch/
+scratch*
+.vscode/

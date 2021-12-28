@@ -4,20 +4,17 @@ abstract type Citable end
 """Abstraction of values for a citable trait."""
 abstract type CitableTrait end 
 
-
 """Value for the CitableTrait for everything not citable."""
 struct NotCitable <: CitableTrait end 
-"""Define default value of CitableTrait as NotCitable."""
-CitableTrait(::Type) = NotCitable() 
 
-"""Value for the CitableTrait for all subtypes of `Citable`."""
-struct CitableObject <: CitableTrait end 
-"""Define value of CitableTrait for subtypes of `Citable`."""
-CitableTrait(::Type{<:Citable}) = CitableObject() 
+"""Define default value of CitableTrait as NotCitable."""
+function citabletrait(::Type) 
+    NotCitable() 
+end
 
 """True if `x` is a citable object."""
 function citable(x)
-    CitableTrait(typeof(x)) != NotCitable()
+    citabletrait(typeof(x)) != NotCitable()
 end
 
 #=
@@ -26,14 +23,13 @@ Define delegation for the 2 functions of the CitableTrait:
 2. label
 =#
 
-
 """Delegate `urn` to specific functions based on 
 type's citable trait value.
 
 $(SIGNATURES)
 """
 function urn(x::T) where {T} 
-    urn(CitableTrait(T), x)
+    urn(citabletrait(T), x)
 end
 
 """Delegate `label` to specific functions based on 
@@ -42,7 +38,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function label(x::T) where {T} 
-    label(CitableTrait(T), x)
+    label(citabletrait(T), x)
 end
 
 # Catch attempts to use these functions on NotCitable:

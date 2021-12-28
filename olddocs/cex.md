@@ -59,5 +59,3 @@ s = "urn:fake:id.subid|Some citable resource"
 fromcex(s, MyOwnCite)
 
 ```
-
-???
