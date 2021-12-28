@@ -38,4 +38,4 @@ It is perfectly possible to use packages implementing the abstractions of `Citab
 
 The guide works through a hypothetical example to design a reading list of books citable by URN values.  The guide first illustrates how to implement a custom URN type for ISBN-10 numbers. It then creates a custom citable object for books cited by ISBN-10 numbers, and finally defines a custom citable collection representing a reading list.  
 
-Following the user's guide, the documentation includes the formal API documentation for the exported functions and type of the `CitableBase` package.
+Following the user's guide, the documentation includes the formal API documentation for the exported functions and types of the `CitableBase` package.
