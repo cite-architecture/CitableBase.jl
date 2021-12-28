@@ -9,8 +9,6 @@ function urncomparisontrait(::Type)
     NotUrnComparable() 
 end
 
-#UrnComparisonTrait(::Type) = NotUrnComparable() 
-
 # Delegate functions based on trait value.
 """URN-comparable objects must implement `urncontains`.
 $(SIGNATURES)
@@ -25,7 +23,6 @@ $(SIGNATURES)
 function urnsimilar(x::T, y) where {T <: Urn} 
     urnsimilar(urncomparisontrait(T), x, y)
 end
-
 
 """URN-comparable objects must implement `urnequals`.
 $(SIGNATURES)
