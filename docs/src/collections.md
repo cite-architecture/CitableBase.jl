@@ -198,7 +198,7 @@ CexTrait(::Type{ReadingList}) = ReadingListCex()
 cexserializable(rl)
 ```
 
-```@example collections
+```
 function cex(reading::ReadingList; delimiter = "|")
     header = "#!citecollection\n"
     strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
@@ -232,11 +232,11 @@ end
 ```
 
 
-```@example collections
+```
 cex(rl)
 ```
 
-```@example collections
+```
 rlcex = cex(rl)
 fromcex(rlcex, ReadingList)
 ```
