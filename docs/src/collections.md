@@ -329,7 +329,7 @@ Once again, we can now invoke `fromcex` with just the parameters for the CEX dat
 fromcex(cexoutput, ReadingList)
 ```
 
-## Implementing the `Iterators`' required `iterate` functions
+## Implementing required and optional frnctions from `Base.Iterators`
 
 The `Iterators` module in Julia `Base` was one of the first traits or interfaces in Julia.  It allows you to apply the same functions to many types of iterable collections.  We need to import the `Base.iterate` function, and implement two versions of it for our new type: one with a single parameter for the collection, and one with a second parameter maintaining some kind of state information.  Both of them have the same return type: either `nothing`, or a Tuple pairing one item in the collection with state information.
 
@@ -349,10 +349,70 @@ end
 ```
 
 
-One example of a native Julia feature we can now use directly with a `ReadingList` is iterating with `for` loops.
+It is also useful (and trivial) to implement the optional methods for the length and base type of the collection.
+
+```@example collections
+import Base: length
+function length(readingList::ReadingList)
+    length(readingList.publications)
+end
+
+
+import Base: eltype
+function eltype(readingList::ReadingList)
+    CitablePublication
+end
+```
+
+```@example collections
+length(rl)
+```
+
+```@example collections
+eltype(rl)
+```
+
+Now our `ReadingList` type is usable with all the richness of [the Julia interface for iterators](https://docs.julialang.org/en/v1/base/collections/#lib-collections-iteration).  Just a few examples:
+
+- `for` loops 
+
 ```@example collections
 for item in rl
     println(item)
 end
 ```
 
+- checking for presence of an item
+
+```@example collections
+distantbook in rl
+```
+
+
+- collect contents without having to know anything about the internal structure of the type
+
+```@example collections
+collect(rl)
+```
+
+## Recap: citable collections
+
+On this page, we wrapped a citable collection type, te `ReadingList` around a Vector of `CitableBook`s.  We made the type identifiable as a citable collection.  We implemented filter of the collection on URN logic with the `UrnComparisonTrait`, and serialization with the `CexSerializableTrait`.  You can test these for these traits with boolean functions.
+
+
+```@example collections
+citablecollection(rl)
+```
+
+
+
+```@example collections
+urncomparable(rl)
+```
+
+
+```@example collections
+cexserializable(rl)
+```
+
+In addition, we made the `ReadingList` implement Julia's `Iterators` behavior.

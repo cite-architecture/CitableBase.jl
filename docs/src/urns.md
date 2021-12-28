@@ -200,6 +200,18 @@ urncontains(distanthorizons, wrong)
 
 
 
+## Recap: identifiers
+
+
+On this page, we defined the `Isnb10Urn` type as a subtype of `Urn` and identified our type as implementing the `UrnComparisonTrait`.  You can test this with `urncomparable`s.
+
+```@example urns
+urncomparable(distanthorizons)
+```
+
+We implemented the trait's required functions to compare pairs of URNs based on URN logic for equality, similarity and containment, and return boolean values.
+
+The next page will make use of our URN type to define a citable object identified by `Isbn10Urn`.
 
 
 
