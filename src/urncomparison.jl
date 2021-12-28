@@ -16,14 +16,14 @@ end
 $(SIGNATURES)
 """
 function urncontains(x::T, y) where {T} 
-    urncontains(UrnComparisonTrait(T), x, y)
+    urncontains(urncomparisontrait(T), x, y)
 end
 
 """URN-comparable objects must implement `urnsimilar`.
 $(SIGNATURES)
 """
 function urnsimilar(x::T, y) where {T} 
-    urnsimilar(UrnComparisonTrait(T), x, y)
+    urnsimilar(urncomparisontrait(T), x, y)
 end
 
 
@@ -31,7 +31,7 @@ end
 $(SIGNATURES)
 """
 function urnequals(x::T, y) where {T} 
-    urnequals(UrnComparisonTrait(T), x, y)
+    urnequals(urncomparisontrait(T), x, y)
 end
 
 

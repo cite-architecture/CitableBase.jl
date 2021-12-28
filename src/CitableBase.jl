@@ -10,6 +10,8 @@ export ==
 # Concrete implementations:
 export components, parts
 
+# Citable object abstract type
+export Citable
 
 # The three key traits of citable content, 
 # together with their required functions:
@@ -17,15 +19,16 @@ export UrnComparisonTrait, NotUrnComparable
 export urncomparisontrait,  urncomparable
 export urnsimilar, urncontains, urnequals
 
-export Citable, CitableTrait
-export NotCitable, citable
+export CitableTrait, NotCitable
+export citabletrait, citable
 export urn, label
 
 export CexTrait, NotCexSerializable, cexserializable
 export cex, fromcex 
 
 # The citable collection trait
-export CitableCollectionTrait, NotCitableCollection, citablecollection
+export CitableCollectionTrait, NotCitableCollection
+export citablecollection
 
 
 include("citable.jl")

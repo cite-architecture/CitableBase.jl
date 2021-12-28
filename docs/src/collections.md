@@ -61,7 +61,7 @@ end
 
 import CitableBase: label
 function label(book::CitableBook)
-    join([book.authors, "*" * book.title * "*"], ", ")
+    book.authors * ", *" * book.title * "* ("  * book.urn * ")"
 end
 
 struct BookComparable <: UrnComparisonTrait end

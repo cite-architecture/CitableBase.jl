@@ -1,20 +1,25 @@
 # Identification with URNs
 
 > ## Summary 
->   
-> This page
 >
-> - defines a new URN type representing an ISBN-10 number
-> - implements the `UrnComparisonTrait` for the new type
+> **The task**: ISBN numbers uniquely identify published editions of a book.  We want to create a type representing a 10-digit ISBN number, and be able to compare ISBN numbers using URN logic.
+>   
+> **The implementation**:
+>
+> - define a new URN type representing an ISBN-10 number
+> - implement the `UrnComparisonTrait` for the new type
+>
 
 
-## The task
 
-ISBN numbers uniquely identify published editions of a book.  We want to create a type representing a 10-digit ISBN number.  We'll make it a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
+
 
 ## Defining the `Isbn10Urn` type
 
 The `Urn` abstract type models a Uniform Resource Name (URN). We'll follow  the requirements of the URN standard to create a URN type for ISBN-10 numbers.  Its URN strings will have three colon-delimited components, beginning with the required prefix `urn`, then a URN type we'll call `isbn10`, followed by a 10-digit ISBN number.  For example, the URN for *Distant Horizons* by Ted Underwood will be `urn:isbn10:022661283X`. (Yes, the last "digit" of an ISBN number can be `X`.)
+
+We will make the new type a subtype of `Urn`, so that we can use it freely with other packages that recognize URNs.
+
 
 ```@example urns
 using CitableBase
@@ -67,7 +72,7 @@ Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its th
     See [this post on julia bloggers](https://www.juliabloggers.com/the-emergent-features-of-julialang-part-ii-traits/) for an introduction to the "Tim Holy Trait Trick" (THTT). .
 
 
-We first define a subtype of the abstract `UrnComparisonTrait`.  It's a singleton type with no fields which we'll use as the trait value for our ISBN type.  `CitableBase` provides the `urncomparisontrait` function to determine if a class implements the `UrnComparisonTrait` so we'll import `urncomparisontrait`, and define a function returning a concrete value of `IsbnComparable()` for our type `Isbn10Urn`.
+We first define a subtype of the abstract `UrnComparisonTrait`.  It's a singleton type with no fields which we'll use as the trait value for our ISBN type.  `CitableBase` provides the `urncomparisontrait` function to determine if a class implements the `UrnComparisonTrait` so we'll import `urncomparisontrait`, and define a function returning a concrete value of `IsbnComparable()` for the type `Isbn10Urn`.
 
 ```@example urns
 struct IsbnComparable <: UrnComparisonTrait end
@@ -84,7 +89,7 @@ Let's test it.
 urncomparisontrait(typeof(distanthorizons))
 ```
 
-`CitableBase` includes a boolean function `urncomparable` we can use to test specific objects.
+This lets us use `CitableBase`s boolean function `urncomparable` to test specific objects.
 
 
 ```@example urns

@@ -8,11 +8,13 @@ abstract type CitableTrait end
 struct NotCitable <: CitableTrait end 
 
 """Define default value of CitableTrait as NotCitable."""
-CitableTrait(::Type) = NotCitable() 
+function citabletrait(::Type) 
+    NotCitable() 
+end
 
 """True if `x` is a citable object."""
 function citable(x)
-    CitableTrait(typeof(x)) != NotCitable()
+    citabletrait(typeof(x)) != NotCitable()
 end
 
 #=
