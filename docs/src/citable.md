@@ -268,7 +268,7 @@ end
 ```
 
 ```@example book
-cex(distantbook)
+cexoutput = cex(distantbook)
 ```
 
 The inverse of `cex` is `fromcex`.  We need two pieces of information to convert a CEX string to an object:  the CEX source data, and the *type* of object to instantiate.  Since `CitableBase` dispatches this function on the trait value of the type want to instantiate, we will ipmlement a function with three required parameters: one for the trait value, and two more for the CEX data and Julia type to create.  (Two optional parameters allow you to define the delimiting string value, or create a dictionary with other configuration settings, but we won't need that for our implementation.)
@@ -289,13 +289,41 @@ end
 
     The `CitableLibrary` package implements `fromcex` for its `CiteLibrary` class. It uses the `configuration` parameter to map different kinds of content to Julia classes, and create a library that many include many different kinds of citable collections.  See its [documentation](https://cite-architecture.github.io/CitableLibrary.jl/stable/).
 
-
-The acid test:  can we round-trip a book to CEX format and recreate it?
+Note that `CitableBase` can delegate to our function from an invocation with only two parameters:  all a user needs to specify is the CEX data and Julia type.
 
 ```@example book
-cexoutput = cex(distantbook)
 restored = fromcex(cexoutput, CitableBook)
+```
+
+Did we wind up with an equivalent book?
+
+```@example book
 distantbook == restored
 ```
 
+## Recap
 
+This page  first defined the `CitableBook`.  Here's what an example looks like:
+
+```@example book
+dump(distantbook)
+```
+
+We implemented three traits which you can test for with boolean functions.
+
+```@example book
+citable(distantbook)
+```
+
+```@example book
+urncomparable(distantbook)
+```
+
+
+```@example book
+cexserializable(distantbook)
+```
+
+Those three traits allowed us to identify books by URN, compare books by URN, and round-trip books to and from plain-text representation.
+
+The next page shows how to build a citable collection for working with collections of citable objects.
