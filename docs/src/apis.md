@@ -8,17 +8,8 @@ CurrentModule = CitableBase
 
 ```@docs
 Urn
-```
-
-Concrete functions for Urns
-
-```@docs
 components
 parts
-```
-URN abstractions to implement for specific types
-
-```@docs
 addversion
 dropversion
 ```
@@ -28,12 +19,10 @@ dropversion
 
 ```@docs
 Citable
-```
-
-Functions to implement for citable resources:
-
-
-```@docs
+CitableTrait
+NotCitable
+citabletrait
+citable
 urn
 label
 ```
@@ -43,6 +32,10 @@ label
 
 ```@docs
 UrnComparisonTrait
+NotUrnComparable
+urncomparisontrait
+urncomparable
+urnequals
 urncontains
 urnsimilar
 ```
@@ -53,6 +46,21 @@ urnsimilar
 
 ```@docs
 CexTrait
+NotCexSerializable
+cextrait
+cexserializable
 cex
 fromcex
+```
+
+
+
+
+## Citable collections
+
+```@docs
+CitableCollectionTrait
+NotCitableCollection
+citablecollectiontrait
+citablecollection
 ```

@@ -31,12 +31,10 @@ export cex, fromcex
 export CitableCollectionTrait, NotCitableCollection
 export citablecollectiontrait, citablecollection
 
-
 include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")
 include("cex.jl")
 include("collectiontrait.jl")
-
 
 end # module
