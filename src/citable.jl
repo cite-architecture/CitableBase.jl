@@ -29,7 +29,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function urn(x::T) where {T} 
-    urn(CitableTrait(T), x)
+    urn(citabletrait(T), x)
 end
 
 """Delegate `label` to specific functions based on 
@@ -38,7 +38,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function label(x::T) where {T} 
-    label(CitableTrait(T), x)
+    label(citabletrait(T), x)
 end
 
 # Catch attempts to use these functions on NotCitable:

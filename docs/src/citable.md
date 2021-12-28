@@ -43,22 +43,21 @@ wrong = Isbn10Urn("urn:isbn10:1108922036")
 
 > # Summary
 >
-> This page
+> **The task**: We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to compare objects of our new type, and serialize citable books to plain-text format.
 >
-> - defines a new type of citable object, the `CitableBook`
-> - implements citation functions for it (the `CitableTrait`)
-> - implements comparison using URN logic (the `UrnComparisonTrait`)
-> - implements round-trip serialization (the `CexTrait`)
+> **The implementation**:
+>
+> - define a new type of citable object, the `CitableBook`
+> - implement citation functions for it (the `CitableTrait`)
+> - implement comparison using URN logic (the `UrnComparisonTrait`)
+> - implement round-trip serialization (the `CexTrait`)
 
 
-## The task
-
-We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to compare objects of our new type, and serialize citable books to plain-text format.
 
 
 ## Defining the `CitableBook`
 
-We'll take advantage of Julia's type hierarchy to create an abstract `CitablePublication` type, and make `CitableBook` a subtype of it.  We won't create any further subtypes in this guide, but if we wanted to implement a type for some other form of citable publication, we could then share code applicable to any type of publication (any subtype of `CitablePublication`).
+We'll take advantage of Julia's type hierarchy to create an abstract `CitablePublication` type, and make `CitableBook` a subtype of it.  We won't create any further subtypes in this guide, but if we wanted to implement a type for some other form of citable publication, we could then share code applicable to any type of publication (that is, any subtype of `CitablePublication`).
 
 We'll identify the book using the `Isbn10Urn` type we previously defined. Again, we'll keep the example simple, and just include strings for authors and a title.  You could elaborate this type however you choose.
 

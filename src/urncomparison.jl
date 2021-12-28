@@ -15,14 +15,14 @@ end
 """URN-comparable objects must implement `urncontains`.
 $(SIGNATURES)
 """
-function urncontains(x::T, y) where {T} 
+function urncontains(x::T, y) where {T <: Urn} 
     urncontains(urncomparisontrait(T), x, y)
 end
 
 """URN-comparable objects must implement `urnsimilar`.
 $(SIGNATURES)
 """
-function urnsimilar(x::T, y) where {T} 
+function urnsimilar(x::T, y) where {T <: Urn} 
     urnsimilar(urncomparisontrait(T), x, y)
 end
 
@@ -30,7 +30,7 @@ end
 """URN-comparable objects must implement `urnequals`.
 $(SIGNATURES)
 """
-function urnequals(x::T, y) where {T} 
+function urnequals(x::T, y) where {T <: Urn} 
     urnequals(urncomparisontrait(T), x, y)
 end
 

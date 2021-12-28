@@ -16,7 +16,7 @@ export Citable
 # The three key traits of citable content, 
 # together with their required functions:
 export UrnComparisonTrait, NotUrnComparable
-export urncomparisontrait,  urncomparable
+export urncomparisontrait, urncomparable
 export urnsimilar, urncontains, urnequals
 
 export CitableTrait, NotCitable

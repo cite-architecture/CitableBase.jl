@@ -100,6 +100,13 @@ end
 
 # Citable collections
 
+> # Summary
+>
+> **The task**: 
+
+
+
+
 !!! note "TBD"
 
     This page will 
