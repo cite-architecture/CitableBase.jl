@@ -3,22 +3,27 @@ using CitableBase
 struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
+
 import Base: show
 function show(io::IO, u::Isbn10Urn)
     print(io, u.isbn)
 end
-import CitableBase: UrnComparisonTrait
+
 struct IsbnComparable <: UrnComparisonTrait end
-UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+import CitableBase: urncomparisontrait
+function urncomparisontrait(::Type{Isbn10Urn})
+    IsbnComparable()
+end
+
 import CitableBase: urnequals
 function urnequals(u1::Isbn10Urn, u2::Isbn10Urn)
     u1 == u2
 end
+
 import CitableBase: urncontains
 function urncontains(u1::Isbn10Urn, u2::Isbn10Urn)
     initial1 = components(u1.isbn)[3][1]
     initial2 = components(u2.isbn)[3][1]
-
     initial1 == initial2
 end
 
@@ -34,10 +39,15 @@ function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
 
     (english(u1) && english(u2)) ||  initial1 == initial2
 end
+
+
+
 distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 enumerations = Isbn10Urn("urn:isbn10:022656875X")
 wrong = Isbn10Urn("urn:isbn10:1108922036")
 ```
+
+
 # Citable entities
 
 
@@ -174,28 +184,31 @@ function urnsimilar(bk1::CitableBook, bk2::CitableBook)
 end
 ```
 
+
+Let's test these functions on `CitableBook`s the same way we tested them for URNs.
+
 ```@example book
 dupebook = distantbook
 urnequals(distantbook, dupebook)
 ```
 
 ```@example book
-urnequals(distantbook, enumerationsbook)
-```
-
-```@example book
-urncontains(distantbook, enumerationsbook)
-```
-
-```@example book
-urnsimilar(distantbook, enumerationsbook)
-```
-
-
-```@example book
 wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
+urnequals(distantbook, wrongbook)
+```
+
+As before, our URNs define "similarity" as belonging to the same language area, so *Distant Horizons* and *Can We Be Wrong?* are similar.
+
+```@example book
 urnsimilar(distantbook, wrongbook)
 ```
+
+But "containment" was defined as code for the same ISBN areas, so *Distant Horizons* does not "contain" *Can We Be Wrong?*.
+
+```@example book
+urncontains(distantbook, wrongbook)
+```
+
 
 
 
@@ -204,7 +217,10 @@ urnsimilar(distantbook, wrongbook)
 
 ```@example book
 struct BookCex <: CexTrait end
-CexTrait(::Type{CitableBook}) = BookCex()
+import CitableBase: cextrait
+function cextrait(::Type{CitableBook})  
+    BookCex()
+end
 ```
 
 ```@example book

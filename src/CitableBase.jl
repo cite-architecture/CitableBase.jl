@@ -23,7 +23,8 @@ export CitableTrait, NotCitable
 export citabletrait, citable
 export urn, label
 
-export CexTrait, NotCexSerializable, cexserializable
+export CexTrait, NotCexSerializable 
+export cextrait, cexserializable
 export cex, fromcex 
 
 # The citable collection trait

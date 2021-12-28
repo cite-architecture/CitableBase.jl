@@ -7,15 +7,20 @@ struct CexSerializable <: CexTrait end
 """Value for the CexTrait for content not serializable to CEX format."""
 struct NotCexSerializable <: CexTrait end
 
-"""The default value of `CitableTrait` is `NotCexSerializable`."""
-CexTrait(::Type) = NotCexSerializable() 
+"""The default value of `CexTrait` is `NotCexSerializable`."""
+function cextrait(::Type) 
+    NotCexSerializable() 
+end    
 
 """Subtypes of `Citable` are `CexSerializable`."""
-CexTrait(::Type{<:Citable}) = CexSerializable() 
+function cextrait(::Type{<:Citable})  
+    CexSerializable() 
+end
 
 
 function cexserializable(x::T) where {T}
-    CexTrait(T) != NotCexSerializable()
+    @warn("x/T/trait", x, T, cextrait(T))
+    cextrait(T) != NotCexSerializable()
 end
 
 #=
@@ -31,7 +36,7 @@ type's citable trait value.
 $(SIGNATURES)
 """
 function cex(x::T; delimiter = "|") where {T} 
-    cex(CexTrait(T), x; delimiter = delimiter)
+    cex(cextrait(T), x; delimiter = delimiter)
 end
 
 """Delegate `fromcex` to specific functions based on 
@@ -42,7 +47,7 @@ $(SIGNATURES)
 function fromcex(s::AbstractString, T::Type{<: DataType}; 
     delimiter = "|", configuration = nothing) 
     @warn("Delegate from cex to ", T)
-    fromcex(CexTrait(T), s, T; delimiter = delimiter)
+    fromcex(cextrait(T), s, T; delimiter = delimiter)
 end
 
 
@@ -91,7 +96,7 @@ end
 $(SIGNATURES)
 """    
 function fromcex(cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
-    fromcex(CexTrait(T), cexsrc, T, delimiter = delimiter, configuration = configuration)
+    fromcex(cextrait(T), cexsrc, T, delimiter = delimiter, configuration = configuration)
 end
 
 
