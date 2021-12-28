@@ -1,24 +1,30 @@
 ```@setup collections
+#page 1
 using CitableBase
 struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
+
 import Base: show
 function show(io::IO, u::Isbn10Urn)
     print(io, u.isbn)
 end
-import CitableBase:  UrnComparisonTrait
+
 struct IsbnComparable <: UrnComparisonTrait end
-UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+import CitableBase: urncomparisontrait
+function urncomparisontrait(::Type{Isbn10Urn})
+    IsbnComparable()
+end
+
 import CitableBase: urnequals
 function urnequals(u1::Isbn10Urn, u2::Isbn10Urn)
     u1 == u2
 end
+
 import CitableBase: urncontains
 function urncontains(u1::Isbn10Urn, u2::Isbn10Urn)
     initial1 = components(u1.isbn)[3][1]
     initial2 = components(u2.isbn)[3][1]
-
     initial1 == initial2
 end
 
@@ -34,25 +40,35 @@ function urnsimilar(u1::Isbn10Urn, u2::Isbn10Urn)
 
     (english(u1) && english(u2)) ||  initial1 == initial2
 end
+
+
+
 distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 enumerations = Isbn10Urn("urn:isbn10:022656875X")
 wrong = Isbn10Urn("urn:isbn10:1108922036")
 
+#page2
 abstract type CitablePublication end
 struct CitableBook <: CitablePublication
     urn::Isbn10Urn
     title::AbstractString
     authors::AbstractString
 end
+
 function show(io::IO, book::CitableBook)
     print(io, book.authors, ", *", book.title, "* (", book.urn, ")")
 end
-distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
-enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
 
-import CitableBase: CitableTrait
+import Base.==
+function ==(book1::CitableBook, book2::CitableBook)
+    book1.urn == book2.urn && book1.title == book2.title && book1.authors == book2.authors
+end
+
 struct CitableByIsbn10 <: CitableTrait end
-CitableTrait(::Type{CitableBook}) = CitableByIsbn10()
+import CitableBase: citabletrait
+function citabletrait(::Type{CitableBook})
+    CitableByIsbn10()
+end
 
 import CitableBase: urn
 function urn(book::CitableBook)
@@ -61,11 +77,14 @@ end
 
 import CitableBase: label
 function label(book::CitableBook)
-    book.authors * ", *" * book.title * "* ("  * book.urn * ")"
+    string(book)
 end
 
+
 struct BookComparable <: UrnComparisonTrait end
-UrnComparisonTrait(::Type{CitableBook}) = BookComparable()
+function urncomparisontrait(::Type{CitableBook})
+    BookComparable()
+end
 
 function urnequals(bk1::CitableBook, bk2::CitableBook)
     bk1.urn == bk2.urn
@@ -76,10 +95,12 @@ end
 function urnsimilar(bk1::CitableBook, bk2::CitableBook)
     urnsimilar(bk1.urn, bk2.urn)
 end
-wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
 
 struct BookCex <: CexTrait end
-CexTrait(::Type{CitableBook}) = BookCex()
+import CitableBase: cextrait
+function cextrait(::Type{CitableBook})
+    BookCex()
+end
 
 import CitableBase: cex
 "Implement for CitableBook"
@@ -88,11 +109,19 @@ function cex(book::CitableBook; delimiter = "|")
 end
 
 import CitableBase: fromcex
-function fromcex(traittype, trait::BookCex, cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
+function fromcex(traitvalue::BookCex, cexsrc::AbstractString, T;
+    delimiter = "|", configuration = nothing)
     fields = split(cexsrc, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
 end
+
+
+
+
+distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
+enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
+wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
 ```
 
 
@@ -103,23 +132,16 @@ end
 > # Summary
 >
 > **The task**: 
+>
+> **The implementation**:
+> - define a new type for a collection of citable books, the `ReadingList` type
+> - identify it as a citable collection (the `CitableCollectionTrait`)
+> - implement filtering the collection using URN logic (the `UrnComparisonTrait`)
+> - implement round-trip serialization (the `CexTrait`)
+> - make the collection available to all Julia functions working with iterable content (`Iterators`)
+>
 
 
-
-
-!!! note "TBD"
-
-    This page will 
-    
-    - √ define a `ReadingList` type 
-    - √ implement the `CitableCollectionTrait`
-    - √ implement `UrnComparisonTrait`, 
-    - √ implement the `CexTrait`
-    - √ implement `Iterators`.
-
-
-
-## The task
 
 ## Defining the `ReadingList` type
 
