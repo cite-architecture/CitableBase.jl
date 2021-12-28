@@ -167,7 +167,7 @@ label(distantbook)
 
 We've already seen the `UrnComparisonTrait`.  We'll now define it for our book type in exactly the same way we did for our URN type. (We don't even need to re-import its functions.)
 
-```nonexample book
+```@example book
 struct BookComparable <: UrnComparisonTrait end
 
 function urncomparisontrait(::Type{CitableBook})
@@ -175,11 +175,11 @@ function urncomparisontrait(::Type{CitableBook})
 end
 ```
 
-```nonexample book
+```@example book
 urncomparisontrait(typeof(distantbook))
 ```
 
-```nonexample book
+```@example book
 urncomparable(distantbook)
 ```
 
@@ -301,7 +301,7 @@ Did we wind up with an equivalent book?
 distantbook == restored
 ```
 
-## Recap
+## Recap: citable objects
 
 This page  first defined the `CitableBook`.  Here's what an example looks like:
 
