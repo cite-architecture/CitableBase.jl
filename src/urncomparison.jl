@@ -5,7 +5,11 @@ abstract type UrnComparisonTrait end
 struct NotUrnComparable <: UrnComparisonTrait end
 
 """Default value of `UrnComparisonTrait` is `NotUrnComparable`."""
-UrnComparisonTrait(::Type) = NotUrnComparable() 
+function urncomparisontrait(::Type)
+    NotUrnComparable() 
+end
+
+#UrnComparisonTrait(::Type) = NotUrnComparable() 
 
 # Delegate functions based on trait value.
 """URN-comparable objects must implement `urncontains`.
@@ -31,9 +35,9 @@ function urnequals(x::T, y) where {T}
 end
 
 
-"""True if `T` implements the `UrnComparisonTrait`.
+"""True if type `T` implements the `UrnComparisonTrait`.
 $SIGNATURES
 """
 function urncomparable(u::T) where {T}
-    UrnComparisonTrait(T) != NotUrnComparable()
+    urncomparisontrait(T) != NotUrnComparable()
 end

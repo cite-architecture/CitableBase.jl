@@ -59,28 +59,37 @@ distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 ## Defining the `UrnComparisonTrait`
 
 
-Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions. `CitableBase` uses the "Holy trait trick" to recognize types implementing the `UrnComparisonTrait`.  We need to import the `UrnComparisonTrait`, and define a function that assigns it a  value for instances of our new type.  For that value, we'll define a subtype of `UrnComparisonTrait`.
+Subtypes of `Urn` are required to implement the `UrnComparisonTrait`, and its three functions. `CitableBase` uses the "Holy trait trick" to dispatch functions implementing URN comparison. 
 
 
 !!! tip "The Tim Holy Trait Trick"
 
-    The `CitableBase` package implements traits using the "Tim Holy Trait Trick" (THTT). For a clear introduction to THTT, see this post on [julia bloggers](https://www.juliabloggers.com/the-emergent-features-of-julialang-part-ii-traits/).
+    See [this post on julia bloggers](https://www.juliabloggers.com/the-emergent-features-of-julialang-part-ii-traits/) for an introduction to the "Tim Holy Trait Trick" (THTT). .
 
 
-The first line imports the abstract `UrnComparisonTrait`, then the second line defines a concrete subtype of it. The concrete type has no fields, because we'll just use instances of this type as our trait's values. The third line makes use of the `::Type` notation to bulk assign the value `IsbnComparable()` to all instances of the `UrnComparisonTrait` type tree.
+We first define a subtype of the abstract `UrnComparisonTrait`.  It's a singleton type with no fields which we'll use as the trait value for our ISBN type.  `CitableBase` provides the `urncomparisontrait` function to determine if a class implements the `UrnComparisonTrait` so we'll import `urncomparisontrait`, and define a function returning a concrete value of `IsbnComparable()` for our type `Isbn10Urn`.
 
 ```@example urns
-import CitableBase: UrnComparisonTrait
 struct IsbnComparable <: UrnComparisonTrait end
-UrnComparisonTrait(::Type{Isbn10Urn}) = IsbnComparable()
+
+import CitableBase: urncomparisontrait
+function urncomparisontrait(::Type{Isbn10Urn}) 
+    IsbnComparable()
+end
 ```
 
-`CitableBase` offers the `urncomparable` function to test whether the trait is recognized for an instance of your new type.
+Let's test it.
 
 ```@example urns
-urncomparable(typeof(distanthorizons))
+urncomparisontrait(typeof(distanthorizons))
 ```
 
+`CitableBase` includes a boolean function `urncomparable` we can use to test specific objects.
+
+
+```@example urns
+urncomparable(distanthorizons)
+```
 
 
 ## Implementing the logic of URN comparison
@@ -116,9 +125,7 @@ urnequals(distanthorizons, enumerations)
 
 !!! tip "Why do we need 'urnequals' when we already have '==' ?"
 
-    Our implementation of the `UrnComparisonTrait`'s functions use two parameters of the same type, compare the two URNs, and produce a boolean result.  In the following section, we will implement the same trio of functions, but with one URN parameter and one parameter giving a citable collection.  In those implementations, we can filter the collection by comparing the URN to the URNs of individual items in the collection.  We can reserve `==` for comparing the contents of two collections, and use `urnequals` to filter a collection's content.
-
-
+    Our implementation of `urnequals` uses two parameters of the same type to compare two URNs and produce a boolean result.  In the following section, we will implement the functions of `UrnComparisonTrait` with one URN parameter and one parameter giving a citable collection.  In those implementations, we can filter the collection by comparing the URN parameter to the URNs of items in the collection.  We will reserve `==` for comparing the contents of two collections, and use `urnequals` to filter a collection's content.
 
 
 
