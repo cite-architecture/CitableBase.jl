@@ -5,7 +5,9 @@ abstract type CitableCollectionTrait end
 struct NotCitableCollection <: CitableCollectionTrait end
 
 """Define default value of CitableCollectionTrait as NotCitableCollection."""
-CitableCollectionTrait(::Type) = NotCitableCollection() 
+function citablecollectiontrait(::Type) 
+    NotCitableCollection() 
+end
 
 
 """True if `x` has the value `CitableCollection` for the `CitableCollectionTrait`.
@@ -13,6 +15,6 @@ CitableCollectionTrait(::Type) = NotCitableCollection()
 $(SIGNATURES)
 """
 function citablecollection(x::T) where {T} 
-    CitableCollectionTrait(T) != NotCitableCollection()
+    citablecollectiontrait(T) != NotCitableCollection()
 end
 

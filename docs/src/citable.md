@@ -44,6 +44,7 @@ end
 
 distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
 enumerations = Isbn10Urn("urn:isbn10:022656875X")
+qi = Isbn10Urn("urn:isbn10:3030234133")
 wrong = Isbn10Urn("urn:isbn10:1108922036")
 ```
 
@@ -51,7 +52,7 @@ wrong = Isbn10Urn("urn:isbn10:1108922036")
 # Citable entities
 
 
-> # Summary
+> ## Summary
 >
 > **The task**: We will define a type representing a book identified by ISBN-10 number.  Our type will follow the CITE architecture's model of a citable object, so that we can identify it by URN and label, apply URN logic to compare objects of our new type, and serialize citable books to plain-text format.
 >
@@ -271,8 +272,7 @@ end
 cexoutput = cex(distantbook)
 ```
 
-The inverse of `cex` is `fromcex`.  We need two pieces of information to convert a CEX string to an object:  the CEX source data, and the *type* of object to instantiate.  Since `CitableBase` dispatches this function on the trait value of the type want to instantiate, we will ipmlement a function with three required parameters: one for the trait value, and two more for the CEX data and Julia type to create.  (Two optional parameters allow you to define the delimiting string value, or create a dictionary with other configuration settings, but we won't need that for our implementation.)
-
+The inverse of `cex` is `fromcex`.  We need two essential pieces of information to convert a CEX string to an object:  the CEX source data, and the *type* of object to instantiate.  However, `CitableBase` dispatches this function on the *trait value* of the type want to instantiate.  Although we can find that value with the `cextrait` function, it needs to appear in the function signature for dispatch to work. We will therefore implement a function with three mandatory parameters: one for the trait value, and two more for the CEX data and Julia type to create.  (Two optional parameters allow you to define the delimiting string value, or create a dictionary with other configuration settings, but we won't need that for our implementation.)
 
 
 ```@example book
@@ -289,13 +289,13 @@ end
 
     The `CitableLibrary` package implements `fromcex` for its `CiteLibrary` class. It uses the `configuration` parameter to map different kinds of content to Julia classes, and create a library that many include many different kinds of citable collections.  See its [documentation](https://cite-architecture.github.io/CitableLibrary.jl/stable/).
 
-Note that `CitableBase` can delegate to our function from an invocation with only two parameters:  all a user needs to specify is the CEX data and Julia type.
+Note that because `CitableBase` can find our type's trait value on its own, it can delegate to the function we just wrote even when you invoke it only two parameters:  all a user needs to specify is the CEX data and Julia type.
 
 ```@example book
 restored = fromcex(cexoutput, CitableBook)
 ```
 
-Did we wind up with an equivalent book?
+The acid test: did we wind up with an equivalent book?
 
 ```@example book
 distantbook == restored
@@ -326,4 +326,5 @@ cexserializable(distantbook)
 
 Those three traits allowed us to identify books by URN, compare books by URN, and round-trip books to and from plain-text representation.
 
-The next page shows how to build a citable collection for working with collections of citable objects.
+Our initial goal was to manage a reading list of books citable by ISBN number.  We could do that directly with, say, a Vector of `CitableBook`s, but the next page shows how we could go a step futher by wrapping a Vector of `CitableBook`s in a type supporting the CITE architecture's definition of a collection with citable content.
+

@@ -117,21 +117,23 @@ function fromcex(traitvalue::BookCex, cexsrc::AbstractString, T;
 end
 
 
-
+qi = Isbn10Urn("urn:isbn10:3030234133")
 
 distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
 enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
-wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data")
-```
+wrongbook = CitableBook(wrong, "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data", "Andrew Piper")
+qibook = CitableBook(qi, "Quantitative Intertextuality: Analyzing the Markers of Information Reuse","Christopher W. Forstall and Walter J. Scheirer")
 
+```
 
 
 
 # Citable collections
 
-> # Summary
+> ## Summary
 >
-> **The task**: 
+> **The task**: We want to create a type for working with a *collection* of the citable books we developed on the previous page.  
+> We should be able to filter the collection by appying URN logic to the identifiers for our books.  We should be able to write our collection to plain-text format and re-instantiate it from the plain-text representation.  And we should be able to apply any Julia functions for working with iterable content to our book list.
 >
 > **The implementation**:
 > - define a new type for a collection of citable books, the `ReadingList` type
@@ -143,7 +145,10 @@ wrongbook = CitableBook(wrong, "Andrew Piper", "Can We Be Wrong? The Problem of 
 
 
 
-## Defining the `ReadingList` type
+## Defining the `ReadingList`
+
+Our model for a reading list is simple: it's just a Vector of citable publications.  We'll annotate our vector as containing subtypes of the abstract `CitablePublication` we previously defined, even though in this example we'll only use our one concrete implementation, the `CitableBook`.  As with our other custom types, we'll override `Base.show`.
+
 
 ```@example collections
 struct ReadingList
@@ -157,33 +162,64 @@ function show(io::IO, readingList::ReadingList)
 end
 ```
 
+Let's see an example.
+
 ```@example collections
-qi = CitableBook(Isbn10Urn("urn:isbn10:3030234133"),
-    "Quantitative Intertextuality Analyzing the Markers of Information Reuse", 
-    "Christopher W. Forstall and Walter J. Scheirer")
-books = [distantbook, enumerationsbook, wrongbook, qi]
+books = [distantbook, enumerationsbook, wrongbook, qibook]
 rl = ReadingList(books)
 ```
 
+The `publications` field is just a normal Julia Vector.
 
-## Defining the `CitableCollectionTrait`
 
 ```@example collections
-import CitableBase: CitableCollectionTrait
-struct CitableReadingList <: CitableCollectionTrait end
-CitableCollectionTrait(::Type{ReadingList}) = CitableReadingList()
+rl.publications[4]
 ```
+
+What will make it different from other Vectors is that it will support a series of CITE traits
+
+
+## Implementing the `CitableCollectionTrait`
+
+We first want to identify our new type as fufilling the requirements of a citable collection with the `CitableCollectionTrait`. We'll repeat the pattern:
+
+1. define a singleton type for the trait value.
+2. override the function identifying the trait value for our new type.  Here the function is named `citablecollectiontrait`, and we'll define it to return the concrete value `CitableReadingList` for the tyupe `ReadingList`.
+
+
+```@example collections
+struct CitableReadingList <: CitableCollectionTrait end
+
+import CitableBase: citablecollectiontrait
+function citablecollectiontrait(::Type{ReadingList}) 
+    CitableReadingList()
+end
+```
+
+```@example collections
+citablecollectiontrait(typeof(rl))
+```
+Use the `citablecollection` function to test if a specific object is a citable collection.
 
 ```@example collections
 citablecollection(rl)
 ```
 
-## Defining the `UrnComparisonTrait`
+The promise we now need to fulfill is that our collection will implement three further traits for URN comparison, serialization and iteration.
 
+## Implementing the `UrnComparisonTrait`
+
+We have previously implemented the `UrnComparisonTrait` for an identifer type (the `Isbn10Urn`) and for a citable object type (the `CitableBook`).  In both of those cases, we compared two objects of the same type, and returned a boolean result of comparing them on URN logic.  
+
+For our citable collection, we will implement the same suite of functions, but with a different signature and result type.  This time, our first parameter will be a URN which we will use to *filter* the collection given in the second parameter.  The result will be a (possibly empty) list of content in our citable collection -- in this example, a list of `CitableBook`s.
+
+We mark our `ReadingList` type as urn-comparable exactly as we did for `Isbn10Urn`s and `CitableBook`s.
 
 ```@example collections
 struct ReadingListComparable <: UrnComparisonTrait end
-UrnComparisonTrait(::Type{ReadingList}) = ReadingListComparable()
+function urncomparisontrait(::Type{ReadingList}) 
+    ReadingListComparable()
+end
 ```
 
 ```@example collections
@@ -191,61 +227,95 @@ urncomparable(rl)
 ```
 
 
+### Implementing the required functions `urnequals`, `urncontains` and `urnsimilar`
+
+To implement the required functions, we'll just lean on the work we've already done: we'll use the boolean version of those functions to filter our collections.
 
 ```@example collections
-function urnequals(reading::ReadingList, urn::Isbn10Urn)
+function urnequals(urn::Isbn10Urn, reading::ReadingList, )
     filter(item -> urnequals(item.urn, urn), reading.publications)
 end
 
-function urncontains(reading::ReadingList, urn::Isbn10Urn)
+function urncontains(urn::Isbn10Urn, reading::ReadingList)
     filter(item -> urncontains(item.urn, urn), reading.publications)
 end
 
-function urnsimilar(reading::ReadingList, urn::Isbn10Urn)
+function urnsimilar(urn::Isbn10Urn, reading::ReadingList)
     filter(item -> urnsimilar(item.urn, urn), reading.publications)
 end
 ```
 
+If your collection does not allow duplicate identifiers, `urnequals` should return a list of 0 or 1 item.
+
+
 ```@example collections
-urnequals(rl, distanthorizons)
+urnequals(distanthorizons, rl)
 ```
 
-## Defining the `CexTrait`
+Three of the books in our list are published in the English-language zone, and therefore will satisfy `urnsimilar` when compared to *Distant Horizons*.
+
+```@example collections
+urnsimilar(distanthorizons, rl)
+```
+
+
+But only two are published in the same ISBN area code as *Distant Horizons*:
+
+```@example collections
+urncontains(distanthorizons, rl)
+```
+
+
+## Implementing the `CexTrait`
+
+As we did with citable objects, we want to ensure that we can round-trip an entire collection to and from delimited-text format.  We'll make our new `ReadingList` type implement `CexTrait` in the same way as `CitableBook`.
+
+
 ```@example collections
 struct ReadingListCex <: CexTrait end
-CexTrait(::Type{ReadingList}) = ReadingListCex()
+function cextrait(::Type{ReadingList})
+    ReadingListCex()
+end
 ```
 
 ```@example collections
 cexserializable(rl)
 ```
 
-```
+
+### Implementing the required functions `cex` and `fromcex` 
+
+We will serialize our collection with a header line identifying it as `citecollection` block, followed by one line for each book in our list.  We can format the books' data by mapping each book to an invocation the `cex` that we previously wrote for `CitableBook`s.
+
+```@example collections
 function cex(reading::ReadingList; delimiter = "|")
     header = "#!citecollection\n"
     strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
     header * join(strings, "\n")
 end
+```
 
 
-"Overrid for specific trait value"
-function fromcex(
-    traittype, trait::ReadingListCex, 
-    cexsrc::AbstractString, T; 
+```@example collections
+cexoutput = cex(rl)
+println(cexoutput)
+```
+
+Recall from our experience implementing CEX serialization for `CitableBook`s that we will need to expose three mandatory parameters for `fromcex`: the trait value, the CEX data and the Julia type we want to instantiate.
+
+
+```@example collections
+function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T; 
     delimiter = "|", configuration = nothing)
-
-    @warn("IT'S A BOOK")
-    @warn("Instantiate a $(T) from $(cexsrc)")
-    isbns = CitableBook[]
+    
     lines = split(cexsrc, "\n")
+    isbns = CitableBook[]
     inblock = false
     for ln in lines
         if ln == "#!citecollection"
             inblock = true
         elseif inblock
-            
             bk = fromcex(ln, CitableBook)
-            @warn("book from ln", bk, ln)
             push!(isbns, bk)
         end
     end
@@ -253,193 +323,36 @@ function fromcex(
 end
 ```
 
+Once again, we can now invoke `fromcex` with just the parameters for the CEX data and desired Julia type to create, and `CitableBase` will find our implementation.
 
-```
-cex(rl)
-```
-
-```
-rlcex = cex(rl)
-fromcex(rlcex, ReadingList)
+```@example collections
+fromcex(cexoutput, ReadingList)
 ```
 
-## Defining the `Iterators`
+## Implementing the `Iterators`' required `iterate` functions
+
+The `Iterators` module in Julia `Base` was one of the first traits or interfaces in Julia.  It allows you to apply the same functions to many types of iterable collections.  We need to import the `Base.iterate` function, and implement two versions of it for our new type: one with a single parameter for the collection, and one with a second parameter maintaining some kind of state information.  Both of them have the same return type: either `nothing`, or a Tuple pairing one item in the collection with state information.
+
+Since our reading list is keeping books in a Vector internally, we can use the state parameter to pass along an index into the Vector.  In the version of `iterate` with no parameters, we'll return the first item in the list, and set the "state" value to 2.  In the two-parameter version, we'll return the item indexed by the state count, and bump the count up one.
 
 
 ```@example collections
 import Base: iterate
 
 function iterate(rlist::ReadingList)
-    (rlist.publications[1], 2)
+    isempty(rlist.publications) ? nothing : (rlist.publications[1], 2)
 end
 
 function iterate(rlist::ReadingList, state)
-    if state > length(rlist.publications)
-        nothing
-    else
-        (rlist.publications[state], state + 1)
-    end
+    state > length(rlist.publications) ? nothing : (rlist.publications[state], state + 1)
 end
 ```
 
+
+One example of a native Julia feature we can now use directly with a `ReadingList` is iterating with `for` loops.
 ```@example collections
 for item in rl
     println(item)
 end
 ```
-
-
-
----
-
-> ---
-> ---
->
-> # QUARRY UNEDITED MATERIAL BELOW THIS
->
-
-## Filtering a citable collection
-
-Whether you use `Cite2Urn`s, `CtsUrn`s, or define your own URN type, as we did for ISBNs, filtering a collection of your content with URN logic is straightforward. All you need to do is define functions for `urnequals`, `urncontains` and `urnsimilar` that take a URN parameter to filter with (here, an `Isbn10Urn`), and a citable collection to filter (here, a `ReadingList`).  If no objects match, we'll return `nothing`; otherwise, we'll return a list of content matching your URN.
-
-
-```
-function urnequals(isbn::Isbn10Urn, rlist::ReadingList)
-    matches = filter(i -> i == isbn, rlist.reff)
-    isempty(matches) ? nothing : matches
-end
-
-function urncontains(isbn::Isbn10Urn, rlist::ReadingList)
-    matches = filter(i -> urncontains(i, isbn), rlist.reff)
-    isempty(matches) ? nothing : matches
-end
-
-function urnsimilar(isbn::Isbn10Urn, rlist::ReadingList)
-    matches = filter(i -> urnsimilar(i, isbn), rlist.reff)
-    isempty(matches) ? nothing : matches
-end
-```
-
-```
-urnequals(jane, rl)
-```
-
-
-```
-group1 = Isbn10Urn("urn:isbn10:1")
-urncontains(group1, rl)
-```
-
-```
-urnsimilar(group1, rl)
-```
-
-
-
-```
-using CitableLibrary
-using CitableBase
-
-struct Isbn10Urn <: Urn
-    isbn::AbstractString
-end
-
-distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
-quantitativeintertextuality = Isbn10Urn("urn:isbn10:3030234134")
-enumerations = Isbn10Urn("urn:isbn10:022656875X")
-wrong = Isbn10Urn("urn:isbn10:1108922036")
-jane = Isbn10Urn("urn:isbn10:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
-
-struct ReadingList
-    reff::Vector{Isbn10Urn}
-end
-
-import Base.==
-function ==(rl1::ReadingList, rl2::ReadingList)
-    rl1.reff == rl2.reff
-end
-
-rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
-```
-
-
-# Serializing collections
-
-In addition to making our citable collection comparable on URN logic and iterable, we must make it serializable to and from CEX format.   When we defined our `Isbn10Urn` type, it automatically inherited the `UrnComparable` trait because it was a subtype of `Urn`.  We saw this when we tested a collection with the `urncomparable` function.
-
-```
-urncomparable(jane)
-```
-
-In contrast, CEX-serializable content does not all fall within a single type hierarchy.  Instead, we will implement the `CexTrait` from `CitableBase`.  
-
-
-
-## Defining our type as serializable
-
-We first define our `ReadingList` type as serializable by importing the `CexTrait` type and assigning it a value of `CexSerializable()` for our type.  We can test whether this assignment is recognized  using the `cexserializable` function from `CitableBase`.
-
-```
-import CitableBase: CexTrait
-CexTrait(::Type{ReadingList}) = CexSerializable()
-
-cexserializable(rl)
-```
-
-When `cexserializable` is true, we know that `CitableBase` will dispatch functions to our type correctly.
-
-## Implementing the required functions
-
-Now we can implement the pair of inverse functions `cex` and `fromcex` from `CitableBase`.
-
-To serialize our collection to CEX format, we'll compose a `citecollection` type of CEX block, and simply list each ISBN's string value, one per line.
-
-```
-import CitableBase: cex
-function cex(reading::ReadingList; delimiter = "|")
-    header = "#!citecollection\n"
-    strings = map(ref -> ref.isbn, reading.reff)
-    header * join(strings, "\n")
-end
-```
-
-Let's see what our reading list looks in this format.
-
-```
-cexoutput = cex(rl)
-println(cexoutput)
-```
-
-Now we'll write a function to instantiate a `ReadingList` from a string source.
-
-!!! warning
-
-    To keep this illustration brief and focused on the design of citable collections, we will naively begin reading data once we see a line containing the block header `citecollection`, and just read to the end of the file. This would fail on anything but the most trivial CEX source. For a real application, we would instead use the [`CiteEXchange` package](https://cite-architecture.github.io/CiteEXchange.jl/stable/) to work with CEX source data.  It includes functions to extract blocks and data lines by type or identifying URN, for example.
-
-```
-import CitableBase: fromcex
-function fromcex(src::AbstractString, ReadingList; delimiter = "|")
-    isbns = []
-    lines = split(src, "\n")
-    inblock = false
-    for ln in lines
-        if ln == "#!citecollection"
-            inblock = true
-        elseif inblock
-            push!(isbns,Isbn10Urn(ln))
-        end 
-    end
-    ReadingList(isbns)
-end
-```
-
-The acid test: can we roundtrip the CEX output back to an equivalent `ReadingList`?
-
-```
-rl2 = fromcex(cexoutput, ReadingList)
-rl == rl2
-```
-
-
-
 
