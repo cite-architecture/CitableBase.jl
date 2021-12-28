@@ -88,16 +88,32 @@ function show(io::IO, book::CitableBook)
 end
 ```
 
-We can test this by creating a couple of examples of our new type.
+We'll also override the `==` function so we can easily compare books for equality.
+
+```@example book
+import Base.==
+function ==(book1::CitableBook, book2::CitableBook)
+    book1.urn == book2.urn && book1.title == book2.title && book1.authors == book2.authors
+end
+```
+
+
+We can test these by creating a couple of examples of our new type.
 
 ```@example book
 distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
 enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
 ```
 
+```@example book
+distantbook == enumerationsbook
+```
+
+
+
 ## Implementing the `CitableTrait`
 
-The first trait we will implement is the `CitableTrait`.  We'll follow the same pattern we saw when we implemented the `UrnComparisonTrait` for the `Isbn10Urn` type. 
+The first trait we will implement is the `CitableTrait`, which specifies that citable objects have an identifying URN and a human-readable label.  We'll follow the same general pattern we saw when we implemented the `UrnComparisonTrait` for the `Isbn10Urn` type, namely:
 
 1. define a singleton type to use for the trait value
 2. override the function identifying the trait value for our new type.  This time the function is named `citabletrait`, and we'll define it to return the concrete value `CitableByIsnb10()` for the type `CitableBook`.
@@ -115,7 +131,7 @@ end
 citabletrait(typeof(distantbook))
 ```
 
-There is a `citable` function that tests whether individual objects belong to a type implementing the function. (This is parallel to the `urncomparable` function we saw before.) 
+`CitableBase` includes the `citable` function to test whether individual objects belong to a type implementing the function. (This is parallel to the `urncomparable` function we saw before.) 
 
 ```@example book
 citable(distantbook)
@@ -123,7 +139,7 @@ citable(distantbook)
 
 ### Implementing the required functions `urn` and `label`
  
- Implementing `urn` and `label` is now trivial.  The `urn` function just returns the `urn` field of the book.  In Julia, `Base.show` underlies the `string` function, so since we have already implemented `show` for our book type, we can just return `string(book)` for the `label` function.
+Implementing `urn` and `label` is now trivial.  The `urn` function just returns the `urn` field of the book.  In Julia, `Base.show` underlies the `string` function, so since we have already implemented `show` for our book type, we can just return `string(book)` for the `label` function.
  
 
 ```@example book
@@ -149,9 +165,9 @@ label(distantbook)
 
 ## Implementing the `UrnComparisonTrait`
 
-We'll define the `UrnComparisonTrait` for our book type in exactly the same way we did for our URN type (and we've already imported `urncomparisontrait`).
+We've already seen the `UrnComparisonTrait`.  We'll now define it for our book type in exactly the same way we did for our URN type. (We don't even need to re-import its functions.)
 
-```@example book
+```nonexample book
 struct BookComparable <: UrnComparisonTrait end
 
 function urncomparisontrait(::Type{CitableBook})
@@ -159,11 +175,11 @@ function urncomparisontrait(::Type{CitableBook})
 end
 ```
 
-```@example book
+```nonexample book
 urncomparisontrait(typeof(distantbook))
 ```
 
-```@example book
+```nonexample book
 urncomparable(distantbook)
 ```
 
@@ -214,6 +230,11 @@ urncontains(distantbook, wrongbook)
 
 ## Implementing the `CexTrait`
 
+Finally, we will implement the `CexTrait`.  It requires that we be able to round trip citable content to a plain-text representation in CEX format, and instantiate an equivalent object from the generated CEX. Once again we will:
+
+1. define a singleton type to use for the trait value
+2. override the function identifying the trait value for our new type. This time the function is named `cextrait`, and we'll define it to return the concrete value `CitableBook()` for the type `CitableBook`.
+
 
 ```@example book
 struct BookCex <: CexTrait end
@@ -224,18 +245,23 @@ end
 ```
 
 ```@example book
+cextrait(typeof(distantbook))
+```
+
+`CitableBase` includes the `cexserializable` function to test individual objects.
+
+```@example book
 cexserializable(distantbook)
 ```
 
 
 
-
-
 ### Defining the required functions `cex` and `fromcex`
+
+The `cex` function composes a delimited-text representation of an object on a single line, with fields separated by an optionally specified delimiting string.
 
 ```@example book
 import CitableBase: cex
-"Implement for CitableBook"
 function cex(book::CitableBook; delimiter = "|")
     join([string(book.urn), book.title, book.authors], delimiter)
 end
@@ -245,23 +271,31 @@ end
 cex(distantbook)
 ```
 
+The inverse of `cex` is `fromcex`.  We need two pieces of information to convert a CEX string to an object:  the CEX source data, and the *type* of object to instantiate.  Since `CitableBase` dispatches this function on the trait value of the type want to instantiate, we will ipmlement a function with three required parameters: one for the trait value, and two more for the CEX data and Julia type to create.  (Two optional parameters allow you to define the delimiting string value, or create a dictionary with other configuration settings, but we won't need that for our implementation.)
+
+
 
 ```@example book
 import CitableBase: fromcex
-function fromcex(traittype, trait::BookCex, cexsrc::AbstractString, T; delimiter = "|", configuration = nothing)
+function fromcex(traitvalue::BookCex, cexsrc::AbstractString, T;      
+    delimiter = "|", configuration = nothing)
     fields = split(cexsrc, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
 end
-
-
 ```
 
+!!! tip "Example of configuring `fromcex`"
 
+    The `CitableLibrary` package implements `fromcex` for its `CiteLibrary` class. It uses the `configuration` parameter to map different kinds of content to Julia classes, and create a library that many include many different kinds of citable collections.  See its [documentation](https://cite-architecture.github.io/CitableLibrary.jl/stable/).
+
+
+The acid test:  can we round-trip a book to CEX format and recreate it?
 
 ```@example book
 cexoutput = cex(distantbook)
 restored = fromcex(cexoutput, CitableBook)
+distantbook == restored
 ```
 
 
