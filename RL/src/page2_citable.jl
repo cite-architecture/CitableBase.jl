@@ -69,7 +69,6 @@ end
 
 
 
-qi = Isbn10Urn("urn:isbn10:3030234133")
 
 distantbook = CitableBook(distanthorizons, "Distant Horizons: Digital Evidence and Literary Change", "Ted Underwood")
 enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary Study", "Andrew Piper")
