@@ -23,4 +23,7 @@
 
 
 
-**[Documentation](https://cite-architecture.github.io/CitableBase.jl/stable/)**
+**Documentation**
+
+- On line [documentation](https://cite-architecture.github.io/CitableBase.jl/stable/) includes a user's guide that builds a sample project with custom identifiers, citable objects and a citable collection to contstruct a reading list of citable books
+- The sample project from the user's guide is also in the `RL` directory of this repository where all the code in the documentation is repeated in unit tests
