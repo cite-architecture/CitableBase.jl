@@ -1,4 +1,4 @@
-abstract type CitablePublication end
+abstract type CitablePublication <: Citable end
 struct CitableBook <: CitablePublication
     urn::Isbn10Urn
     title::AbstractString

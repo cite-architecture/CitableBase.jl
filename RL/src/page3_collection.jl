@@ -5,9 +5,6 @@ function show(io::IO, readingList::ReadingList)
     print(io, "ReadingList with ", length(readingList.publications), " items")
 end
 
-books = [distantbook, enumerationsbook, wrongbook, qibook]
-rl = ReadingList(books)
-
 struct CitableReadingList <: CitableCollectionTrait end
 
 import CitableBase: citablecollectiontrait
@@ -42,7 +39,7 @@ end
 function cex(reading::ReadingList; delimiter = "|")
     header = "#!citecollection\n"
     strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
-    header * join(strings, "\n")
+    header * join(strings, "\n") * "\n"
 end
 
 function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
@@ -54,7 +51,7 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
     for ln in lines
         if ln == "#!citecollection"
             inblock = true
-        elseif inblock
+        elseif inblock && !isempty(ln)
             bk = fromcex(ln, CitableBook)
             push!(isbns, bk)
         end
@@ -76,4 +73,9 @@ end
 import Base: length
 function length(readingList::ReadingList)
     length(readingList.publications)
+end
+
+import Base: eltype
+function eltype(readingList::ReadingList)
+    CitablePublication
 end

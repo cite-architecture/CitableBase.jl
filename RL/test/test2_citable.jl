@@ -1,4 +1,7 @@
 @testset "Test Base overrides for CitableBook" begin
+
+    @test supertype(CitableBook) <: Citable
+
     distanthorizons = Isbn10Urn("urn:isbn10:022661283X")
     enumerations = Isbn10Urn("urn:isbn10:022656875X")
     wrong = Isbn10Urn("urn:isbn10:1108922036")
