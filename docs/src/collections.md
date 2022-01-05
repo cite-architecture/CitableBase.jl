@@ -124,6 +124,9 @@ enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary St
 wrongbook = CitableBook(wrong, "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data", "Andrew Piper")
 qibook = CitableBook(qi, "Quantitative Intertextuality: Analyzing the Markers of Information Reuse","Christopher W. Forstall and Walter J. Scheirer")
 
+
+# root of repository in file system:
+root = pwd() |> dirname |> dirname
 ```
 
 
@@ -327,6 +330,25 @@ Once again, we can now invoke `fromcex` with just the parameters for the CEX dat
 
 ```@example collections
 fromcex(cexoutput, ReadingList)
+```
+
+### Free bonus!
+
+`CitableBase` optionally allows you to include a third parameter to the `fromcex` function naming the type of reader to apply to the first string parameter.  Valid values are `StringReader`, `FileReader` or `UrlReader`.  The previous example relied on the default value of `StringReader`.  The following examples use the file `RL/test/data/dataset.cex`  in this repository; its contents are the output of `cex(rl)` above.
+
+
+```@example collections
+fname = joinpath(root, "RL", "test", "data", "dataset.cex")
+fileRL = fromcex(fname, ReadingList, FileReader)
+```
+
+```@example collections
+url = "https://raw.githubusercontent.com/cite-architecture/CitableBase.jl/dev/RL/test/data/dataset.cex"
+urlRL = fromcex(url, ReadingList, UrlReader)
+```
+
+```@example collections
+rl == fileRL == urlRL
 ```
 
 ## Implementing required and optional frnctions from `Base.Iterators`
