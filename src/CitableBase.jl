@@ -31,6 +31,9 @@ export cex, fromcex
 export CitableCollectionTrait, NotCitableCollection
 export citablecollectiontrait, citablecollection
 
+export StringReader, FileReader, UrlReader
+
+include("readers.jl")
 include("citable.jl")
 include("urns.jl")
 include("urncomparison.jl")
