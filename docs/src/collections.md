@@ -124,6 +124,9 @@ enumerationsbook = CitableBook(enumerations, "Enumerations: Data and Literary St
 wrongbook = CitableBook(wrong, "Can We Be Wrong? The Problem of Textual Evidence in a Time of Data", "Andrew Piper")
 qibook = CitableBook(qi, "Quantitative Intertextuality: Analyzing the Markers of Information Reuse","Christopher W. Forstall and Walter J. Scheirer")
 
+
+# root of repository in file system:
+root = pwd() |> dirname |> dirname
 ```
 
 
@@ -309,9 +312,10 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
     delimiter = "|", configuration = nothing)
     
     lines = split(cexsrc, "\n")
+    datalines = filter(ln -> !isempty(ln), lines)
     isbns = CitableBook[]
     inblock = false
-    for ln in lines
+    for ln in datalines
         if ln == "#!citecollection"
             inblock = true
         elseif inblock
@@ -323,11 +327,32 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
 end
 ```
 
+!!! warning
+
+    To keep this example brief and avoid introducing other packages, our implementation of `fromcex` naively assumes `cexsrc` will contain a single CEX block introduced by the `#!citecollection` heading.  This would break on real world CEX data sources: in a real application, we would instead use the `CiteEXchange` package to parse and extract appropriate blocks.  See the [documentation of `CiteEXchange`](https://cite-architecture.github.io/CiteEXchange.jl/stable/), or look at how a package like [`CitableCorpus`](https://cite-architecture.github.io/CitableCorpus.jl/stable/) uses `CiteEXchange` in its implementation of `fromcex` for different data type.
+
+
 Once again, we can now invoke `fromcex` with just the parameters for the CEX data and desired Julia type to create, and `CitableBase` will find our implementation.
 
 ```@example collections
 fromcex(cexoutput, ReadingList)
 ```
+
+### Free bonus!
+
+`CitableBase` optionally allows you to include a third parameter to the `fromcex` function naming the type of reader to apply to the first string parameter.  Valid values are `StringReader`, `FileReader` or `UrlReader`.  The previous example relied on the default value of `StringReader`.  The following examples use the file `RL/test/data/dataset.cex`  in this repository; its contents are the output of `cex(rl)` above.
+
+
+```@example collections
+fname = joinpath(root, "RL", "test", "data", "dataset.cex")
+fileRL = fromcex(fname, ReadingList, FileReader)
+```
+
+```@example collections
+url = "https://raw.githubusercontent.com/cite-architecture/CitableBase.jl/dev/RL/test/data/dataset.cex"
+urlRL = fromcex(url, ReadingList, UrlReader)
+```
+
 
 ## Implementing required and optional frnctions from `Base.Iterators`
 

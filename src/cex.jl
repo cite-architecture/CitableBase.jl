@@ -31,11 +31,6 @@ function cexserializable(x::T) where {T}
     cextrait(T) != NotCexSerializable()
 end
 
-#=
-Define delegation for the 2 functions of the CexTrait:
-- cex
-- fromcex
-=#
 
 """Delegate `cex` to specific functions based on 
 type's `cextrait` value.
@@ -46,8 +41,16 @@ function cex(x::T; delimiter = "|") where {T}
     cex(cextrait(T), x; delimiter = delimiter)
 end
 
+# Catch attempts to use cex on NotCexSerializable:
+"""It is an error to invoke the `cex` function on material that is not CEX serializable.
 
-"""Instantiate an object of type `T` from CEX-formatted data `cexsrc` by dispatching based on `cextrait` of `T`.
+$(SIGNATURES)
+"""
+function cex(::NotCexSerializable, x; delimiter)
+    throw(DomainError(x, string(typeof(x), " is not a CexSerializable type.")))
+end
+
+"""Dispatch `fromcex` on `cextrait` of `T` to instantiate an object of type `T` from CEX-formatted data `cexsrc`.
 
 $(SIGNATURES)
 """    
@@ -58,18 +61,39 @@ function fromcex(cexsrc::AbstractString, T;
 end
 
 
-
-
-# Catch attempts to use these functions on NotCexSerializable:
-
-"""It is an error to invoke the `cex` function on material that is not CEX serializable.
+"""Implement `fromcex` using first string parameter for a file name.
 
 $(SIGNATURES)
-"""
-function cex(::NotCexSerializable, x; delimiter)
-    throw(DomainError(x, string(typeof(x), " is not a CexSerializable type.")))
+""" 
+function fromcex(fname::AbstractString, T, freader::Type{FileReader}; 
+    delimiter = "|", configuration = nothing)
+    cexsrc =  open(f->read(f, String), fname)
+    fromcex(cextrait(T), cexsrc, T, 
+    delimiter = delimiter, configuration = configuration)
 end
 
+"""Implement `fromcex` using first string parameter for a URL.
+
+$(SIGNATURES)
+""" 
+function fromcex(url::AbstractString, T, ureader::Type{UrlReader}; 
+    delimiter = "|", configuration = nothing)
+    cexsrc = HTTP.get(url).body |> String
+    fromcex(cextrait(T), cexsrc, T, 
+    delimiter = delimiter, configuration = configuration)
+end
+
+"""Implement `fromcex` using first string parameter for raw string data.
+
+$(SIGNATURES)
+""" 
+function fromcex(cexsrc::AbstractString, T, freader::Type{StringReader}; 
+    delimiter = "|", configuration = nothing)
+    fromcex(cextrait(T), cexsrc, T, 
+    delimiter = delimiter, configuration = configuration)
+end
+
+# Catch attempts to use fromex on NotCexSerializable or on  types with out an implementation
 """It is an error to invoke the `fromcex` function on material that is not CEX serializable.
 
 $(SIGNATURES)
