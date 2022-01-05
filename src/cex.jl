@@ -61,7 +61,10 @@ function fromcex(cexsrc::AbstractString, T;
 end
 
 
-# fiel reader
+"""Implement `fromcex` using first string parameter for a file name.
+
+$(SIGNATURES)
+""" 
 function fromcex(fname::AbstractString, T, freader::Type{FileReader}; 
     delimiter = "|", configuration = nothing)
     cexsrc =  open(f->read(f, String), fname)
@@ -69,7 +72,10 @@ function fromcex(fname::AbstractString, T, freader::Type{FileReader};
     delimiter = delimiter, configuration = configuration)
 end
 
-# url reader
+"""Implement `fromcex` using first string parameter for a URL.
+
+$(SIGNATURES)
+""" 
 function fromcex(url::AbstractString, T, ureader::Type{UrlReader}; 
     delimiter = "|", configuration = nothing)
     cexsrc = HTTP.get(url).body |> String
@@ -77,7 +83,10 @@ function fromcex(url::AbstractString, T, ureader::Type{UrlReader};
     delimiter = delimiter, configuration = configuration)
 end
 
-# string reader
+"""Implement `fromcex` using first string parameter for raw string data.
+
+$(SIGNATURES)
+""" 
 function fromcex(cexsrc::AbstractString, T, freader::Type{StringReader}; 
     delimiter = "|", configuration = nothing)
     fromcex(cextrait(T), cexsrc, T, 
