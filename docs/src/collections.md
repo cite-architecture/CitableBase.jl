@@ -312,9 +312,10 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
     delimiter = "|", configuration = nothing)
     
     lines = split(cexsrc, "\n")
+    datalines = filter(ln -> !isempty(ln), lines)
     isbns = CitableBook[]
     inblock = false
-    for ln in lines
+    for ln in datalines
         if ln == "#!citecollection"
             inblock = true
         elseif inblock
@@ -325,6 +326,11 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
     ReadingList(isbns)
 end
 ```
+
+!!! warning
+
+    To keep this example brief and avoid introducing other packages, our implementation of `fromcex` naively assumes `cexsrc` will contain a single CEX block introduced by the `#!citecollection` heading.  This would break on real world CEX data sources: in a real application, we would instead use the `CiteEXchange` package to parse and extract appropriate blocks.  See the [documentation of `CiteEXchange`](https://cite-architecture.github.io/CiteEXchange.jl/stable/), or look at how a package like [`CitableCorpus`](https://cite-architecture.github.io/CitableCorpus.jl/stable/) uses `CiteEXchange` in its implementation of `fromcex` for different data type.
+
 
 Once again, we can now invoke `fromcex` with just the parameters for the CEX data and desired Julia type to create, and `CitableBase` will find our implementation.
 
@@ -339,8 +345,6 @@ fromcex(cexoutput, ReadingList)
 
 ```@example collections
 fname = joinpath(root, "RL", "test", "data", "dataset.cex")
-```
-```@example collections
 fileRL = fromcex(fname, ReadingList, FileReader)
 ```
 
@@ -349,9 +353,6 @@ url = "https://raw.githubusercontent.com/cite-architecture/CitableBase.jl/dev/RL
 urlRL = fromcex(url, ReadingList, UrlReader)
 ```
 
-```@example collections
-rl == fileRL == urlRL
-```
 
 ## Implementing required and optional frnctions from `Base.Iterators`
 

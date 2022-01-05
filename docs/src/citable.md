@@ -73,7 +73,7 @@ We'll take advantage of Julia's type hierarchy to create an abstract `CitablePub
 We'll identify the book using the `Isbn10Urn` type we previously defined. Again, we'll keep the example simple, and just include strings for authors and a title.  You could elaborate this type however you choose.
 
 ```@example book
-abstract type CitablePublication end
+abstract type CitablePublication <: Citable end
 struct CitableBook <: CitablePublication
     urn::Isbn10Urn
     title::AbstractString
