@@ -339,6 +339,8 @@ fromcex(cexoutput, ReadingList)
 
 ```@example collections
 fname = joinpath(root, "RL", "test", "data", "dataset.cex")
+```
+```@example collections
 fileRL = fromcex(fname, ReadingList, FileReader)
 ```
 

@@ -1,5 +1,5 @@
 module CitableBase
-
+using HTTP
 using Documenter, DocStringExtensions
 import Base:  ==
 
