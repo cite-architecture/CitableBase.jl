@@ -197,8 +197,39 @@ wrong = Isbn10Urn("urn:isbn10:1108922036")
 urncontains(distanthorizons, wrong)
 ```
 
+## Optional methods
 
+The `CtsUrn` (from `CitableText`) and the `Cite2Urn` (from `CitableObject`) illustrate two optional behaviors: support for versioning of URNs, and support for subreferences.  Although our ISBN numbers don't require either of those features, we'll illustrate how they are implemented.
 
+### Versioning
+
+The three relevant functions are `supportsversion`, `addversion` and `dropversion`.  We'll indicate that our URN type supports versioning but for this demonstration will just pass the URN through unchanged.
+
+```@example urns
+import CitableBase: supportsversion
+function supportsversion(u::Isbn10Urn)
+    true
+end
+
+import CitableBase: addversion
+function addversion(u::Isbn10Urn, versioninfo::AbstractString)
+    u
+end
+
+import CitableBase: dropversion
+function dropversion(u::Isbn10Urn)
+    u
+end
+```
+```@example urns
+supportsversion(wrong)
+```
+```@example urns
+addversion(wrong, "v2")
+```
+```@example urns
+dropversion(wrong)
+```
 
 ## Recap: identifiers
 

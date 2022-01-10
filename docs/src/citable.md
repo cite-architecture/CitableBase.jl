@@ -138,12 +138,17 @@ citabletrait(typeof(distantbook))
 citable(distantbook)
 ```
 
-### Implementing the required functions `urn` and `label`
+### Implementing the required functions `urntype`, `urn`, `label`
  
-Implementing `urn` and `label` is now trivial.  The `urn` function just returns the `urn` field of the book.  In Julia, `Base.show` underlies the `string` function, so since we have already implemented `show` for our book type, we can just return `string(book)` for the `label` function.
+Implementing `urntype`, `urn` and `label` is now trivial.  The `urntype` function will report the type of URN we cite this object with. The `urn` function just returns the `urn` field of the book.  In Julia, `Base.show` underlies the `string` function, so since we have already implemented `show` for our book type, we can just return `string(book)` for the `label` function.
  
 
 ```@example book
+import CitableBase: urntype
+function urntype(book::CitableBook)
+    Isbn10Urn
+end
+
 import CitableBase: urn
 function urn(book::CitableBook)
     book.urn
@@ -153,6 +158,11 @@ import CitableBase: label
 function label(book::CitableBook)
     string(book)
 end
+```
+
+
+```@example book
+urntype(distantbook)
 ```
 
 ```@example book
