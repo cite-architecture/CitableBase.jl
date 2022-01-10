@@ -23,6 +23,16 @@ Define delegation for the 2 functions of the CitableTrait:
 2. label
 =#
 
+
+"""Delegate `urntype` to specific functions based on 
+type's citable trait value.
+
+$(SIGNATURES)
+"""
+function urntype(x::T) where {T} 
+    urntype(citabletrait(T), x)
+end
+
 """Delegate `urn` to specific functions based on 
 type's citable trait value.
 
@@ -57,4 +67,13 @@ $(SIGNATURES)
 """
 function label(::NotCitable, x)
     throw(DomainError(x, string(typeof(x), " does not implement the label function.")))
+end
+
+
+"""It is an error to invoke the `urn` function on material that is not citable.
+
+$(SIGNATURES)
+"""
+function urntype(::NotCitable, x)
+    throw(DomainError(x, string( typeof(x), " does not implement the urn function.")))
 end

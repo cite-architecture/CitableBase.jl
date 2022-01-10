@@ -208,6 +208,20 @@ Use the `citablecollection` function to test if a specific object is a citable c
 citablecollection(rl)
 ```
 
+Like citable objects, citable collections should report the type of URN they use for citation.
+
+```@example collections
+import CitableBase: urntype
+function urntype(readingList::ReadingList)
+    Isbn10Urn
+end
+```
+
+
+```@example collections
+urntype(rl)
+```
+
 The promise we now need to fulfill is that our collection will implement three further traits for URN comparison, serialization and iteration.
 
 ## Implementing the `UrnComparisonTrait`

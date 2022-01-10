@@ -53,17 +53,63 @@ function parts(componentString::AbstractString)
 end
 
 
+"""True for URN types that support versioning.
+$(SIGNATURES)
+"""
+function supportsversion(u::Type{<:Urn})
+    false
+end
+
+
 """Urn subtypes should implement `dropversion(urn::U)::U`.
 
 $(SIGNATURES)
 """
-function dropversion  end
+function dropversion(u::Type{<:Urn})  
+    if !(supportsversion)
+        @warn("URNs of type $(typeof(u)) do not support versions.")
+        u
+    else
+        throw(DomainError(u, 
+        "`dropversion` not implemented for type $(typeof(u))"))
+    end
+end
 
 
 """Urn subtypes should implement `addversion(urn::U, versionid)::U`.  
 
 $(SIGNATURES)
 """
-function addversion end
+function addversion(u::Type{<:Urn}, versioninfo::AbstractString)  
+    if !(supportsversion)
+        @warn("URNs of type $(typeof(u)) do not support versions.")
+        u
+    else
+        throw(DomainError(u, 
+        "`addversion` not implemented for type $(typeof(u))"))
+    end
+end
 
+"""True for URN types that support subreferences.
+$(SIGNATURES)
+"""
+function supportssubref(u::Type{<:Urn})
+    false
+end
+
+
+
+"""Urn subtypes should implement `dropversion(urn::U)::U`.
+
+$(SIGNATURES)
+"""
+function dropsubref(u::Type{<:Urn})  
+    if !(supportssubref)
+        @warn("URNs of type $(typeof(u)) do not support subreferences.")
+        u
+    else
+        throw(DomainError(u, 
+        "`dropsubref` not implemented for type $(typeof(u))"))
+    end
+end
 

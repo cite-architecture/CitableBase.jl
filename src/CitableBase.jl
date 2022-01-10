@@ -21,7 +21,7 @@ export urnsimilar, urncontains, urnequals
 
 export CitableTrait, NotCitable
 export citabletrait, citable
-export urn, label
+export urntype, urn, label
 
 export CexTrait, NotCexSerializable 
 export cextrait, cexserializable
