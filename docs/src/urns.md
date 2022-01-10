@@ -231,6 +231,51 @@ addversion(wrong, "v2")
 dropversion(wrong)
 ```
 
+
+### Subreferences
+
+
+
+```@example urns
+import CitableBase: supportssubref
+function supportssubref(u::Isbn10Urn)
+    true
+end
+
+import CitableBase: dropsubref
+function dropsubref(u::Isbn10Urn)
+    u
+end
+
+import CitableBase: hassubref
+function hassubref(u::Isbn10Urn)
+    false
+end
+
+import CitableBase: subref
+function subref(u::Isbn10Urn)
+    nothing
+end
+```
+
+
+```@example urns
+supportssubref(wrong)
+```
+
+```@example urns
+hassubref(wrong)
+```
+
+
+```@example urns
+dropsubref(wrong)
+```
+
+```@example urns
+subref(wrong)
+```
+
 ## Recap: identifiers
 
 

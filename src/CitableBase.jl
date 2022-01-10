@@ -5,8 +5,9 @@ import Base:  ==
 
 # Urn and its functions
 export Urn
-export dropversion, addversion
-export ==
+export supportsversion, dropversion, addversion
+export supportssubref, hassubref, dropsubref, subref
+
 # Concrete implementations:
 export components, parts
 

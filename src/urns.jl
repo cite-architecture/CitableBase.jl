@@ -99,6 +99,34 @@ end
 
 
 
+"""True for URN types that support subreferences.
+$(SIGNATURES)
+"""
+function hassubref(u::Type{<:Urn})
+    if !(supportssubref)
+        @warn("URNs of type $(typeof(u)) do not support subreferences.")
+        false
+    else
+        throw(DomainError(u, 
+        "`hassubref` not implemented for type $(typeof(u))"))
+    end
+end
+
+"""Urn subtypes should implement `dropversion(urn::U)::U`.
+
+$(SIGNATURES)
+"""
+function subref(u::Type{<:Urn})  
+    if !(supportssubref)
+        @warn("URNs of type $(typeof(u)) do not support subreferences.")
+        u
+    else
+        throw(DomainError(u, 
+        "`subref` not implemented for type $(typeof(u))"))
+    end
+end
+
+
 """Urn subtypes should implement `dropversion(urn::U)::U`.
 
 $(SIGNATURES)
@@ -112,4 +140,6 @@ function dropsubref(u::Type{<:Urn})
         "`dropsubref` not implemented for type $(typeof(u))"))
     end
 end
+
+
 
