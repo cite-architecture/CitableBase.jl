@@ -55,9 +55,11 @@ end
 $(SIGNATURES)
 """    
 function fromcex(cexsrc::AbstractString, T; 
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", 
+    configuration = nothing,
+    strict = true)
     fromcex(cextrait(T), cexsrc, T, 
-    delimiter = delimiter, configuration = configuration)
+    delimiter = delimiter, configuration = configuration, strict = strict)
 end
 
 
@@ -66,10 +68,10 @@ end
 $(SIGNATURES)
 """ 
 function fromcex(fname::AbstractString, T, freader::Type{FileReader}; 
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", configuration = nothing, strict = true)
     cexsrc =  open(f->read(f, String), fname)
     fromcex(cextrait(T), cexsrc, T, 
-    delimiter = delimiter, configuration = configuration)
+    delimiter = delimiter, configuration = configuration, strict = strict)
 end
 
 """Implement `fromcex` using first string parameter for a URL.
@@ -77,10 +79,10 @@ end
 $(SIGNATURES)
 """ 
 function fromcex(url::AbstractString, T, ureader::Type{UrlReader}; 
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", configuration = nothing, strict = true)
     cexsrc = HTTP.get(url).body |> String
     fromcex(cextrait(T), cexsrc, T, 
-    delimiter = delimiter, configuration = configuration)
+    delimiter = delimiter, configuration = configuration, strict = strict)
 end
 
 """Implement `fromcex` using first string parameter for raw string data.
@@ -88,9 +90,9 @@ end
 $(SIGNATURES)
 """ 
 function fromcex(cexsrc::AbstractString, T, freader::Type{StringReader}; 
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", configuration = nothing, strict = true)
     fromcex(cextrait(T), cexsrc, T, 
-    delimiter = delimiter, configuration = configuration)
+    delimiter = delimiter, configuration = configuration, strict = strict)
 end
 
 # Catch attempts to use fromex on NotCexSerializable or on  types with out an implementation
@@ -98,7 +100,7 @@ end
 
 $(SIGNATURES)
 """
-function fromcex(::NotCexSerializable, cex, T::Type{<: Any}; delimiter , configuration) 
+function fromcex(::NotCexSerializable, cex, T::Type{<: Any}; delimiter , configuration, strict) 
     throw(DomainError(T, "$(T) is not a CexSerializable type."))
 end
 
@@ -108,6 +110,6 @@ unimplemented trait value.
 $(SIGNATURES)
 """
 function fromcex(traitvalue::TraitType, cexsrc::AbstractString, T;
-    delimiter, configuration) where {TraitType <: CexTrait}
+    delimiter, configuration, strict) where {TraitType <: CexTrait}
     throw(DomainError(traitvalue, "`fromcex` is not implemented for trait $(traitvalue) on type $(T)."))  
 end
