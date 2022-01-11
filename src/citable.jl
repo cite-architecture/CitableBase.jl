@@ -75,5 +75,5 @@ end
 $(SIGNATURES)
 """
 function urntype(::NotCitable, x)
-    throw(DomainError(x, string( typeof(x), " does not implement the urn function.")))
+    throw(DomainError(x, string( typeof(x), " does not implement the urntype function.")))
 end
