@@ -288,7 +288,7 @@ The inverse of `cex` is `fromcex`.  We need two essential pieces of information 
 ```@example book
 import CitableBase: fromcex
 function fromcex(traitvalue::BookCex, cexsrc::AbstractString, T;      
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", configuration = nothing, strict = true)
     fields = split(cexsrc, delimiter)
     urn = Isbn10Urn(fields[1])
     CitableBook(urn, fields[2], fields[3])
