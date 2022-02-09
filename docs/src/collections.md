@@ -434,6 +434,20 @@ distantbook in rl
 collect(rl)
 ```
 
+## More free stuff!
+
+The `slidingwindow` function does what its name suggests: it creates a Vector of Vectors by sliding a window along a collection.  
+```@example collections
+titles = map(bk -> bk.title, rl)
+slidingwindow(titles)
+```
+
+It can also work directly on a citable collection.
+
+```@example collections
+slidingwindow(rl)
+```
+
 ## Recap: citable collections
 
 On this page, we wrapped a citable collection type, te `ReadingList` around a Vector of `CitableBook`s.  We made the type identifiable as a citable collection.  We implemented filter of the collection on URN logic with the `UrnComparisonTrait`, and serialization with the `CexSerializableTrait`.  You can test these for these traits with boolean functions.
