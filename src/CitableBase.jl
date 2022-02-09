@@ -31,6 +31,7 @@ export cex, fromcex
 # The citable collection trait
 export CitableCollectionTrait, NotCitableCollection
 export citablecollectiontrait, citablecollection
+export slidingwindow
 
 export StringReader, FileReader, UrlReader
 

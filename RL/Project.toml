@@ -1,11 +1,11 @@
 name = "RL"
 uuid = "60d68c50-4e62-4164-8a84-6eb432a03ed7"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-CitableBase = "8"
+CitableBase = "10.1"
