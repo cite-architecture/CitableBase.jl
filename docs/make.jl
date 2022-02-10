@@ -20,6 +20,7 @@ makedocs(
         "Identifiers" => "urns.md",
         "Citable objects" => "citable.md",
         "Citable collections" => "collections.md",
+        "Julia collections" => "collections2.md",
         "API documentation" => "apis.md"
     ]
     )
