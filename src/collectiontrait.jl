@@ -37,6 +37,12 @@ function slidingwindow(trait::T, coll, windowsize::Int64 = 2; pad = false) where
     slidingwindow(collect(coll), windowsize, pad = pad)
 end
 
+
+"""Create a Vector of Vectors of type `T` by sliding a window 
+of size `windowsize` over `v`.
+
+$(SIGNATURES)
+"""
 function slidingwindow(v::T,windowsize::Int64 = 2; pad = false)  where {T <: AbstractVector}
     span = windowsize - 1
     if pad
