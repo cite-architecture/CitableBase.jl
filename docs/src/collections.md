@@ -448,6 +448,22 @@ It can also work directly on a citable collection.
 slidingwindow(rl)
 ```
 
+
+The `partitionvect` function partitions a Vector into a series of Vectors of a given size.  In contrast to `slidingwindow`, the elements in the new Vectors do not overlap.
+
+`partitionvect` can work on any generic Vector.
+
+```@example collections
+v = collect(1:10)
+partitionvect(v)
+```
+
+It also works on any citable collection.
+
+```@example collections
+partitionvect(rl)
+```
+
 ## Recap: citable collections
 
 On this page, we wrapped a citable collection type, te `ReadingList` around a Vector of `CitableBook`s.  We made the type identifiable as a citable collection.  We implemented filter of the collection on URN logic with the `UrnComparisonTrait`, and serialization with the `CexSerializableTrait`.  You can test these for these traits with boolean functions.

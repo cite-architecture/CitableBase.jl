@@ -1,4 +1,5 @@
-## Julia collections
+
+# Julia collections
 
 By defining five functions on your citable collection, you can make them interoperate with dozens of generic Julia functions for working with collections of data.
 
