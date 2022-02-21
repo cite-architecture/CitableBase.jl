@@ -66,7 +66,7 @@ end
 $(SIGNATURES)
 """
 function dropversion(u::Type{<:Urn})  
-    if !(supportsversion)
+    if !(supportsversion(u))
         @warn("URNs of type $(typeof(u)) do not support versions.")
         u
     else
@@ -81,7 +81,7 @@ end
 $(SIGNATURES)
 """
 function addversion(u::Type{<:Urn}, versioninfo::AbstractString)  
-    if !(supportsversion)
+    if !(supportsversion(u))
         @warn("URNs of type $(typeof(u)) do not support versions.")
         u
     else
@@ -89,6 +89,23 @@ function addversion(u::Type{<:Urn}, versioninfo::AbstractString)
         "`addversion` not implemented for type $(typeof(u))"))
     end
 end
+
+"""Urn subtypes should implement `addversion(urn::U, versionid)::U`.  
+
+$(SIGNATURES)
+"""
+function versionid(u::Type{<:Urn})  
+    if !(supportsversion(u))
+        @warn("URNs of type $(typeof(u)) do not support versions.")
+        u
+    else
+        throw(DomainError(u, 
+        "`addversion` not implemented for type $(typeof(u))"))
+    end
+end
+
+
+
 
 """True for URN types that support subreferences.
 $(SIGNATURES)
