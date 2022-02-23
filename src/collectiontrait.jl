@@ -18,7 +18,7 @@ function citablecollection(x::T) where {T}
     citablecollectiontrait(T) != NotCitableCollection()
 end
 
-"""Delegate function, catching types that do not implement `CitableCollectionTrait`.
+"""Disipatch function, catching types that do not implement `CitableCollectionTrait`.
 $(SIGNATURES)
 """
 function slidingwindow(coll::T; n::Int64 = 2, pad = false) where {T} 
@@ -83,21 +83,8 @@ function partitionvect(v::T; n::Int64 = 2) where {T <: AbstractVector}
     if remainderlen == 0
         partitionbalanced(v,n)
     else
-         # Make math easier to read without all those parentheses:
-        vlen = length(v)
-        remainderv =  Union{Nothing, eltype(v)}[]
-
-        remainderelems = v[vlen - remainderlen + 1:end]
-        for e in remainderelems
-            push!(remainderv, e)
-        end
-        nothinglen = n - remainderlen
-        for i in 1:nothinglen
-            push!(remainderv, nothing)
-        end
-
-
-        balanced = similar(v, Union{Nothing, eltype(v)}, length(v) + nothinglen)
+        totallen = length(v) + remainderlen
+        balanced =  Union{Nothing, eltype(v)}[nothing for _ in 1:totallen]
         for i in 1:length(v)
             balanced[i] = v[i]
         end
