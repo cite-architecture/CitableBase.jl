@@ -32,7 +32,7 @@ end
 
 !!! warning "Note on the ISBN format and our `Isbn10Urn` type"
 
-    There is in fact a URN namespace for ISBN numbers identifeid by the `isbn` namespace identifier. (See this [blogpost about citing publications with URNs](https://www.benmeadowcroft.com/webdev/articles/urns-and-citations/).)  This guide invents an `isbn10` URN type solely to illustrate how you could create your own URN type using the `CitableBase` package.
+    There is in fact a URN namespace for ISBN numbers identified by the `isbn` namespace identifier. (See this [blogpost about citing publications with URNs](https://www.benmeadowcroft.com/webdev/articles/urns-and-citations/).)  This guide invents an `isbn10` URN type solely to illustrate how you could create your own URN type using the `CitableBase` package.
 
     Parsing the full [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is extremely complicated: ISBN-10 numbers have four components, each of which is variable in length! In this user's guide example, we'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  In a real program, we would enforce this in the constructor, but to keep our example brief and focused on the `CitableBase` class, we blindly accept any string value for the `isbn` field of our type.
 
