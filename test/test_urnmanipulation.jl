@@ -9,3 +9,12 @@ end
     groupparts = parts(group)
     @test size(groupparts,1) == 3
 end
+
+@testset "Test URN ranges" begin
+    struct TestUrn <: Urn
+        s::AbstractString
+    end
+
+    u = TestUrn("1-5")
+    @test isrange(u)
+end
