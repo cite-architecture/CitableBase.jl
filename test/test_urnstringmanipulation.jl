@@ -35,6 +35,12 @@ end
     @test_throws ArgumentError CitableBase.str_hassubref("@xy")
     @test_throws ArgumentError CitableBase.str_hassubref("1-@xy")
     @test_throws ArgumentError CitableBase.str_hassubref("@1-x")
-    
 
+    @test hassubref(TestUrn("x@y"))
+    @test hassubref(TestUrn("a-b@x"))
+
+    @test CitableBase.str_subref("x@y") == "y"
+    @test_throws ArgumentError CitableBase.str_subref("a-b@x") == "x"
+    @test CitableBase.str_subref("xy") |> isempty
+    @test_throws ArgumentError CitableBase.str_subref("@xy")
 end

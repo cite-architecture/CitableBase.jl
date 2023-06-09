@@ -1,6 +1,6 @@
 #=
 subref
-hassubref
+
 dropsubref
 
 =#
@@ -42,5 +42,38 @@ function str_hassubref(s::AbstractString)::Bool
         else
             throw(ArgumentError("Invalid passage component `$(s)`.  Too many @-delimited parts."))
         end
+    end
+end
+
+
+"""
+$(SIGNATURES)
+Extract subreference from a a URN, or empty
+string if there is no subreference.
+"""
+function subref(u::T) where T <: Urn
+    string(u) |> str_subref
+end
+
+"""
+$(SIGNATURES)
+Extract subreference from a string.
+"""
+function str_subref(s::AbstractString)
+    if str_isrange(s)
+        throw(ArgumentError("Invalid subreference syntax `$(s)`.  Subreference can only be extracted from individual components of a range reference."))
+    end
+    if s[1] == '@'
+        throw(ArgumentError("Invalid subreference syntax `$(s)`.  Subreferences may not be attached to empty identifiers."))
+    end
+
+    segments = split(s,"@")
+    count = length(segments)
+    if count == 1
+        ""
+    elseif count == 2
+        segments[2]
+    else
+        throw(ArgumentError("Invalid subreference syntax `$(s)`.  Too many `@` characters."))
     end
 end

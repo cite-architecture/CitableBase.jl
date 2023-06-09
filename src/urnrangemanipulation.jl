@@ -12,7 +12,7 @@ function str_isrange(s::AbstractString)::Bool
     if isempty(s)
         false
 
-    elseif s[1] == "-"
+    elseif s[1] == '-'
         throw(ArgumentError("Invalid object identifer `$(s)`.  Range parts may not be empty."))
     end
     rangeparts = split(s,"-")
