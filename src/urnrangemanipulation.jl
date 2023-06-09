@@ -1,10 +1,3 @@
-#=
-subref
-hassubref
-dropsubref
-
-=#
-
 """True if `u` is a range-type URN.
 $(SIGNATURES)
 """

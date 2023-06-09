@@ -26,5 +26,15 @@ end
 end
 
 @testset "Test subref patterns" begin
+    @test CitableBase.str_hassubref("x@y")
+    @test CitableBase.str_hassubref("a-b@x")
+    @test CitableBase.str_hassubref("a@x-b")
+    @test CitableBase.str_hassubref("a@x-b@y")
+    @test CitableBase.str_hassubref("xy") == false
+    @test CitableBase.str_hassubref("x-y") == false
+    @test_throws ArgumentError CitableBase.str_hassubref("@xy")
+    @test_throws ArgumentError CitableBase.str_hassubref("1-@xy")
+    @test_throws ArgumentError CitableBase.str_hassubref("@1-x")
     
+
 end
