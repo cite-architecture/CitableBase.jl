@@ -77,3 +77,33 @@ function str_subref(s::AbstractString)
         throw(ArgumentError("Invalid subreference syntax `$(s)`.  Too many `@` characters."))
     end
 end
+
+
+
+
+"""
+$(SIGNATURES)
+Remove any subreferences in URN `u`.
+If `u` is a range, separately drop subreference
+from each of range-begin and range-end parts.
+"""
+function dropsubref(u::T)::T where T <: Urn
+    string(u) |> str_dropsubref |> T
+end
+
+"""
+$(SIGNATURES)
+Remove any subreference substrings in a string.
+If `s` is a range expression, separately drop subreference
+from each of range-begin and range-end parts.
+"""
+function str_dropsubref(s::AbstractString)
+    if str_isrange(s)
+        r1parts = split(str_range_begin(s),"@")
+        r2parts = split(str_range_end(s),"@")
+        r1parts[1] * "-" * r2parts[1]
+    else 
+        parts = split(s, "@")
+        parts[1]
+    end
+end

@@ -44,3 +44,16 @@ end
     @test CitableBase.str_subref("xy") |> isempty
     @test_throws ArgumentError CitableBase.str_subref("@xy")
 end
+
+
+@testset "Test dropping subref patterns" begin
+    @test CitableBase.str_dropsubref("x@y")  == "x"
+    @test CitableBase.str_dropsubref("a-b@x") == "a-b"
+    @test CitableBase.str_dropsubref("a@x-b") == "a-b"
+    @test CitableBase.str_dropsubref("a@x-b@y") == "a-b"
+    @test CitableBase.str_dropsubref("xy") == "xy"
+    @test CitableBase.str_dropsubref("x-y") == "x-y"
+
+    @test dropsubref(TestUrn("x@y"))  == TestUrn("x")
+    @test dropsubref(TestUrn("a-b@x")) == TestUrn("a-b")
+end
