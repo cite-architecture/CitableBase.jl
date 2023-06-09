@@ -3,10 +3,6 @@ subref
 hassubref
 dropsubref
 
-
-range_begin
-range_end
-
 =#
 
 """True if `u` is a range-type URN.
@@ -63,7 +59,7 @@ $(SIGNATURES)
 Extract first part from a range expression in `s`.
 """
 function str_range_begin(s::AbstractString)::AbstractString
-    if isrange(s)
+    if str_isrange(s)
         rangeparts = split(s,"-")
         rangeparts[1]
     else
@@ -76,7 +72,7 @@ $(SIGNATURES)
 Extract second part from a range expression.
 """
 function str_range_end(s::AbstractString)::AbstractString
-    if isrange(s)
+    if str_isrange(s)
         rangeparts = split(s,"-")
         rangeparts[2]
     else

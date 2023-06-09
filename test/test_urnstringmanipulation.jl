@@ -19,4 +19,12 @@ end
     @test isrange(TestUrn("singlevalue")) == false
     @test_throws ArgumentError isrange(TestUrn("-z"))
     @test_throws ArgumentError isrange(TestUrn("x-y-z"))
+    
+    @test range_begin(u) == "rangey"
+    @test range_end(u) == "value"
+    @test_throws ArgumentError range_begin(TestUrn("singlevalue"))
+end
+
+@testset "Test subref patterns" begin
+    
 end
