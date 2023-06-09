@@ -80,7 +80,11 @@ $(SIGNATURES)
 """ 
 function fromcex(url::AbstractString, T, ureader::Type{UrlReader}; 
     delimiter = "|", configuration = nothing, strict = true)
-    cexsrc = HTTP.get(url).body |> String
+    #cexsrc = HTTP.get(url).body |> String
+    datafile = download(url)
+    cexsrc = read(datafile, String)
+    rm(datafile)
+
     fromcex(cextrait(T), cexsrc, T, 
     delimiter = delimiter, configuration = configuration, strict = strict)
 end
