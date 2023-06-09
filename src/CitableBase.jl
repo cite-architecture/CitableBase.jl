@@ -38,8 +38,11 @@ export StringReader, FileReader, UrlReader
 include("readers.jl")
 include("citable.jl")
 include("urns.jl")
+include("urnstringmanipulation.jl")
 include("urncomparison.jl")
 include("cex.jl")
 include("collectiontrait.jl")
+
+
 
 end # module
