@@ -4,3 +4,4 @@ docs/build/
 scratch/
 scratch*
 .vscode/
+_site/

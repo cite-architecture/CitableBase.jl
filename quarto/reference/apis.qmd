@@ -1,0 +1,80 @@
+---
+title: "API documentation"
+---
+
+
+```
+x = "Hello"
+```
+
+`Urn` 
+
+:::{.callout-note appearance="minimal"}
+```
+#| echo: false
+#| warning: false
+using CitableBase
+@doc Urn
+```
+:::
+
+## URNs
+
+```
+Urn 
+components
+parts
+addversion
+dropversion
+```
+
+
+## Citable resources
+
+```
+Citable
+CitableTrait
+NotCitable
+citabletrait
+citable
+urn
+label
+```
+
+
+## URN comparison
+
+```
+UrnComparisonTrait
+NotUrnComparable
+urncomparisontrait
+urncomparable
+urnequals
+urncontains
+urnsimilar
+```
+
+
+
+## CEX serialization
+
+```
+CexTrait
+NotCexSerializable
+cextrait
+cexserializable
+cex
+fromcex
+```
+
+
+
+
+## Citable collections
+
+```
+CitableCollectionTrait
+NotCitableCollection
+citablecollectiontrait
+citablecollection
+```
