@@ -1,5 +1,5 @@
 ---
-title: "Creating your own citable type"
+title: "Defining your own citable type"
 ---
 
 > ## Summary 

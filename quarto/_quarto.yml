@@ -41,6 +41,7 @@ website:
       contents:
         - guides/index.qmd
         - guides/diy.qmd
+        - guides/diy-collection.qmd
 
     - title: "Reference"
       contents: 

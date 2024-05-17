@@ -1,3 +1,8 @@
+---
+title: "Defining your own citable collection"
+---
+
+
 ```@setup collections
 #page 1
 using CitableBase
