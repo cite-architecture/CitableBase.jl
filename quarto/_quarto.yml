@@ -5,14 +5,14 @@ theme: spacelab
 execute:
   freeze: auto
 date: last-modified  
-margin-header: "Package version `10.3.1`"
+margin-header: "Documentation for version `10.3.1`"
 format:
   html: 
     toc: true
 
 
 website:
-  title: "citablebase"
+  title: "CitableBase.jl"
   navbar:
     background: primary
     search: true
@@ -40,11 +40,13 @@ website:
     - title: "Guides"
       contents:
         - guides/index.qmd
+        - guides/diy.qmd
 
     - title: "Reference"
       contents: 
         - reference/index.qmd
         - reference/apis.qmd
+        - reference/collections.qmd
 
     - title: "Concepts"
       contents: 

@@ -1,4 +1,6 @@
-# Identification with URNs
+---
+title: "Creating your own citable type"
+---
 
 > ## Summary 
 >

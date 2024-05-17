@@ -5,3 +5,4 @@ scratch/
 scratch*
 .vscode/
 _site/
+_freeze/
