@@ -51,7 +51,6 @@ website:
         - reference/index.qmd
         - reference/apis.qmd
         - reference/collections.qmd
-        - reference/slidingwindow.qmd
 
     - title: "Concepts"
       contents: 
