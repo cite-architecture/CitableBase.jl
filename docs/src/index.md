@@ -1,5 +1,5 @@
 # CitableBase
 
-This package defines traits and abstract types for the essential concepts of the CITE architecture. 
+> Traits and abstract types for the essential concepts of the CITE architecture. 
 
-Documentation is currently being moved to quartopub.
+Documentation is currently being moved to [https://neelsmith.quarto.pub/citablebase/](https://neelsmith.quarto.pub/citablebase/).

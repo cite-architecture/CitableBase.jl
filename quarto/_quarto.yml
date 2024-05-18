@@ -36,6 +36,8 @@ website:
     - title: "Tutorials"
       contents: 
         - tutorials/index.qmd
+        - tutorials/diy-urn.qmd
+        - tutorials/diy-object.qmd
 
     - title: "Guides"
       contents:
