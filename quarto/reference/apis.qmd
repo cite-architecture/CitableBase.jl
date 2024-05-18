@@ -1,13 +1,27 @@
+---
+title: "API documentation"
+---
 
-```@meta
-CurrentModule = CitableBase
+
 ```
-# API documentation 
+x = "Hello"
+```
+
+`Urn` 
+
+:::{.callout-note appearance="minimal"}
+```
+#| echo: false
+#| warning: false
+using CitableBase
+@doc Urn
+```
+:::
 
 ## URNs
 
-```@docs
-Urn
+```
+Urn 
 components
 parts
 addversion
@@ -17,7 +31,7 @@ dropversion
 
 ## Citable resources
 
-```@docs
+```
 Citable
 CitableTrait
 NotCitable
@@ -30,7 +44,7 @@ label
 
 ## URN comparison
 
-```@docs
+```
 UrnComparisonTrait
 NotUrnComparable
 urncomparisontrait
@@ -44,7 +58,7 @@ urnsimilar
 
 ## CEX serialization
 
-```@docs
+```
 CexTrait
 NotCexSerializable
 cextrait
@@ -58,7 +72,7 @@ fromcex
 
 ## Citable collections
 
-```@docs
+```
 CitableCollectionTrait
 NotCitableCollection
 citablecollectiontrait

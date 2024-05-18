@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: b6df4fbc-8330-4427-9de2-c4c364891e72
+      url: 'https://neelsmith.quarto.pub/citablebase'

@@ -1,0 +1,65 @@
+project:
+  type: website
+jupyter: julia-1.10  
+theme: spacelab
+execute:
+  freeze: auto
+date: last-modified  
+margin-header: "Documentation for version `10.4.0`"
+format:
+  html: 
+    toc: true
+
+
+website:
+  title: "CitableBase"
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        file: index.qmd
+      - text: "Concepts"
+        file: concepts/index.qmd           
+      - text: "Tutorials"
+        file: tutorials/index.qmd          
+      - text: "Guides"
+        file: guides/index.qmd           
+      - text: "Reference"
+        file: reference/index.qmd  
+    right:   
+      - icon: github
+        href: https://github.com/cite-architecture/CitableBase.jl
+        aria-label: GitHub
+
+  sidebar:
+    - title: "Tutorials"
+      contents: 
+        - tutorials/index.qmd
+        - tutorials/diy-urn.qmd
+        - tutorials/diy-object.qmd
+
+    - title: "Guides"
+      contents:
+        - guides/index.qmd
+        - guides/diy-optional-methods.qmd        
+        - guides/diy-collection.qmd
+
+
+    - title: "Reference"
+      contents: 
+        - reference/index.qmd
+        - reference/apis.qmd
+        - reference/collections.qmd
+
+    - title: "Concepts"
+      contents: 
+        - concepts/index.qmd
+
+        
+
+    - title: "Home"
+      contents:
+        - index.qmd               
+ 
+

@@ -1,0 +1,8 @@
+---
+title: "Guides"
+---
+
+Follow a step-by-step guides extending the examples in the [tutorials](../tutorials/):
+
+- add support for [versioning and subreferences](./diy-optional-methods.qmd) to a custom URN type
+- make a custom type for a [citable collection](./diy-collection.qmd) representing a reading list of citable books.
