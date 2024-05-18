@@ -2,11 +2,11 @@
 title: "Sliding window"
 ---
 
+## Deprecated
 
-## More free stuff!
 
 The `slidingwindow` function does what its name suggests: it creates a Vector of Vectors by sliding a window along a collection.  
-```{julia}
+```{xjulia}
 using CitableBase
 titles = map(bk -> bk.title, rl)
 slidingwindow(titles)
@@ -14,7 +14,7 @@ slidingwindow(titles)
 
 It can also work directly on a citable collection.
 
-```{julia}
+```{xjulia}
 slidingwindow(rl)
 ```
 
@@ -23,13 +23,13 @@ The `partitionvect` function partitions a Vector into a series of Vectors of a g
 
 `partitionvect` can work on any generic Vector.
 
-```{julia}
+```{xjulia}
 v = collect(1:10)
 partitionvect(v)
 ```
 
 It also works on any citable collection.
 
-```{julia}
+```{xjulia}
 partitionvect(rl)
 ```

@@ -4,6 +4,8 @@ title: "Defining your own citable collection"
 
 
 ```{julia}
+#| echo: false
+#| output: false
 #page 1
 using CitableBase
 struct Isbn10Urn <: Urn
@@ -135,7 +137,6 @@ root = pwd() |> dirname |> dirname
 ```
 
 
-
 # Citable collections
 
 > ## Summary
@@ -162,17 +163,11 @@ Our model for a reading list is simple: it's just a Vector of citable publicatio
 struct ReadingList
     publications::Vector{<: CitablePublication}
 end
-```
 
-```{julia}
 function show(io::IO, readingList::ReadingList)
     print(io, "ReadingList with ", length(readingList.publications), " items")
 end
-```
 
-Let's see an example.
-
-```{julia}
 books = [distantbook, enumerationsbook, wrongbook, qibook]
 rl = ReadingList(books)
 ```
@@ -184,7 +179,7 @@ The `publications` field is just a normal Julia Vector.
 rl.publications[4]
 ```
 
-What will make it different from other Vectors is that it will support a series of CITE traits
+What will make it different from other Vectors is that it will support a series of CITE traits.
 
 
 ## Implementing the `CitableCollectionTrait`
@@ -346,7 +341,7 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
 end
 ```
 
-!!! warning
+
 
 ::: {.callout-warning}
 To keep this example brief and avoid introducing other packages, our implementation of `fromcex` naively assumes `cexsrc` will contain a single CEX block introduced by the `#!citecollection` heading.  This would break on real world CEX data sources: in a real application, we would instead use the `CiteEXchange` package to parse and extract appropriate blocks.  See the [documentation of `CiteEXchange`](https://cite-architecture.github.io/CiteEXchange.jl/stable/), or look at how a package like [`CitableCorpus`](https://cite-architecture.github.io/CitableCorpus.jl/stable/) uses `CiteEXchange` in its implementation of `fromcex` for different data type.
@@ -443,21 +438,21 @@ collect(rl)
 
 ## Recap: citable collections
 
-On this page, we wrapped a citable collection type, te `ReadingList` around a Vector of `CitableBook`s.  We made the type identifiable as a citable collection.  We implemented filter of the collection on URN logic with the `UrnComparisonTrait`, and serialization with the `CexSerializableTrait`.  You can test these for these traits with boolean functions.
+On this page, we wrapped a citable collection type, the `ReadingList,` around a Vector of `CitableBook`s.  We made the type identifiable as a citable collection.  We implemented filter of the collection on URN logic with the `UrnComparisonTrait`, and serialization with the `CexSerializableTrait`.  You can test these for these traits with boolean functions.
 
 
-```@example collections
+```{julia}
 citablecollection(rl)
 ```
 
 
 
-```@example collections
+```{julia}
 urncomparable(rl)
 ```
 
 
-```@example collections
+```{julia}
 cexserializable(rl)
 ```
 
