@@ -42,7 +42,6 @@ website:
     - title: "Guides"
       contents:
         - guides/index.qmd
-        - guides/diy.qmd
         - guides/diy-collection.qmd
 
     - title: "Reference"
@@ -50,6 +49,7 @@ website:
         - reference/index.qmd
         - reference/apis.qmd
         - reference/collections.qmd
+        - reference/slidingwindow.qmd
 
     - title: "Concepts"
       contents: 

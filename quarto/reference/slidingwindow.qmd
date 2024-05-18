@@ -1,0 +1,35 @@
+---
+title: "Sliding window"
+---
+
+
+## More free stuff!
+
+The `slidingwindow` function does what its name suggests: it creates a Vector of Vectors by sliding a window along a collection.  
+```{julia}
+using CitableBase
+titles = map(bk -> bk.title, rl)
+slidingwindow(titles)
+```
+
+It can also work directly on a citable collection.
+
+```{julia}
+slidingwindow(rl)
+```
+
+
+The `partitionvect` function partitions a Vector into a series of Vectors of a given size.  In contrast to `slidingwindow`, the elements in the new Vectors do not overlap.
+
+`partitionvect` can work on any generic Vector.
+
+```{julia}
+v = collect(1:10)
+partitionvect(v)
+```
+
+It also works on any citable collection.
+
+```{julia}
+partitionvect(rl)
+```
