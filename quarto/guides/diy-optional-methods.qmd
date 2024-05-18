@@ -1,0 +1,104 @@
+---
+title: "Versioning and subreferences in URNs"
+---
+
+
+## Optional methods
+
+
+The example URN type for ISBN numbers developed in the [tutorials](../tutorials/) doesn't require versioning (ISBN-10 values are fixed values) or support for subreferences (the ISBN-10 value is complete and can't be further reference).
+of those features, but we'll use that type to show how they can be implemented.
+
+We'll use the simple ISBN URN type to show how support for those features can be implemented: see the `CtsUrn` (from `CitableText`) or the `Cite2Urn` (from `CitableObject`) for examples of URN types supporting those optional behaviors.
+
+
+We start from a type that is a subtype of the abstract `Urn`.
+
+```{julia}
+using CitableBase
+struct Isbn10Urn <: Urn
+    isbn::AbstractString
+end
+
+canwebewrong = Isbn10Urn("urn:isbn10:1108922036")
+
+```
+
+
+### Versioning
+
+URN types that support versioning must implement three functions: `supportsversion`, `addversion` and `dropversion`.  
+
+
+We'll indicate that our URN type supports versioning but for this demonstration will just pass the URN through unchanged.
+
+```{julia}
+import CitableBase: supportsversion
+function supportsversion(u::Isbn10Urn)
+    true
+end
+
+import CitableBase: addversion
+function addversion(u::Isbn10Urn, versioninfo::AbstractString)
+    u
+end
+
+import CitableBase: dropversion
+function dropversion(u::Isbn10Urn)
+    u
+end
+```
+```{julia}
+supportsversion(canwebewrong)
+```
+```{julia}
+addversion(canwebewrong, "v2")
+```
+```{julia}
+dropversion(canwebewrong)
+```
+
+
+### Subreferences
+
+URN types that support subreferences on identifiers must implement four functions: `supportssubref`, `dropsubref`, `addsubref` and `hassubref`.
+
+```{julia}
+import CitableBase: supportssubref
+function supportssubref(u::Isbn10Urn)
+    true
+end
+
+import CitableBase: dropsubref
+function dropsubref(u::Isbn10Urn)
+    u
+end
+
+import CitableBase: hassubref
+function hassubref(u::Isbn10Urn)
+    false
+end
+
+import CitableBase: subref
+function subref(u::Isbn10Urn)
+    nothing
+end
+```
+
+
+```{julia}
+supportssubref(canwebewrong)
+```
+
+```{julia}
+hassubref(canwebewrong)
+```
+
+
+```{julia}
+dropsubref(canwebewrong)
+```
+
+```{julia}
+subref(canwebewrong)
+```

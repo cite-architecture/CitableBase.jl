@@ -42,7 +42,9 @@ website:
     - title: "Guides"
       contents:
         - guides/index.qmd
+        - guides/diy-optional-methods.qmd        
         - guides/diy-collection.qmd
+
 
     - title: "Reference"
       contents: 

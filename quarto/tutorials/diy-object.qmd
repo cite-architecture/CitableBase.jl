@@ -1,5 +1,5 @@
 ---
-title: "Defining your own citable type"
+title: "Defining your own type for citable objects"
 ---
 
 

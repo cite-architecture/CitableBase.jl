@@ -2,6 +2,7 @@
 title: "Guides"
 ---
 
-Follow a step-by-step guide to making a [citable collection](./diy-collection.qmd).
+Follow a step-by-step guides extending the examples in the [tutorials](../tutorials/):
 
-This guide extends the examples in the [tutorials](../tutorials/) to define a custom citable collection representing a reading list of citable books.
+- add support for [versioning and subreferences](./diy-optional-methods.qmd) to a custom URN type
+- make a custom type for a [citable collection](./diy-collection.qmd) representing a reading list of citable books.
