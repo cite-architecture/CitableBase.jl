@@ -12,7 +12,7 @@ format:
 
 
 website:
-  title: "CitableBase.jl"
+  title: "CitableBase"
   navbar:
     background: primary
     search: true
