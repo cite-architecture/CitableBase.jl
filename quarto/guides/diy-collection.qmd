@@ -137,20 +137,21 @@ root = pwd() |> dirname |> dirname
 ```
 
 
-# Citable collections
 
-> ## Summary
->
-> **The task**: We want to create a type for working with a *collection* of the citable books we developed on the previous page.  
-> We should be able to filter the collection by appying URN logic to the identifiers for our books.  We should be able to write our collection to plain-text format and re-instantiate it from the plain-text representation.  And we should be able to apply any Julia functions for working with iterable content to our book list.
->
-> **The implementation**:
-> - define a new type for a collection of citable books, the `ReadingList` type
-> - identify it as a citable collection (the `CitableCollectionTrait`)
-> - implement filtering the collection using URN logic (the `UrnComparisonTrait`)
-> - implement round-trip serialization (the `CexTrait`)
-> - make the collection available to all Julia functions working with iterable content (`Iterators`)
->
+
+## Overview
+
+**The task**: We want to create a type for working with a *collection* of the citable books we developed on the previous page.  
+We should be able to filter the collection by appying URN logic to the identifiers for our books.  We should be able to write our collection to plain-text format and re-instantiate it from the plain-text representation.  And we should be able to apply any Julia functions for working with iterable content to our book list.
+
+**The implementation**:
+
+- define a new type for a collection of citable books, the `ReadingList` type
+- identify it as a citable collection (the `CitableCollectionTrait`)
+- implement filtering the collection using URN logic (the `UrnComparisonTrait`)
+- implement round-trip serialization (the `CexTrait`)
+ make the collection available to all Julia functions working with iterable content (`Iterators`)
+
 
 
 

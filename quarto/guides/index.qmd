@@ -2,4 +2,6 @@
 title: "Guides"
 ---
 
-Recipe book for working with `CitableBase.jl`
+Follow a step-by-step guide to making a [citable collection](./diy-collection.qmd).
+
+This guide extends the examples in the [tutorials](../tutorials/) to define a custom citable collection representing a reading list of citable books.

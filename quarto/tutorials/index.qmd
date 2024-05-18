@@ -2,6 +2,7 @@
 title: Tutorials
 ---
 
-Learn `CitableBase.jl`.
 
-The guide works through a hypothetical example to design a reading list of books citable by URN values.  The guide first illustrates how to implement a custom URN type for ISBN-10 numbers. It then creates a custom citable object for books cited by ISBN-10 numbers, and finally defines a custom citable collection representing a reading list.  
+Learn how to use `CitableBase.jl` to define your own types of Citable objects, and even your own URN types.
+
+The tutorials work through a hypothetical example to design a reading list of books citable by URN values. The first tutorial shows how to [implement a custom URN type](./diy-urn.qmd) for ISBN-10 numbers. The second tutorial then creates a [custom type of citable object](./diy-object.qmd) for books cited by ISBN-10 numbers.
